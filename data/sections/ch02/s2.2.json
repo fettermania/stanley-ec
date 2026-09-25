@@ -1,0 +1,169 @@
+{
+  "id": "2.2",
+  "title": "Examples and Applications",
+  "chapter": 2,
+  "pdf_pages": {"start": 226, "end": 234},
+  "technique_tags": ["inclusion-exclusion", "generating-functions", "determinants", "q-analogue", "finite-differences", "bijection"],
+
+  "key_idea": "Inclusion-exclusion gives powerful closed forms when $f_{\\geq}(T)$ has special structure: (1) if it depends only on $|T|$, finite differences give $a(m)$ cleanly; (2) if it **factors** over an ordered set, the I-E sum becomes a **determinant**. The descent-set example leads to determinantal formulas (Eqs. 2.15–2.17) and a $q$-analogue tracking the inversion statistic (Eqs. 2.18–2.21).",
+
+  "summary": "This section works through major examples:\n\n**Derangements** $D(n)$: the symmetric I-E with $b(k) = (n-k)!$ gives $D(n) = n! \\sum_{j=0}^n (-1)^j/j!$. There is also a recurrence $D(n) = (n-1)(D(n-1)+D(n-2))$ with bijective proof.\n\n**Descent-set counting**: For $w \\in S_n$, define $\\text{Des}(w) \\subseteq [n-1]$. The 'at-least' count $\\alpha_n(S)$ is a multinomial coefficient; the 'exact' count $\\beta_n(S)$ is recovered by I-E. The key step is that $f_{\\leq}(S) = \\alpha_n(S)$ factors into a ratio of factorials that, after the I-E alternating sum, equals a **determinant** (Eqs. 2.15–2.17).\n\n**q-analogue**: Weighting by $q^{\\text{inv}(w)}$ gives $q$-multinomials and a $q$-determinant (Eqs. 2.18–2.21).\n\n**Proposition 2.2.6**: Abstract condition under which $f_{=}$ is a determinant.",
+
+  "notation": [
+    {"symbol": "\\alpha_n(S)", "latex": "\\alpha_n(S)", "description": "Number of $w \\in S_n$ with $\\text{Des}(w) \\subseteq S$ ('at least' descent set contained in $S$)"},
+    {"symbol": "\\beta_n(S)", "latex": "\\beta_n(S)", "description": "Number of $w \\in S_n$ with $\\text{Des}(w) = S$ (descent set exactly $S$)"},
+    {"symbol": "\\text{Des}(w)", "latex": "\\text{Des}(w)", "description": "Descent set of $w$: $\\{i \\in [n-1] : w(i) > w(i+1)\\}$"},
+    {"symbol": "D(n)", "latex": "D(n)", "description": "Number of derangements of $[n]$; $D(n) = n!\\sum_{j=0}^n (-1)^j/j!$"},
+    {"symbol": "b(k)", "latex": "b(k)", "description": "In symmetric I-E: number of objects with 'at least $k$' (or $k$ or more) of a property"},
+    {"symbol": "\\binom{n}{c_1,c_2,\\ldots}", "latex": "\\binom{n}{c_1,c_2,\\ldots}", "description": "Multinomial coefficient $n!/(c_1! c_2! \\cdots)$ where $\\sum c_i = n$"},
+    {"symbol": "[n]_q", "latex": "[n]_q", "description": "$q$-integer: $1 + q + q^2 + \\cdots + q^{n-1}$"},
+    {"symbol": "[n]_q!", "latex": "[n]_q!", "description": "$q$-factorial: $[1]_q [2]_q \\cdots [n]_q$"},
+    {"symbol": "\\binom{n}{k}_q", "latex": "\\binom{n}{k}_q", "description": "$q$-binomial: $[n]_q! / ([k]_q! [n-k]_q!)$"},
+    {"symbol": "\\text{inv}(w)", "latex": "\\text{inv}(w)", "description": "Number of inversions of $w$: $|\\{(i,j): i<j, w(i)>w(j)\\}|$"}
+  ],
+
+  "definitions": [
+    {
+      "id": "def-2.2-descent",
+      "order": 1,
+      "term": "Descent set and descent-set counts",
+      "statement": "For $w \\in S_n$, the **descent set** is $\\text{Des}(w) = \\{i \\in [n-1] : w(i) > w(i+1)\\}$.\n\nFor $S = \\{s_1 < s_2 < \\cdots < s_k\\} \\subseteq [n-1]$, set $s_0 = 0$ and $s_{k+1} = n$. Define:\n- $\\alpha_n(S) = |\\{w \\in S_n : \\text{Des}(w) \\subseteq S\\}|$ (at least $S$ means no descents outside $S$)\n- $\\beta_n(S) = |\\{w \\in S_n : \\text{Des}(w) = S\\}|$ (exactly $S$)",
+      "notes": "Note the naming: $\\alpha$ = 'at least' (descent set **contained in** $S$, so there are at most the descents of $S$), while $\\beta$ = 'exactly $S$.' This seems reversed from the $f_{\\geq}$//$f_{=}$ notation: that's because $\\alpha_n(S) = f_{\\leq}(S)$ (descent set **subset** of $S$) rather than $f_{\\geq}$. The I-E formula still applies with the same alternating sign."
+    }
+  ],
+
+  "propositions": [
+    {
+      "id": "prop-2.2.2",
+      "order": 3,
+      "number": "2.2.2",
+      "title": "Derangement recurrence",
+      "statement": "For $n \\geq 2$: $D(n) = (n-1)\\bigl(D(n-1) + D(n-2)\\bigr)$ with $D(0)=1$, $D(1)=0$.",
+      "proof_sketch": "Consider derangements $w$ of $[n]$. Choose $w(n) = k$ for some $k \\in [n-1]$ (so $w(n) \\neq n$). Case 1: $w(k) = n$. Then the remaining $n-2$ values form a derangement of $[n] \\setminus \\{k,n\\}$, giving $(n-1) D(n-2)$ such $w$. Case 2: $w(k) \\neq n$. Replace $n$ by $k$ in the constraint: now positions $1,\\ldots,n-1$ form a derangement of $[n-1]$ (with $k$ playing the role of $n$), giving $(n-1) D(n-1)$ such $w$.",
+      "techniques": ["bijection", "double-counting"],
+      "cross_refs": ["2.1"]
+    },
+    {
+      "id": "prop-2.2.6",
+      "order": 8,
+      "number": "2.2.6",
+      "title": "Determinantal formula for $f_{=}$",
+      "statement": "Let $0 = s_0 < s_1 < \\cdots < s_k < s_{k+1} = n$ and let $g: \\mathbb{Z}_{\\geq 0} \\to R$ be any function into a commutative ring $R$. Suppose $f_{\\leq}(S)$ (the I-E 'at-least' function) has the product form $f_{\\leq}(S) = \\prod_{i=0}^{k} g(s_{i+1} - s_i)$ for every $S = \\{s_1,\\ldots,s_k\\} \\subseteq [n-1]$. Then:\n$$f_{=}(S) = \\det\\bigl[g(s_{j+1} - s_i + j - i - 1)\\bigr]_{i,j=1}^{k+1}$$\n(indices adjusted so the matrix is $(k+1) \\times (k+1)$ with entries depending on $s_i, s_j$).\n\nMore explicitly with $s_0 = 0$, $s_{k+1} = n$: the matrix entry in row $i$, column $j$ is $g(s_{j+1} - s_i)$, where rows/columns are indexed $0, \\ldots, k$.",
+      "proof_sketch": "The I-E formula is $f_{=}(S) = \\sum_{T \\supseteq S} (-1)^{|T|-|S|} f_{\\leq}(T)$. With the product structure, summing over supersets $T$ of $S$ is equivalent to, for each 'gap' $(s_i, s_{i+1})$ in $S$, independently choosing whether to refine it by inserting more points. The Leibniz expansion of the determinant exactly encodes this alternating sum over permutations (refinements).",
+      "techniques": ["determinants", "inclusion-exclusion"],
+      "cross_refs": ["2.2"]
+    }
+  ],
+
+  "theorems": [
+    {
+      "id": "thm-2.2-derangements",
+      "order": 2,
+      "number": "2.2 (Derangements)",
+      "title": "Derangement formula",
+      "statement": "$$D(n) = n! \\sum_{j=0}^{n} \\frac{(-1)^j}{j!} \\approx \\frac{n!}{e} \\tag{2.11--2.14}$$\nAlso: $D(n) = (n-1)(D(n-1) + D(n-2))$ and the EGF is $\\hat{D}(x) = \\sum_{n \\geq 0} D(n) x^n/n! = e^{-x}/(1-x)$.",
+      "proof_sketch": "Apply the symmetric I-E with properties $p_i$: 'position $i$ is a fixed point.' Then $b(k) = (n-k)!$ and $D(n) = a(0) = \\sum_{k=0}^n (-1)^k \\binom{n}{k}(n-k)! = \\sum_{k=0}^n (-1)^k n!/k!$.",
+      "techniques": ["inclusion-exclusion", "generating-functions"],
+      "cross_refs": ["2.1"]
+    },
+    {
+      "id": "thm-2.2-alpha",
+      "order": 4,
+      "number": "2.2 (Descent-set: $\\alpha$ formula)",
+      "title": "At-least descent count is a multinomial",
+      "statement": "For $S = \\{s_1 < \\cdots < s_k\\} \\subseteq [n-1]$ with $s_0=0$, $s_{k+1}=n$, let $c_i = s_i - s_{i-1}$ for $i=1,\\ldots,k+1$. Then:\n$$\\alpha_n(S) = \\binom{n}{c_1, c_2, \\ldots, c_{k+1}} = \\frac{n!}{c_1!\\, c_2!\\, \\cdots\\, c_{k+1}!} \\tag{2.15}$$",
+      "proof_sketch": "A permutation $w \\in S_n$ has $\\text{Des}(w) \\subseteq S$ iff in each block $(s_{i-1}, s_i]$ of positions, $w$ is **weakly increasing**. Equivalently, $w$ is a shuffle of $k+1$ increasing runs of lengths $c_1, \\ldots, c_{k+1}$. The number of such shuffles is $n! / (c_1! \\cdots c_{k+1}!)$.",
+      "techniques": ["inclusion-exclusion"],
+      "cross_refs": ["2.1"]
+    },
+    {
+      "id": "thm-2.2-det",
+      "order": 5,
+      "number": "2.2 (Equations 2.16--2.17)",
+      "title": "Descent-set count as a determinant",
+      "statement": "With $S = \\{s_1 < \\cdots < s_k\\}$, $s_0 = 0$, $s_{k+1} = n$:\n$$\\beta_n(S) = \\sum_{T \\supseteq S} (-1)^{|T|-|S|} \\alpha_n(T) \\tag{2.15, via I-E}$$\nThis equals the determinant (Eq. 2.16):\n$$\\beta_n(S) = \\det\\!\\left[\\frac{1}{(s_{j+1} - s_i)!}\\right]_{0 \\leq i,j \\leq k} \\cdot \\prod_{i=0}^{k} (s_{i+1} - s_i)! \\cdot n!$$\nMore cleanly, factoring out row and column constants (Eq. 2.17):\n$$\\beta_n(S) = n! \\cdot \\det\\!\\left[\\binom{n - s_i}{s_{j+1} - s_i}\\right]_{0 \\leq i,j \\leq k}$$",
+      "proof_sketch": "Step 1: $\\alpha_n(T)$ depends only on the gap lengths $t_{j+1} - t_j$. Factor it: $\\alpha_n(T) = n! / \\prod_j (t_{j+1}-t_j)!$. This is a product over the gaps of $T$, matching the hypothesis of Prop. 2.2.6 with $g(m) = 1/m!$.\n\nStep 2: Apply I-E over supersets $T \\supseteq S$. Each such $T$ is obtained by inserting extra breakpoints into the gaps of $S$. For each gap $(s_i, s_{i+1})$ of $S$, the contribution of inserting extra breakpoints in that gap is independent of other gaps. This independence is what gives the Leibniz (determinant) structure.\n\nStep 3 (Eq. 2.16 → 2.17): Factor $1/\\prod_i s_i!$ from row $i$ and $s_{j+1}!$ from column $j$. These telescope to absorb $n!$ and transform $1/(s_{j+1}-s_i)!$ into the binomial $\\binom{n-s_i}{s_{j+1}-s_i}$ after rescaling.",
+      "proof_detailed": "The detailed calculation for the $n=8$, $S=\\{1,5\\}$ example ($k=2$, $s_0=0,s_1=1,s_2=5,s_3=8$):\n\nThe $3\\times 3$ binomial matrix has $(i,j)$-entry $\\binom{8-s_i}{s_{j+1}-s_i}$ for $i,j=0,1,2$:\n\n| | $j=0$ ($s_1=1$) | $j=1$ ($s_2=5$) | $j=2$ ($s_3=8$) |\n|---|---|---|---|\n| $i=0$ ($s_0=0$) | $\\binom{8}{1}=8$ | $\\binom{8}{5}=56$ | $\\binom{8}{8}=1$ |\n| $i=1$ ($s_1=1$) | $\\binom{7}{0}=1$ | $\\binom{7}{4}=35$ | $\\binom{7}{7}=1$ |\n| $i=2$ ($s_2=5$) | $\\binom{3}{-4}=0$ | $\\binom{3}{0}=1$ | $\\binom{3}{3}=1$ |\n\nBut wait — $\\binom{3}{-4}=0$ since $s_1 - s_2 = 1 - 5 < 0$ (the lower-triangular entries vanish!). Computing:\n$$\\det = 8(35 \\cdot 1 - 1 \\cdot 1) - 56(1 \\cdot 1 - 1 \\cdot 0) + 1(1 \\cdot 1 - 35 \\cdot 0) = 8 \\cdot 34 - 56 + 1 = 272 - 56 + 1 = 217.$$\nSo $\\beta_8(\\{1,5\\}) = 217$. Sanity: $\\alpha_8(\\{1,5\\}) = \\binom{8}{1,4,3} = 280$, and I-E removes the 63 extra permutations.",
+      "techniques": ["inclusion-exclusion", "determinants"],
+      "cross_refs": ["2.2"]
+    },
+    {
+      "id": "thm-2.2-q",
+      "order": 6,
+      "number": "2.2 (Equations 2.18--2.21)",
+      "title": "$q$-analogue: descent set weighted by inversions",
+      "statement": "Define $\\alpha_n^q(S) = \\sum_{\\text{Des}(w) \\subseteq S} q^{\\text{inv}(w)}$ (weight by inversions). Then:\n$$\\alpha_n^q(S) = \\binom{n}{c_1, \\ldots, c_{k+1}}_q \\cdot \\prod_i [c_i]_q! \\quad\\text{where } [n]_q! \\cdot \\binom{n}{k}_q = [n]_q! \\tag{2.18--2.20}$$\nMore precisely, $\\alpha_n^q(S) = [n]_q! / \\prod_{i=1}^{k+1} [c_i]_q!$ where $c_i = s_i - s_{i-1}$.\n\nThe $q$-analogue of $\\beta_n(S)$ is:\n$$\\beta_n^q(S) = \\sum_{\\text{Des}(w) = S} q^{\\text{inv}(w)} = [n]_q! \\cdot \\det\\!\\left[\\binom{n-s_i}{s_{j+1}-s_i}_q\\right]_{0 \\leq i,j \\leq k} \\tag{2.21}$$",
+      "proof_sketch": "The inversion count for $w$ with $\\text{Des}(w) \\subseteq S$ decomposes: inversions come only from comparing values in different blocks. The $q$-multinomial counts such shuffles weighted by $q^{\\text{inv}}$, generalizing the ordinary multinomial. Then the $q$-determinant follows from the same Leibniz-sum argument, with $g(m) = 1/[m]_q!$.",
+      "techniques": ["q-analogue", "determinants"],
+      "cross_refs": ["2.2"]
+    }
+  ],
+
+  "examples": [
+    {
+      "id": "2.2-derangement-3-EGF",
+      "title": "Example 2.2.1 — Derangements via EGF",
+      "content": "The EGF for derangements is $\\sum_{n \\geq 0} D(n) x^n / n! = e^{-x}/(1-x)$.\n\nSince $1/(1-x) = \\sum_n n! \\cdot x^n/n!$ is the EGF for factorials, and $e^{-x} = \\sum_k (-1)^k x^k/k!$, their product gives $D(n) = \\sum_{k=0}^n (-1)^k n!/k!$ by the EGF convolution. Setting $y = -x$: $D(n)/n! \\to 1/e$ as $n \\to \\infty$.",
+      "solution": ""
+    },
+    {
+      "id": "2.2-multiset",
+      "title": "Example 2.2.3 — Multiset permutations",
+      "content": "Let $M$ be a multiset with $a_i$ copies of letter $i$, $|M| = n$. A **multiset permutation** is any arrangement of $M$. Define property $p_{ij}$: 'the $j$-th copy of letter $i$ appears in the wrong order relative to other copies of $i$' (i.e., the relative order of the $a_i$ copies of $i$ is not the natural order $1,2,\\ldots,a_i$).\n\nIn the I-E setup: $b(k) = $ number of arrangements of $M$ with the relative order of at least $k$ specified letters fixed. This is $n! / \\prod_i a_i!$ times a correction for the fixed constraints.\n\nThe symmetric I-E gives $a(0) = n! / \\prod_i a_i!$ (the multinomial coefficient), and $b(k) = $ number of arrangements where at least $k$ 'repeats' occur.",
+      "solution": "The key point: $b(k)$ as defined in the text counts arrangements where at least $k$ of the ordered copies are in the 'natural' (non-repeating) order. When ALL copies of every letter are in natural order, we get the multinomial $n!/\\prod a_i!$. The I-E then recovers this as the 'zero repeats' count."
+    },
+    {
+      "id": "2.2-descent-n8-S15",
+      "title": "Example 2.2.4 — $\\beta_8(\\{1,5\\})$ via determinant (Eq. 2.17)",
+      "content": "Count permutations $w \\in S_8$ with descent set exactly $\\{1,5\\}$, i.e., $w(1) > w(2) < w(3) < w(4) < w(5) > w(6) < w(7) < w(8)$.\n\nHere $S = \\{s_1, s_2\\} = \\{1,5\\}$, so $k=2$, $s_0=0, s_1=1, s_2=5, s_3=8$. The formula gives a $3 \\times 3$ determinant with entry $(i,j)$ equal to $\\binom{8-s_i}{s_{j+1}-s_i}$:\n\n$$\\begin{pmatrix} \\binom{8}{1} & \\binom{8}{5} & \\binom{8}{8} \\\\ \\binom{7}{0} & \\binom{7}{4} & \\binom{7}{7} \\\\ 0 & \\binom{3}{0} & \\binom{3}{3} \\end{pmatrix} = \\begin{pmatrix} 8 & 56 & 1 \\\\ 1 & 35 & 1 \\\\ 0 & 1 & 1 \\end{pmatrix}$$\n\n**Why lower-triangular entries are 0**: $\\binom{n-s_i}{s_{j+1}-s_i} = 0$ whenever $s_{j+1} < s_i$ (negative top, since $n - s_i < n - s_j$, but actually the key is $s_{j+1} - s_i < 0$). This forces the matrix to be **upper Hessenberg**, making the determinant easy to compute along the bottom row.",
+      "solution": "$$\\det = 8(35 - 1) - 56(1 - 0) + 1(1 - 0) = 272 - 56 + 1 = \\boxed{217}.$$\n\nVerify: $\\alpha_8(\\{1,5\\}) = \\binom{8}{1,4,3} = 280$. The overcounting is from permutations with descent sets $\\{1,5,j\\}$ for $j \\in \\{2,3,4,6,7\\}$ and $\\{1,5,j,k\\}$, etc. I-E via the determinant automatically handles all these corrections."
+    },
+    {
+      "id": "2.2-q-analogue-explanation",
+      "title": "Example 2.2.5 — The $q$-multinomial and why $\\text{inv}(w)$ works",
+      "content": "For $n=3$, $S = \\{1\\}$ (so $k=1$, $c_1=1$, $c_2=2$):\n$$\\alpha_3^q(\\{1\\}) = \\sum_{\\text{Des}(w) \\subseteq \\{1\\}} q^{\\text{inv}(w)} = [3]_q! / ([1]_q! [2]_q!) = \\binom{3}{1}_q$$\n\nThe permutations with $\\text{Des}(w) \\subseteq \\{1\\}$ (i.e., $w(1) > w(2) < w(3)$ is not required; we just need no descents outside position 1, so $w$ is **increasing from position 2 onward**, meaning $w(2) < w(3)$). These are: $132\\ (\\text{inv}=1)$, $213\\ (\\text{inv}=1)$, $231\\ (\\text{inv}=2)$, $312\\ (\\text{inv}=2)$... Wait: $\\{w : \\text{Des}(w) \\subseteq \\{1\\}\\}$ means the only possible descent is at position 1. So $w(2) < w(3)$ is required. The 4 such permutations are: $123\\ (0),\\ 132\\ (1),\\ 213\\ (1),\\ 312\\ (2)$. Sum: $1 + q + q + q^2 = (1+q)(1) \\cdot (1+q+q^2)/(1) = [3]_q!/([1]_q![2]_q!) = \\binom{3}{1}_q$. ✓\n\n**Why $\\text{inv}$ works**: inversions between positions in different blocks of $S$ account for all $q$-factors. Inversions within a single increasing block are 0. The $q$-multinomial exactly counts the inversions contributed by choosing which elements go in which block.",
+      "solution": ""
+    }
+  ],
+
+  "exercises": [
+    {
+      "number": "2.5",
+      "statement": "Prove that $D(n) = n D(n-1) + (-1)^n$ for $n \\geq 1$. (Use the formula $D(n) = n!\\sum_{k=0}^n (-1)^k/k!$ directly.)",
+      "difficulty": "easy",
+      "techniques": ["generating-functions"],
+      "relevant_theorems": ["2.2"],
+      "hints": [
+        "Compute $D(n) - n D(n-1)$ using the sum formula. Most terms cancel telescopically."
+      ]
+    },
+    {
+      "number": "2.8",
+      "statement": "Give a bijective proof of the recurrence $D(n) = (n-1)(D(n-1)+D(n-2))$. (Stanley hints at an explicit construction.)",
+      "difficulty": "medium",
+      "techniques": ["bijection"],
+      "relevant_theorems": ["2.2"],
+      "hints": [
+        "For a derangement $w$ of $[n]$, consider where $n$ goes. If $w(n) = k$, then either $w(k) = n$ (a transposition, leaving a derangement of $[n-2]$) or $w(k) \\neq n$ (gives a derangement of $[n-1]$ by remapping $k \\mapsto n$).",
+        "The bijection for case 2: given $w$ with $w(n)=k$, $w(k) \\neq n$, define $w'$ on $[n-1]$ by $w'(i) = w(i)$ for $i \\neq n$, $w'(k) = w(k)$ (where $k$ now represents $n$). Check $w'$ is a derangement."
+      ]
+    },
+    {
+      "number": "2.9",
+      "statement": "Verify that $\\beta_6(\\{2,4\\}) = 6! \\cdot \\det \\binom{6-s_i}{s_{j+1}-s_i}$ for appropriate $s_i$. Compute the $3 \\times 3$ matrix explicitly and evaluate the determinant. Cross-check by computing $\\alpha_6(\\{2,4\\})$ and subtracting the overcounts.",
+      "difficulty": "medium",
+      "techniques": ["determinants", "inclusion-exclusion"],
+      "relevant_theorems": ["2.2"],
+      "hints": [
+        "$S = \\{2,4\\} \\subseteq [5]$, so $s_0=0, s_1=2, s_2=4, s_3=6$. The matrix entries are $\\binom{6-s_i}{s_{j+1}-s_i}$.",
+        "$\\alpha_6(\\{2,4\\}) = \\binom{6}{2,2,2} = 90$."
+      ]
+    }
+  ],
+
+  "connections": {
+    "requires": ["2.1"],
+    "used_by": ["2.3"],
+    "related": []
+  }
+}

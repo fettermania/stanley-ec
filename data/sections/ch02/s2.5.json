@@ -1,0 +1,16 @@
+{
+  "id": "2.5",
+  "title": "The Sieve Method for Sequences",
+  "chapter": 2,
+  "pdf_pages": {"start": 244, "end": 246},
+  "technique_tags": ["inclusion-exclusion"],
+  "status": "stub",
+
+  "key_idea": "I-E applies not just to permutations but to sequences with avoidance conditions, giving a more general sieve.",
+
+  "summary": "**To be filled in when you reach this section.**",
+
+  "notation": [], "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+
+  "connections": {"requires": ["2.1"], "used_by": [], "related": []}
+}

@@ -1,0 +1,16 @@
+{
+  "id": "2.7",
+  "title": "Determinantal Formulas",
+  "chapter": 2,
+  "pdf_pages": {"start": 247, "end": 248},
+  "technique_tags": ["determinants"],
+  "status": "stub",
+
+  "key_idea": "The Lindström–Gessel–Viennot lemma gives determinantal formulas for counting nonintersecting lattice paths, which connects to many combinatorial quantities.",
+
+  "summary": "**To be filled in when you reach this section.** The LGV lemma is one of the most powerful tools in enumerative combinatorics: det$[p(A_i, B_j)]$ = signed count of systems of nonintersecting paths from sources $A_i$ to sinks $B_j$.",
+
+  "notation": [], "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+
+  "connections": {"requires": ["2.2", "2.3"], "used_by": [], "related": []}
+}

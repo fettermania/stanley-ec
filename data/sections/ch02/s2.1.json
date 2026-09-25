@@ -1,0 +1,112 @@
+{
+  "id": "2.1",
+  "title": "Inclusion-Exclusion",
+  "chapter": 2,
+  "pdf_pages": {"start": 223, "end": 226},
+  "technique_tags": ["inclusion-exclusion", "substitution-inner-sum", "mobius-inversion", "finite-differences"],
+
+  "key_idea": "To count objects with **exactly** a prescribed set of properties, express it via an alternating sum over objects with **at least** those properties. The two counts $f_{=}$ and $f_{\\geq}$ are related by Möbius inversion on the Boolean lattice.",
+
+  "summary": "Let $A$ be a finite set of objects, and let $p_1, \\ldots, p_n$ be properties that elements of $A$ may or may not possess. For $T \\subseteq [n]$, define $f_{\\geq}(T)$ = number of elements having **at least** the properties in $T$, and $f_{=}(T)$ = number having **exactly** the properties in $T$ (and no others from $\\{p_1,\\ldots,p_n\\}$).\n\nInclusion-exclusion gives the exact count from the at-least counts. The key formula (Theorem 2.1.1) expresses $f_{=}$ as an alternating sum of $f_{\\geq}$ values. The symmetric case—where $f_{\\geq}(T)$ depends only on $|T|$—gives the cleanest formula, with finite differences.",
+
+  "notation": [
+    {"symbol": "f_{=}(T)", "latex": "f_{=}(T)", "description": "Number of objects with exactly the properties in $T$ (and no other properties from the list)"},
+    {"symbol": "f_{\\geq}(T)", "latex": "f_{\\geq}(T)", "description": "Number of objects with at least the properties in $T$ (may have others too)"},
+    {"symbol": "N_S", "latex": "N_S", "description": "Alternative notation for $f_{=}(S)$ used in some examples"},
+    {"symbol": "\\Delta^m b(0)", "latex": "\\Delta^m b(0)", "description": "The $m$-th forward difference of $b$ evaluated at 0; equals $\\sum_{j=0}^m (-1)^{m-j}\\binom{m}{j}b(j)$"},
+    {"symbol": "a(m),\\, b(k)", "latex": "a(m),\\, b(k)", "description": "In the symmetric case: $a(m) = f_{=}$ with exactly $m$ properties; $b(k) = f_{\\geq}$ with at least $k$ properties"}
+  ],
+
+  "definitions": [
+    {
+      "id": "def-2.1-properties",
+      "order": 1,
+      "term": "Properties and their counts",
+      "statement": "Let $A$ be a finite set and $p_1, \\ldots, p_n$ properties elements of $A$ may possess. For $T \\subseteq [n]$:\n$$f_{\\geq}(T) = |\\{a \\in A : a \\text{ has at least every property } p_i \\text{ for } i \\in T\\}|$$\n$$f_{=}(T) = |\\{a \\in A : a \\text{ has exactly the properties } \\{p_i : i \\in T\\}\\}|$$",
+      "notes": "Note $f_{\\geq}(\\emptyset) = |A|$ and $f_{=}(\\emptyset)$ counts objects with none of the $n$ properties. The fundamental goal is usually to compute $f_{=}(\\emptyset)$."
+    }
+  ],
+
+  "theorems": [
+    {
+      "id": "thm-2.1.1",
+      "order": 2,
+      "number": "2.1.1",
+      "title": "Inclusion-Exclusion",
+      "statement": "For any $S \\subseteq [n]$,\n$$f_{=}(S) = \\sum_{T \\supseteq S} (-1)^{|T| - |S|}\\, f_{\\geq}(T). \\tag{2.2}$$\nIn particular, $f_{=}(\\emptyset) = \\sum_{T \\subseteq [n]} (-1)^{|T|}\\, f_{\\geq}(T)$.",
+      "proof_sketch": "Double-count the set of pairs $(a, U)$ where $a \\in A$ has exactly properties $T_a \\supseteq S$, and $S \\subseteq U \\subseteq T_a$. Each such $a$ contributes $\\sum_{U: S \\subseteq U \\subseteq T_a} (-1)^{|U|-|S|}$, which equals $\\sum_{k=0}^{|T_a|-|S|} (-1)^k \\binom{|T_a|-|S|}{k} = [T_a = S]$ by the binomial theorem. So the total is exactly the count of $a$ with $T_a = S$, which is $f_{=}(S)$.",
+      "proof_detailed": "We compute the RHS and show it equals $f_{=}(S)$.\n\n$$\\sum_{T \\supseteq S} (-1)^{|T|-|S|} f_{\\geq}(T) = \\sum_{T \\supseteq S} (-1)^{|T|-|S|} \\sum_{\\substack{a \\in A \\\\ a \\text{ has all props of } T}} 1$$\n\nSwap the order of summation. For a fixed $a$ with exact property set $T_a \\supseteq S$, the contribution is:\n$$\\sum_{T: S \\subseteq T \\subseteq T_a} (-1)^{|T|-|S|} = \\sum_{k=0}^{|T_a|-|S|} (-1)^k \\binom{|T_a|-|S|}{k} = (1-1)^{|T_a|-|S|} = [T_a = S].$$\n\nSo the entire sum equals the number of $a \\in A$ with $T_a = S$, which is $f_{=}(S)$. $\\square$",
+      "techniques": ["substitution-inner-sum", "double-counting"],
+      "cross_refs": []
+    },
+    {
+      "id": "thm-2.1-symmetric",
+      "order": 3,
+      "number": "2.1 (Symmetric case)",
+      "title": "Symmetric I-E and Finite Differences",
+      "statement": "Suppose $f_{\\geq}(T) = b(|T|)$ depends only on $|T|$ (the **symmetric** case). Define $a(m) = f_{=}(S)$ for any $|S|=m$ (also well-defined by symmetry). Then:\n$$a(m) = \\sum_{k \\geq m} (-1)^{k-m} \\binom{k}{m} b(k) = \\Delta^m b(0) \\tag{2.5}$$\nwhere $\\Delta^m b(0) = \\sum_{j=0}^m (-1)^{m-j} \\binom{m}{j} b(j)$ is the $m$-th forward finite difference of $b$ at 0.",
+      "proof_sketch": "With the symmetric condition, $f_{=}(S)$ depends only on $|S|=m$. Summing Theorem 2.1.1 over the $\\binom{n}{m}$ sets $T$ of size $k \\geq m$ all contribute $\\binom{k}{m}$ times each. The $(-1)^{k-m}\\binom{k}{m}$ comes from grouping $T$'s by $|T|$. Recognizing the result as $\\Delta^m b(0)$ follows from the finite difference formula.",
+      "techniques": ["finite-differences", "substitution-inner-sum"],
+      "cross_refs": []
+    }
+  ],
+
+  "propositions": [
+    {
+      "id": "prop-2.1-inversion",
+      "order": 4,
+      "number": "2.1 (Möbius inversion)",
+      "title": "Möbius Inversion on Boolean Lattice",
+      "statement": "The relation $f_{\\geq}(S) = \\sum_{T \\supseteq S} f_{=}(T)$ can be inverted to give $f_{=}(S) = \\sum_{T \\supseteq S} (-1)^{|T|-|S|} f_{\\geq}(T)$. This is Möbius inversion on the Boolean lattice $2^{[n]}$, where $\\mu(S,T) = (-1)^{|T|-|S|}$.",
+      "proof_sketch": "Direct verification using the formula for the Möbius function of the Boolean lattice, or by applying Theorem 2.1.1.",
+      "techniques": ["mobius-inversion"],
+      "cross_refs": []
+    }
+  ],
+
+  "examples": [
+    {
+      "id": "2.1-derangements-3",
+      "title": "Derangements of $[3]$",
+      "content": "Let $A = S_3$ (all permutations of $\\{1,2,3\\}$), with property $p_i$ = 'position $i$ is a fixed point' ($w(i)=i$). We want $f_{=}(\\emptyset)$ = number of permutations with **no** fixed points.\n\nCompute $f_{\\geq}(T)$: a permutation has at least the fixed points in $T$ iff $w(i)=i$ for all $i \\in T$. So $f_{\\geq}(T) = (3-|T|)!$ (the remaining $3-|T|$ positions are free).\n\nApply inclusion-exclusion:\n$$f_{=}(\\emptyset) = \\sum_{k=0}^{3} (-1)^k \\binom{3}{k} (3-k)! = 6 - 6 + 3 - 1 = 2.$$\nIndeed: $(2,3,1)$ and $(3,1,2)$ are the two derangements of $[3]$.",
+      "solution": ""
+    },
+    {
+      "id": "2.1-symmetric-check",
+      "title": "Verifying the symmetric case formula",
+      "content": "For the derangement setup, $b(k) = f_{\\geq}$ with $k$ fixed points $= (n-k)!$. Then:\n$$D(n) = a(0) = \\sum_{k=0}^{n} (-1)^k \\binom{k}{0} b(k) = \\sum_{k=0}^{n} (-1)^k (n-k)! = n! \\sum_{j=0}^{n} \\frac{(-1)^j}{j!}.$$\nThis is the standard derangement formula.",
+      "solution": ""
+    }
+  ],
+
+  "exercises": [
+    {
+      "number": "2.1",
+      "statement": "Let $A = S_n$ and let the properties be $p_i$: '$w(i) = i$' (fixed points). Compute $f_{=}(S)$ for a set $S$ of size $m$. Your answer should give the number of permutations of $[n]$ fixing exactly the set $S$. Then use this to verify the derangement formula $D(n) = n! \\sum_{k=0}^n (-1)^k / k!$.",
+      "difficulty": "medium",
+      "techniques": ["inclusion-exclusion"],
+      "relevant_theorems": ["2.1"],
+      "hints": [
+        "$f_{=}(S)$ counts permutations where $w(i)=i$ exactly for $i \\in S$ and $w(j)\\neq j$ for $j \\notin S$. The latter part is a derangement condition on $[n] \\setminus S$.",
+        "Use $f_{=}(S) = D(n - |S|)$ where $D(k)$ is the number of derangements of $[k]$."
+      ]
+    },
+    {
+      "number": "2.2",
+      "statement": "Prove the identity $\\sum_{k=m}^{n} (-1)^{k-m} \\binom{k}{m} \\binom{n}{k} = \\binom{n}{m} [m=n]$... wait, this is $[m=n]$? Actually verify: $\\sum_{k=0}^{n} (-1)^k \\binom{n}{k} \\binom{k}{m} = (-1)^m \\binom{n}{m} [m\\leq n]$... Work out the correct identity from the I-E proof and verify it for $n=4, m=2$.",
+      "difficulty": "easy",
+      "techniques": ["substitution-inner-sum"],
+      "relevant_theorems": ["2.1"],
+      "hints": [
+        "The inner sum collapse in Theorem 2.1.1 uses $\\sum_{k=0}^{r} (-1)^k \\binom{r}{k} = [r=0]$.",
+        "Combinatorial identity: $\\binom{n}{k}\\binom{k}{m} = \\binom{n}{m}\\binom{n-m}{k-m}$. Use this to verify."
+      ]
+    }
+  ],
+
+  "connections": {
+    "requires": [],
+    "used_by": ["2.2", "2.3", "2.4", "2.5"],
+    "related": []
+  }
+}

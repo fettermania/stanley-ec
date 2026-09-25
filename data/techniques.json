@@ -1,0 +1,74 @@
+{
+  "techniques": [
+    {
+      "id": "inclusion-exclusion",
+      "name": "Inclusion-Exclusion",
+      "description": "To count objects with **none** of a set of properties, alternately add and subtract counts of objects having at least each combination of properties. For properties $A_1, \\ldots, A_n$, the count of objects with none of them is $\\sum_{T \\subseteq [n]} (-1)^{|T|} f_{\\geq}(T)$, where $f_{\\geq}(T)$ counts objects having at least the properties in $T$.",
+      "when_to_use": "When you can compute $f_{\\geq}(T)$ easily for every $T$ (often it factors into a product), but computing the exact count $f_{=}(\\emptyset)$ directly is hard.",
+      "appears_in": ["2.1", "2.2", "2.3"]
+    },
+    {
+      "id": "double-counting",
+      "name": "Double Counting / Switching the Order of Summation",
+      "description": "Count the same set $S$ of pairs (or triples) in two different orders. If $S = \\{(a, b) : a \\in A,\\, b \\in B(a)\\}$, summing first over $a$ gives $\\sum_a |B(a)|$; summing first over $b$ gives $\\sum_b |A(b)|$. Equating the two sums yields an identity.",
+      "when_to_use": "Whenever you need to relate two sums involving binomial coefficients or other combinatorial quantities. The key step is always identifying the correct set of pairs to double-count.",
+      "appears_in": ["2.3"]
+    },
+    {
+      "id": "substitution-inner-sum",
+      "name": "Inner Sum Collapse via Substitution",
+      "description": "After an inclusion-exclusion, swap the order of summation so the inner sum runs over the 'excess' properties. The inner sum often evaluates to zero unless the outer index equals a specific value, collapsing the double sum. The identity $\\sum_{k=j}^{n} (-1)^{k-j} \\binom{k}{j} = [j=n]$ is a typical example.",
+      "when_to_use": "When the I-E formula produces a double sum $\\sum_T \\sum_{\\text{objects}} (-1)^{|T|}$. Interchange summation, identify the inner sum as an alternating binomial sum, and collapse.",
+      "appears_in": ["2.1", "2.2"]
+    },
+    {
+      "id": "generating-functions",
+      "name": "Generating Functions",
+      "description": "Encode a sequence $a_0, a_1, a_2, \\ldots$ as $A(x) = \\sum_n a_n x^n$ (ordinary) or $\\hat{A}(x) = \\sum_n a_n x^n / n!$ (exponential). Algebraic identities on $A(x)$ correspond to combinatorial identities on the $a_n$.",
+      "when_to_use": "Recurrences, convolutions, asymptotic estimates. The EGF is natural when objects have labeled components (permutations, set partitions). The OGF is natural for unlabeled objects.",
+      "appears_in": ["2.2"]
+    },
+    {
+      "id": "q-analogue",
+      "name": "q-Analogues",
+      "description": "Replace ordinary integers and factorials with their $q$-counterparts: $[n]_q = 1 + q + \\cdots + q^{n-1}$, $[n]_q! = [1]_q [2]_q \\cdots [n]_q$, and the $q$-binomial coefficient $\\binom{n}{k}_q = [n]_q! / ([k]_q! [n-k]_q!)$. The $q$-binomial counts $k$-dimensional subspaces of $\\mathbb{F}_q^n$ and also equals $\\sum_{w} q^{\\text{inv}(w)}$ over permutations with descent content $(k, n-k)$.",
+      "when_to_use": "When ordinary counting formulas have natural 'stat' refinements (inv, maj, etc.) or when counting over finite fields $\\mathbb{F}_q$.",
+      "appears_in": ["2.2"]
+    },
+    {
+      "id": "rook-polynomials",
+      "name": "Rook Polynomials",
+      "description": "For a board $B \\subseteq [n] \\times [n]$, the rook numbers $r_k(B)$ count ways to place $k$ non-attacking rooks on $B$. The rook polynomial $R_B(x) = \\sum_k r_k x^k$ encodes these. The hit numbers $N_j$ (full non-attacking placements with exactly $j$ rooks on $B$) are recovered from the $r_k$ via $N_n(x) = \\sum_k r_k (n-k)! (x-1)^k$.",
+      "when_to_use": "Permutation problems with position restrictions. The derangement formula is the $B = $ diagonal case; ménage is $B = $ diagonal plus super-diagonal (mod $n$).",
+      "appears_in": ["2.3"]
+    },
+    {
+      "id": "determinants",
+      "name": "Determinants from Factored Sums",
+      "description": "When an inclusion-exclusion sum $\\sum_{T} (-1)^{|T|} f_{\\leq}(T)$ has $f_{\\leq}(T)$ factoring as a product over pairs $(i,j)$, the Leibniz formula for the determinant exactly captures the alternating sum. The result is a determinant of the matrix $[g(i,j)]$.",
+      "when_to_use": "I-E over ordered sets (e.g., descent sets, paths) where the 'at-least' function $f_{\\leq}$ factors as a product. If $f_{\\leq}(s_1, \\ldots, s_k) = \\prod_i h(s_i, s_{i+1})$, the I-E sum becomes a determinant.",
+      "appears_in": ["2.2"]
+    },
+    {
+      "id": "mobius-inversion",
+      "name": "Möbius Inversion on the Boolean Lattice",
+      "description": "The inclusion-exclusion formula $f_{=}(S) = \\sum_{T \\supseteq S} (-1)^{|T|-|S|} f_{\\geq}(T)$ is exactly Möbius inversion on the Boolean lattice $2^{[n]}$, where the Möbius function is $\\mu(S,T) = (-1)^{|T|-|S|}$.",
+      "when_to_use": "Any time you recognize I-E as a special case of Möbius inversion. Generalizes to arbitrary posets in §3.",
+      "appears_in": ["2.1", "2.2"]
+    },
+    {
+      "id": "bijection",
+      "name": "Bijective Proof",
+      "description": "Prove $|A| = |B|$ by constructing an explicit bijection $\\varphi: A \\to B$. The bijection must be clearly defined, injective, and surjective. Often the inverse is the more natural map to define.",
+      "when_to_use": "When two combinatorial quantities are equal and there is a natural correspondence between the objects. Also useful for proving recurrences (e.g., $D(n) = (n-1)(D(n-1)+D(n-2))$).",
+      "appears_in": ["2.2"]
+    },
+    {
+      "id": "finite-differences",
+      "name": "Finite Differences",
+      "description": "The forward difference operator $\\Delta$ acts by $(\\Delta f)(k) = f(k+1) - f(k)$. Then $\\Delta^m f(0) = \\sum_{j=0}^m (-1)^{m-j} \\binom{m}{j} f(j)$. If $f(k) = b(k)$ counts objects with 'at least $k$ properties' in a symmetric I-E setup, then $a(m) = \\Delta^m b(0)$ counts objects with 'exactly $m$ properties.'",
+      "when_to_use": "Symmetric I-E (when $f_{\\geq}(T)$ depends only on $|T|$). The formula $a(m) = \\Delta^m b(0)$ is cleaner than writing out the full alternating sum.",
+      "appears_in": ["2.1", "2.2"]
+    }
+  ]
+}

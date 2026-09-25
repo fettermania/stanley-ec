@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EC Companion — Stanley Enumerative Combinatorics</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <!-- MathJax 3 -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- Top bar -->
+    <header id="topbar">
+      <div id="brand">
+        <span class="brand-title">EC Companion</span>
+        <span class="brand-sub">Stanley · Enumerative Combinatorics Vol. 1</span>
+      </div>
+      <div id="search-wrap">
+        <input type="text" id="search-input" placeholder="Search theorems, definitions, techniques…" autocomplete="off" />
+        <div id="search-results" class="hidden"></div>
+      </div>
+      <div id="topbar-actions">
+        <button id="btn-export" title="Export notes and progress">Export</button>
+        <button id="btn-import" title="Import saved data">Import</button>
+        <input type="file" id="import-file" accept=".json" style="display:none" />
+      </div>
+    </header>
+
+    <div id="main-layout">
+      <!-- Sidebar -->
+      <nav id="sidebar">
+        <div class="nav-section">
+          <a href="#home" class="nav-home nav-link" data-route="home">Home</a>
+          <a href="#techniques" class="nav-link" data-route="techniques">Technique Library</a>
+          <a href="#index" class="nav-link" data-route="index">Theorem Index</a>
+        </div>
+        <div id="chapter-nav" class="nav-section">
+          <!-- Populated by JS -->
+        </div>
+      </nav>
+
+      <!-- Content -->
+      <main id="content">
+        <div id="content-inner">
+          <!-- Populated by JS -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Templates -->
+  <template id="tpl-section-tabs">
+    <div class="section-tabs">
+      <button class="tab-btn active" data-tab="overview">Overview</button>
+      <button class="tab-btn" data-tab="content">Theorems &amp; Defs</button>
+      <button class="tab-btn" data-tab="examples">Examples</button>
+      <button class="tab-btn" data-tab="exercises">Exercises</button>
+      <button class="tab-btn" data-tab="notes">My Notes</button>
+      <button class="tab-btn" data-tab="connections">Connections</button>
+    </div>
+  </template>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

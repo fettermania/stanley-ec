@@ -1,0 +1,26 @@
+{
+  "id": "2.4",
+  "title": "Permutations by Cycle Structure",
+  "chapter": 2,
+  "pdf_pages": {"start": 241, "end": 244},
+  "technique_tags": ["inclusion-exclusion", "generating-functions"],
+  "status": "stub",
+
+  "key_idea": "This section applies I-E to count permutations by their cycle type, connecting rook numbers to Stirling numbers of the first kind.",
+
+  "summary": "**To be filled in when you reach this section.** Use `python3 scripts/add_section.py 2.4` to scaffold the content, then edit `data/sections/ch02/s2.4.json` with your notes.",
+
+  "notation": [],
+  "definitions": [],
+  "theorems": [],
+  "propositions": [],
+  "corollaries": [],
+  "examples": [],
+  "exercises": [],
+
+  "connections": {
+    "requires": ["2.1", "2.2", "2.3"],
+    "used_by": [],
+    "related": []
+  }
+}

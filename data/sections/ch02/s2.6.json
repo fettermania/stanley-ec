@@ -1,0 +1,16 @@
+{
+  "id": "2.6",
+  "title": "Posets and Möbius Inversion",
+  "chapter": 2,
+  "pdf_pages": {"start": 246, "end": 247},
+  "technique_tags": ["mobius-inversion"],
+  "status": "stub",
+
+  "key_idea": "I-E on the Boolean lattice generalizes to Möbius inversion on any locally finite poset. The Möbius function $\\mu(x,y)$ of a poset is defined recursively and generalizes $(-1)^{|T|-|S|}$.",
+
+  "summary": "**To be filled in when you reach this section.** This connects §2.1 back to the general Möbius inversion framework that will appear in Chapter 3.",
+
+  "notation": [], "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+
+  "connections": {"requires": ["2.1"], "used_by": [], "related": []}
+}
