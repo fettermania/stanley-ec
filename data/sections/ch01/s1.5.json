@@ -1,0 +1,21 @@
+{
+  "id": "1.5",
+  "title": "Geometric representations of permutations",
+  "chapter": 1,
+  "pdf_pages": {"start": 48, "end": 53},
+  "technique_tags": ["bijection"],
+  "status": "stub",
+
+  "key_idea": "Permutations of $[n]$ correspond bijectively to regions of the **braid arrangement** (the hyperplane arrangement $\\{x_i = x_j : i<j\\}$ in $\\mathbb{R}^n$). This geometric viewpoint connects the combinatorial statistics (inversions, descents) to the geometry of the arrangement — chambers, walls, and the Coxeter group $S_n$.",
+
+  "summary": "**To be filled in when you reach this section.** Topics: the braid arrangement $\\mathcal{A}_n$, permutohedron, the bijection between permutations and regions, how descents correspond to walls, weak order on $S_n$. Motivates the broader theory of hyperplane arrangements in §3.11.",
+
+  "notation": [
+    {"symbol": "\\mathcal{A}_n", "latex": "\\mathcal{A}_n", "description": "Braid arrangement: the set of hyperplanes $\\{x_i = x_j\\}$ for $1 \\leq i < j \\leq n$ in $\\mathbb{R}^n$"},
+    {"symbol": "\\Pi_n", "latex": "\\Pi_n", "description": "Permutohedron: convex hull of all $n!$ permutations of $(1,2,\\ldots,n)$"}
+  ],
+
+  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+
+  "connections": {"requires": ["1.3","1.4"], "used_by": ["1.6"], "related": ["3.11"]}
+}

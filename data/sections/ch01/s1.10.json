@@ -1,0 +1,22 @@
+{
+  "id": "1.10",
+  "title": "Two q-analogues of permutations",
+  "chapter": 1,
+  "pdf_pages": {"start": 89, "end": 104},
+  "technique_tags": ["q-analogue", "generating-functions", "bijection"],
+  "status": "stub",
+
+  "key_idea": "Two natural statistics on $S_n$ — $\\text{inv}(w)$ (inversions, §1.3) and $\\text{maj}(w)$ (major index, §1.7) — are **equidistributed**: $\\sum_w q^{\\text{inv}(w)} = \\sum_w q^{\\text{maj}(w)} = [n]_q!$. This is MacMahon's theorem. Section 1.10 gives two complementary 'proofs via bijection as words' vs. 'as bijections,' constructing explicit bijections $\\phi: S_n \\to S_n$ with $\\text{inv}(\\phi(w)) = \\text{maj}(w)$.",
+
+  "summary": "**To be filled in when you reach this section.** Two subsections: (1.10.1) the $q$-analogue as bijections ($\\text{inv}$ viewpoint, $q$-factorial via inversion tables, Foata's map); (1.10.2) the $q$-analogue as words ($\\text{maj}$ viewpoint, MacMahon's theorem, the bijection $\\phi$ of Foata and Schützenberger). These connect directly to Example 2.2.5 in §2.2 ($q$-multinomials).",
+
+  "notation": [
+    {"symbol": "\\text{maj}(w)", "latex": "\\text{maj}(w)", "description": "Major index: $\\sum_{i \\in \\text{Des}(w)} i$"},
+    {"symbol": "\\text{inv}(w)", "latex": "\\text{inv}(w)", "description": "Inversion number: $|\\{(i,j): i<j, w(i)>w(j)\\}|$"},
+    {"symbol": "\\phi", "latex": "\\phi", "description": "Foata's bijection $S_n \\to S_n$ with $\\text{maj}(w) = \\text{inv}(\\phi(w))$"}
+  ],
+
+  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+
+  "connections": {"requires": ["1.3","1.4","1.7"], "used_by": ["2.2"], "related": []}
+}

@@ -1,0 +1,23 @@
+{
+  "id": "1.3",
+  "title": "Cycles and inversions",
+  "chapter": 1,
+  "pdf_pages": {"start": 29, "end": 37},
+  "technique_tags": ["bijection", "generating-functions"],
+  "status": "stub",
+
+  "key_idea": "Every permutation decomposes uniquely into **cycles**. The **signless Stirling number** $c(n,k) = \\left[\\begin{smallmatrix}n\\\\k\\end{smallmatrix}\\right]$ counts permutations of $[n]$ with exactly $k$ cycles. Their OGF is $\\sum_k c(n,k) x^k = x(x+1)(x+2)\\cdots(x+n-1)$ (rising factorial). **Inversions**: $(i,j)$ with $i<j$ but $w(i)>w(j)$; tracked by $\\text{inv}(w)$, the $q$-weight $\\sum_w q^{\\text{inv}(w)} = [n]_q!$.",
+
+  "summary": "**To be filled in when you reach this section.** Topics: cycle notation, the cycle lemma, signless Stirling numbers $c(n,k)$ and their recurrence $c(n,k) = c(n-1,k-1) + (n-1)c(n-1,k)$, inversion tables, the bijection between inversion tables and permutations, and the $q$-analogue $[n]_q! = \\sum_w q^{\\text{inv}(w)}$.",
+
+  "notation": [
+    {"symbol": "c(n,k)", "latex": "c(n,k)", "description": "Signless Stirling number of the first kind: number of $w \\in S_n$ with exactly $k$ cycles"},
+    {"symbol": "\\text{inv}(w)", "latex": "\\text{inv}(w)", "description": "Number of inversions of $w$: $|\\{(i,j): i<j, w(i)>w(j)\\}|$"},
+    {"symbol": "[n]_q!", "latex": "[n]_q!", "description": "$q$-factorial: $\\sum_{w \\in S_n} q^{\\text{inv}(w)} = 1(1+q)(1+q+q^2)\\cdots(1+\\cdots+q^{n-1})$"},
+    {"symbol": "x^{(n)}", "latex": "x^{(n)}", "description": "Rising factorial: $x(x+1)\\cdots(x+n-1)$"}
+  ],
+
+  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+
+  "connections": {"requires": ["1.1","1.2"], "used_by": ["1.4","1.10","2.2"], "related": []}
+}

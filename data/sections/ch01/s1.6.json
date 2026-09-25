@@ -1,0 +1,21 @@
+{
+  "id": "1.6",
+  "title": "Alternating permutations, Euler numbers, and the cd-index of S_n",
+  "chapter": 1,
+  "pdf_pages": {"start": 54, "end": 61},
+  "technique_tags": ["generating-functions", "bijection"],
+  "status": "stub",
+
+  "key_idea": "An **alternating permutation** satisfies $w(1) < w(2) > w(3) < w(4) > \\cdots$. Their count is the **tangent/secant number** $E_n$ (Euler number), which appears in the Taylor series $\\tan x = \\sum_{n \\text{ odd}} E_n x^n/n!$ and $\\sec x = \\sum_{n \\text{ even}} E_n x^n/n!$. The **cd-index** is a polynomial in non-commuting variables $c$ and $d$ that encodes all descent-set statistics of $S_n$ compactly.",
+
+  "summary": "**To be filled in when you reach this section.** Three subsections: (1.6.1) basic properties of $E_n$ and the generating function; (1.6.2) bijection via increasing binary trees (flip equivalence); (1.6.3) min-max trees and the $cd$-index $\\Psi(S_n)$.",
+
+  "notation": [
+    {"symbol": "E_n", "latex": "E_n", "description": "Euler (tangent/secant) number: $E_n = |\\{$alternating permutations of $[n]\\}|$"},
+    {"symbol": "\\Psi(P)", "latex": "\\Psi(P)", "description": "cd-index of a graded poset $P$ (or of $S_n$): a polynomial in $c,d$ encoding flag $f$-vector data"}
+  ],
+
+  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+
+  "connections": {"requires": ["1.4","1.5"], "used_by": [], "related": []}
+}

@@ -1,16 +1,16 @@
 {
   "id": "2.5",
-  "title": "The Sieve Method for Sequences",
+  "title": "V-partitions and Unimodal Sequences",
   "chapter": 2,
-  "pdf_pages": {"start": 244, "end": 246},
-  "technique_tags": ["inclusion-exclusion"],
+  "pdf_pages": {"start": 238, "end": 241},
+  "technique_tags": ["inclusion-exclusion", "generating-functions"],
   "status": "stub",
 
-  "key_idea": "I-E applies not just to permutations but to sequences with avoidance conditions, giving a more general sieve.",
+  "key_idea": "A **V-partition** of $n$ with parts in $\\{1,\\ldots,m\\}$ is a sequence $(\\lambda_1, \\ldots, \\lambda_k)$ that is first decreasing then increasing (a 'V'-shape). Counting these via I-E connects to unimodal sequences and certain $q$-series identities.",
 
   "summary": "**To be filled in when you reach this section.**",
 
   "notation": [], "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
 
-  "connections": {"requires": ["2.1"], "used_by": [], "related": []}
+  "connections": {"requires": ["2.4"], "used_by": [], "related": []}
 }

@@ -1,0 +1,21 @@
+{
+  "id": "1.7",
+  "title": "Permutations of multisets",
+  "chapter": 1,
+  "pdf_pages": {"start": 62, "end": 67},
+  "technique_tags": ["generating-functions", "bijection"],
+  "status": "stub",
+
+  "key_idea": "A **permutation of a multiset** $M = \\{1^{a_1}, 2^{a_2}, \\ldots, k^{a_k}\\}$ is an arrangement of all $n = \\sum a_i$ elements. The count is the multinomial coefficient $\\binom{n}{a_1, \\ldots, a_k}$. Descents and other statistics for multiset permutations generalize the symmetric group case; the descent polynomial is a product formula involving $q$-multinomials.",
+
+  "summary": "**To be filled in when you reach this section.** Key results: multinomial coefficient formula, $q$-analogue via $\\text{inv}$ or $\\text{maj}$, connection to standard Young tableaux, and the MacMahon major index theorem.",
+
+  "notation": [
+    {"symbol": "\\binom{n}{a_1,\\ldots,a_k}", "latex": "\\binom{n}{a_1,\\ldots,a_k}", "description": "Multinomial coefficient: number of permutations of $\\{1^{a_1}, \\ldots, k^{a_k}\\}$"},
+    {"symbol": "\\text{maj}(w)", "latex": "\\text{maj}(w)", "description": "Major index of $w$: $\\sum_{i \\in \\text{Des}(w)} i$"}
+  ],
+
+  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+
+  "connections": {"requires": ["1.2","1.3","1.4"], "used_by": ["1.10","2.2"], "related": []}
+}

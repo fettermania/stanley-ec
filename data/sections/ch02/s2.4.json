@@ -1,26 +1,16 @@
 {
   "id": "2.4",
-  "title": "Permutations by Cycle Structure",
+  "title": "Ferrers Boards",
   "chapter": 2,
-  "pdf_pages": {"start": 241, "end": 244},
-  "technique_tags": ["inclusion-exclusion", "generating-functions"],
+  "pdf_pages": {"start": 235, "end": 237},
+  "technique_tags": ["rook-polynomials", "inclusion-exclusion"],
   "status": "stub",
 
-  "key_idea": "This section applies I-E to count permutations by their cycle type, connecting rook numbers to Stirling numbers of the first kind.",
+  "key_idea": "A **Ferrers board** $B(b_1, \\ldots, b_n)$ is the board with $b_i$ cells in column $i$ (staircase-shaped). The rook numbers $r_k$ for Ferrers boards have a clean product formula, giving a factored rook polynomial. This connects to the theory of hit polynomials and the falling factorial expansion of the rook polynomial.",
 
-  "summary": "**To be filled in when you reach this section.** Use `python3 scripts/add_section.py 2.4` to scaffold the content, then edit `data/sections/ch02/s2.4.json` with your notes.",
+  "summary": "**To be filled in when you reach this section.** Key results: (1) the rook polynomial of a Ferrers board factors as a product, (2) connection between rook numbers and the falling factorial basis for polynomials.",
 
-  "notation": [],
-  "definitions": [],
-  "theorems": [],
-  "propositions": [],
-  "corollaries": [],
-  "examples": [],
-  "exercises": [],
+  "notation": [], "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
 
-  "connections": {
-    "requires": ["2.1", "2.2", "2.3"],
-    "used_by": [],
-    "related": []
-  }
+  "connections": {"requires": ["2.1", "2.3"], "used_by": ["2.5"], "related": []}
 }

@@ -1,0 +1,22 @@
+{
+  "id": "1.4",
+  "title": "Descents",
+  "chapter": 1,
+  "pdf_pages": {"start": 38, "end": 47},
+  "technique_tags": ["generating-functions", "inclusion-exclusion", "bijection"],
+  "status": "stub",
+
+  "key_idea": "The **Eulerian number** $A(n,k)$ (also written $\\langle\\begin{smallmatrix}n\\\\k\\end{smallmatrix}\\rangle$) counts permutations of $[n]$ with exactly $k$ descents. Their generating function is the **Eulerian polynomial** $A_n(t) = \\sum_k A(n,k) t^k$. These satisfy the recurrence $A(n,k) = (k+1)A(n-1,k) + (n-k)A(n-1,k-1)$ and the 'worpitzky identity' connecting Eulerian numbers to power sums.",
+
+  "summary": "**To be filled in when you reach this section.** Key results: Eulerian recurrence, symmetry $A(n,k) = A(n, n-1-k)$, the EGF $\\sum_n A_n(t) x^n/n! = (t-1)/(t-e^{(t-1)x})$, the Worpitzky identity $n^k = \\sum_j A(k,j)\\binom{n+k-j-1}{k}$, and the connection to descent sets in §2.2.",
+
+  "notation": [
+    {"symbol": "A(n,k)", "latex": "A(n,k)", "description": "Eulerian number: number of $w \\in S_n$ with exactly $k$ descents"},
+    {"symbol": "\\text{des}(w)", "latex": "\\text{des}(w)", "description": "Number of descents of $w$: $|\\{i \\in [n-1]: w(i) > w(i+1)\\}|$"},
+    {"symbol": "A_n(t)", "latex": "A_n(t)", "description": "Eulerian polynomial $\\sum_{k=0}^{n-1} A(n,k) t^k$; also written $\\sum_w t^{\\text{des}(w)}$"}
+  ],
+
+  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+
+  "connections": {"requires": ["1.1","1.2","1.3"], "used_by": ["1.6","2.2"], "related": []}
+}

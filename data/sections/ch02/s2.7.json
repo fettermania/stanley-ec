@@ -1,14 +1,14 @@
 {
   "id": "2.7",
-  "title": "Determinantal Formulas",
+  "title": "Determinants",
   "chapter": 2,
-  "pdf_pages": {"start": 247, "end": 248},
+  "pdf_pages": {"start": 246, "end": 248},
   "technique_tags": ["determinants"],
   "status": "stub",
 
-  "key_idea": "The Lindström–Gessel–Viennot lemma gives determinantal formulas for counting nonintersecting lattice paths, which connects to many combinatorial quantities.",
+  "key_idea": "The **Lindström–Gessel–Viennot (LGV) lemma**: for a directed acyclic graph with sources $A_1, \\ldots, A_n$ and sinks $B_1, \\ldots, B_n$, the determinant $\\det[e(A_i, B_j)]$ (where $e(u,v)$ = sum of weights of paths $u \\to v$) equals the signed sum over $n$-tuples of vertex-disjoint paths. This gives determinantal formulas for many combinatorial quantities (binomial, ballot, Catalan, plane partitions).",
 
-  "summary": "**To be filled in when you reach this section.** The LGV lemma is one of the most powerful tools in enumerative combinatorics: det$[p(A_i, B_j)]$ = signed count of systems of nonintersecting paths from sources $A_i$ to sinks $B_j$.",
+  "summary": "**To be filled in when you reach this section.** The LGV lemma is one of the most powerful tools in enumerative combinatorics — a clean determinantal formula arising from a sign-reversing involution on intersecting path systems.",
 
   "notation": [], "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
 

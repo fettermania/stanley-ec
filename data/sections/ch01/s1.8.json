@@ -1,0 +1,23 @@
+{
+  "id": "1.8",
+  "title": "Partition identities",
+  "chapter": 1,
+  "pdf_pages": {"start": 68, "end": 78},
+  "technique_tags": ["generating-functions", "bijection"],
+  "status": "stub",
+
+  "key_idea": "An **integer partition** of $n$ is a weakly decreasing sequence $\\lambda_1 \\geq \\lambda_2 \\geq \\cdots \\geq \\lambda_k > 0$ with $\\sum \\lambda_i = n$. The OGF is $\\sum_n p(n)x^n = \\prod_{k \\geq 1} 1/(1-x^k)$. Classical identities (Euler, Jacobi, Rogers–Ramanujan) equate different partition families; many have elegant bijective proofs via Young diagrams or Ferrers diagrams.",
+
+  "summary": "**To be filled in when you reach this section.** Key results: Euler's partition theorem (odd parts = distinct parts), conjugation of partitions (Young diagram transpose), Ferrers diagrams, the Jacobi triple product, generating functions with restrictions (distinct parts, bounded parts), and a taste of Rogers-Ramanujan.",
+
+  "notation": [
+    {"symbol": "p(n)", "latex": "p(n)", "description": "Number of integer partitions of $n$"},
+    {"symbol": "p(n,k)", "latex": "p(n,k)", "description": "Number of partitions of $n$ into at most $k$ parts (equivalently, parts $\\leq k$)"},
+    {"symbol": "\\lambda \\vdash n", "latex": "\\lambda \\vdash n", "description": "$\\lambda$ is a partition of $n$"},
+    {"symbol": "\\lambda'", "latex": "\\lambda'", "description": "Conjugate (transpose) partition of $\\lambda$"}
+  ],
+
+  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+
+  "connections": {"requires": ["1.1","1.2"], "used_by": ["1.9","2.4","2.5"], "related": []}
+}
