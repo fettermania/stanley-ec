@@ -4,20 +4,189 @@
   "chapter": 1,
   "pdf_pages": {"start": 68, "end": 78},
   "technique_tags": ["generating-functions", "bijection"],
-  "status": "stub",
+  "status": "done",
 
-  "key_idea": "An **integer partition** of $n$ is a weakly decreasing sequence $\\lambda_1 \\geq \\lambda_2 \\geq \\cdots \\geq \\lambda_k > 0$ with $\\sum \\lambda_i = n$. The OGF is $\\sum_n p(n)x^n = \\prod_{k \\geq 1} 1/(1-x^k)$. Classical identities (Euler, Jacobi, Rogers–Ramanujan) equate different partition families; many have elegant bijective proofs via Young diagrams or Ferrers diagrams.",
+  "key_idea": "The generating functions for partitions are beautiful infinite products. Key identities: $\\sum p(n)q^n = \\prod_{i\\geq 1}1/(1-q^i)$; $q(n) = p_{\\text{odd}}(n)$ (distinct parts = odd parts); the pentagonal number theorem $\\prod(1-q^k) = \\sum(-1)^n q^{n(3n-1)/2}$. Durfee squares connect partition GFs to $q$-binomials.",
 
-  "summary": "**To be filled in when you reach this section.** Key results: Euler's partition theorem (odd parts = distinct parts), conjugation of partitions (Young diagram transpose), Ferrers diagrams, the Jacobi triple product, generating functions with restrictions (distinct parts, bounded parts), and a taste of Rogers-Ramanujan.",
+  "summary": "Stanley develops the generating function theory of partitions, starting from the observation that $\\sum_{n\\geq 0} p_{\\leq k}(n)q^n = 1/((1-q)\\cdots(1-q^k))$. A general theorem (Prop 1.8.1) handles partitions with restricted parts. The section proves $q(n) = p_{\\text{odd}}(n)$ with three proofs (GF, bijective via binary expansion, bijective via diagram cutting). Durfee square decomposition (Prop 1.8.6) yields Gaussian polynomial identities. The pentagonal number theorem (Prop 1.8.7) gives a sign-reversing involution proof.",
 
   "notation": [
-    {"symbol": "p(n)", "latex": "p(n)", "description": "Number of integer partitions of $n$"},
-    {"symbol": "p(n,k)", "latex": "p(n,k)", "description": "Number of partitions of $n$ into at most $k$ parts (equivalently, parts $\\leq k$)"},
-    {"symbol": "\\lambda \\vdash n", "latex": "\\lambda \\vdash n", "description": "$\\lambda$ is a partition of $n$"},
-    {"symbol": "\\lambda'", "latex": "\\lambda'", "description": "Conjugate (transpose) partition of $\\lambda$"}
+    {"symbol": "p(n)",      "latex": "p(n)",            "description": "Total number of partitions of $n$"},
+    {"symbol": "p_k(n)",    "latex": "p_k(n)",          "description": "# partitions of $n$ into exactly $k$ parts"},
+    {"symbol": "q(n)",      "latex": "q(n)",             "description": "# partitions of $n$ into distinct parts"},
+    {"symbol": "p_odd(n)",  "latex": "p_{\\text{odd}}(n)", "description": "# partitions of $n$ into odd parts"},
+    {"symbol": "lambda'",   "latex": "\\lambda'",        "description": "Conjugate partition (transpose Ferrers diagram)"},
+    {"symbol": "rank(lam)", "latex": "\\text{rank}(\\lambda)", "description": "Largest $i$ with $\\lambda_i \\geq i$ (size of Durfee square)"}
   ],
 
-  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+  "definitions": [
+    {
+      "id": "def-conjugate",
+      "term": "Conjugate partition",
+      "number": "1.8.0",
+      "order": 1,
+      "statement": "The **conjugate** (or transpose) $\\lambda'$ of a partition $\\lambda$ is the partition whose Ferrers diagram is the reflection of that of $\\lambda$ across the main diagonal. Explicitly, $\\lambda'_j = \\#\\{i : \\lambda_i \\geq j\\}$. The number of parts of $\\lambda'$ equal to $i$ is $\\lambda_i - \\lambda_{i+1}$ (the $i$th difference)."
+    },
+    {
+      "id": "def-durfee",
+      "term": "Rank and Durfee square",
+      "number": "1.8.4",
+      "order": 8,
+      "statement": "The **rank** of $\\lambda \\vdash n$ is the largest $i$ with $\\lambda_i \\geq i$, i.e., the side length of the largest square fitting in the Ferrers diagram (the **Durfee square**)."
+    }
+  ],
 
-  "connections": {"requires": ["1.1","1.2"], "used_by": ["1.9","2.4","2.5"], "related": []}
+  "propositions": [
+    {
+      "id": "prop-1-8-1",
+      "number": "1.8.1",
+      "title": "General partition GF",
+      "order": 5,
+      "statement": "For each $i \\in \\mathbb{P}$, let $S_i \\subseteq \\mathbb{N}$. Let $\\mathcal{S} = (S_1, S_2, \\ldots)$ and $P(\\mathcal{S}) = $ set of partitions $\\lambda$ such that each part $i$ appears $m_i(\\lambda) \\in S_i$ times. Then $$F(\\mathcal{S}, \\mathbf{q}) = \\sum_{\\lambda \\in P(\\mathcal{S})} q_1^{m_1}q_2^{m_2}\\cdots = \\prod_{i \\geq 1}\\left(\\sum_{j \\in S_i} q_i^j\\right).$$",
+      "proof_sketch": "The coefficient of $q_1^{m_1}q_2^{m_2}\\cdots$ in the product is 1 if each $m_i \\in S_i$ (contributing that partition) and 0 otherwise. The product distributes over the independent constraints for each part size."
+    },
+    {
+      "id": "prop-1-8-3",
+      "number": "1.8.3",
+      "title": "Young diagram column sums",
+      "order": 10,
+      "statement": "For any partition $\\lambda$: $$\\sum_{i \\geq 1}(i-1)\\lambda_i = \\sum_{i \\geq 1} \\binom{\\lambda_i'}{2}$$",
+      "proof_sketch": "Place $i-1$ in each cell of row $i$ of the Young diagram of $\\lambda$. Summing by rows gives the LHS. Summing by columns: column $j$ has $\\lambda_j'$ cells, with values $0, 1, \\ldots, \\lambda_j'-1$, summing to $\\binom{\\lambda_j'}{2}$. The RHS is the column sum."
+    },
+    {
+      "id": "prop-1-8-4",
+      "number": "1.8.4",
+      "title": "Self-conjugate partitions GF",
+      "order": 12,
+      "statement": "$$\\sum_{n \\geq 0} c(n)\\,q^n = (1+q)(1+q^3)(1+q^5)\\cdots$$ where $c(n)$ is the number of self-conjugate partitions ($\\lambda = \\lambda'$) of $n$.",
+      "proof_sketch": "Self-conjugate partitions biject with partitions into distinct odd parts via 'diagonal hooks'. Each hook in the Ferrers diagram of a self-conjugate partition gives a distinct odd part."
+    },
+    {
+      "id": "prop-1-8-5",
+      "number": "1.8.5",
+      "title": "Distinct parts = Odd parts",
+      "order": 15,
+      "statement": "For all $n \\geq 0$: $q(n) = p_{\\text{odd}}(n)$, where $q(n)$ = # partitions into distinct parts and $p_{\\text{odd}}(n)$ = # partitions into odd parts.",
+      "proof_sketch": "**GF proof:** $\\sum q(n)t^n = \\prod_{k\\geq 1}(1+t^k) = \\prod_{k\\geq 1}\\frac{1-t^{2k}}{1-t^k} = \\prod_{j \\text{ odd}}\\frac{1}{1-t^j} = \\sum p_{\\text{odd}}(n)t^n$.\n\n**Bijective proof 1 (binary):** Write each odd part $2j-1$ appearing $r_j$ times in binary; form a distinct-parts partition using the binary expansion.\n\n**Bijective proof 2 (diagram):** Arrange hooks in the Ferrers diagram diagonally to convert a staircase of odd parts to distinct parts.",
+      "techniques": ["bijection", "generating-functions"]
+    },
+    {
+      "id": "prop-1-8-6",
+      "number": "1.8.6",
+      "title": "Durfee square identities",
+      "order": 20,
+      "statement": "(a) $\\displaystyle\\frac{1}{\\prod_{i\\geq 1}(1-xq^i)} = \\sum_{k\\geq 0} \\frac{x^k q^k}{(1-q)(1-q^2)\\cdots(1-q^k)}$.\n\n(b) $\\displaystyle\\frac{1}{\\prod_{i\\geq 1}(1-xq^i)} = \\sum_{k\\geq 0} \\frac{x^k q^{k^2}}{(1-q)\\cdots(1-q^k)(1-xq)\\cdots(1-xq^k)}$.\n\n(c) $\\displaystyle\\prod_{i\\geq 1}(1+xq^i) = \\sum_{k\\geq 0} \\frac{x^k q^{\\binom{k+1}{2}}}{(1-q)\\cdots(1-q^k)}$.",
+      "proof_sketch": "Partition by length $\\ell(\\lambda) = k$: the GF for partitions of length $k$ is $q^k/((1-q)\\cdots(1-q^k))$ (shift each part down by 1 to count partitions with largest part $\\leq k$). For (b), partition by rank (Durfee square side $k$): the Durfee square contributes $q^{k^2}$, the part below-right contributes a $\\binom{n}{k}_q$ factor, and the part to the right of the square contributes another.",
+      "techniques": ["generating-functions"]
+    },
+    {
+      "id": "prop-1-8-7",
+      "number": "1.8.7",
+      "title": "Pentagonal Number Theorem",
+      "order": 25,
+      "statement": "$$\\prod_{k \\geq 1}(1-x^k) = \\sum_{n \\in \\mathbb{Z}} (-1)^n x^{n(3n-1)/2} = 1 - x - x^2 + x^5 + x^7 - x^{12} - x^{15} + \\cdots$$\nThe exponents $n(3n-1)/2$ for $n \\in \\mathbb{Z}$ are the **pentagonal numbers**: $\\ldots, 12, 5, 2, 0, 1, 7, 15, \\ldots$",
+      "proof_sketch": "Define $f(n) = q_e(n) - q_o(n)$ where $q_e(n)$ (resp. $q_o(n)$) counts partitions of $n$ into an even (resp. odd) number of distinct parts. Define an involution $\\varphi$ on partitions into distinct parts by moving the smallest part to become a new 'bottom diagonal row' or vice versa; $\\varphi$ changes the parity of the number of parts. The involution fails only when the partition has the form $(k, k-1, \\ldots, 1)$ or $(k+1, k, \\ldots, 2)$, which are exactly the pentagonal number partitions.",
+      "techniques": ["bijection"]
+    }
+  ],
+
+  "theorems": [],
+
+  "corollaries": [
+    {
+      "id": "cor-1-8-2",
+      "number": "1.8.2",
+      "title": "Partition GF with one variable",
+      "order": 6,
+      "statement": "Under the notation of Proposition 1.8.1, setting $q_i = q^i$: $$\\sum_{n \\geq 0} p(\\mathcal{S}, n) q^n = \\prod_{i \\geq 1}\\left(\\sum_{j \\in S_i} q^{ij}\\right)$$ where $p(\\mathcal{S}, n) = \\#\\{\\lambda \\vdash n : \\lambda \\in P(\\mathcal{S})\\}$."
+    }
+  ],
+
+  "examples": [
+    {
+      "id": "1.8.1",
+      "title": "Partitions of $n$ with $k$ parts",
+      "content": "Show $\\sum_{n\\geq 0} p_{\\leq k}(n)q^n = 1/((1-q)(1-q^2)\\cdots(1-q^k))$.",
+      "solution": "A partition with at most $k$ parts assigns $m_i \\geq 0$ to each part size $i$ (no restriction for $i \\leq k$, $m_i = 0$ for $i > k$). By Corollary 1.8.2 with $S_i = \\mathbb{N}$ for $i\\leq k$ and $S_i = \\{0\\}$ for $i>k$: $\\prod_{i=1}^k \\sum_{j\\geq 0} q^{ij} = \\prod_{i=1}^k 1/(1-q^i)$."
+    },
+    {
+      "id": "1.8.2",
+      "title": "Using pentagonal number theorem to compute $p(n)$",
+      "content": "Use (1.91) to compute $p(20)$ from smaller values.",
+      "solution": "$p(20) = p(19)+p(18)-p(15)-p(13)+p(8)+p(5)-\\cdots$\n$= 490+385-176-101+22+7 = 627$.\n\nThe pentagonal number recurrence $p(n) = \\sum_{k\\neq 0}(-1)^{k-1}p(n-k(3k-1)/2)$ is the most efficient known method for computing $p(n)$."
+    }
+  ],
+
+  "exercises": [
+    {
+      "number": 110,
+      "statement": "Prove bijectively that $p(n)$ = # partitions of $n$ into parts $\\not\\equiv 0 \\pmod{4}$ = # partitions of $n$ into parts that are not all even.",
+      "hints": ["Use the GF identity $\\prod_k 1/(1-x^k)$ and manipulate."],
+      "techniques": ["generating-functions", "bijection"]
+    }
+  ],
+
+  "text_passages": [
+    {
+      "type": "heading",
+      "text": "Generating functions for partitions"
+    },
+    {
+      "type": "prose",
+      "text": "The fundamental GF is $\\sum_{n\\geq 0} p(n)q^n = \\prod_{i\\geq 1}1/(1-q^i)$, coming from the fact that each part size $i$ can appear $0,1,2,\\ldots$ times independently."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.8.1",
+      "label": "Proposition 1.8.1 — General partition GF",
+      "preview": "If parts of size $i$ are restricted to multiplicities in $S_i \\subseteq \\mathbb{N}$, the GF is $\\prod_{i\\geq 1}(\\sum_{j\\in S_i} q_i^j)$. Setting $q_i=q^i$ gives the partition GF."
+    },
+    {
+      "type": "heading",
+      "text": "Distinct parts equal odd parts"
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.8.5",
+      "label": "Proposition 1.8.5 — $q(n)=p_{\\text{odd}}(n)$",
+      "preview": "The number of partitions into distinct parts equals the number into odd parts. Three proofs: GF (telescope $(1+q^k) = (1-q^{2k})/(1-q^k)$), binary expansion bijection, and diagram-cutting bijection."
+    },
+    {
+      "type": "heading",
+      "text": "The Durfee square"
+    },
+    {
+      "type": "concept",
+      "kind": "definition",
+      "number": "1.8.4",
+      "label": "Definition — Rank and Durfee square",
+      "preview": "The rank of $\\lambda$ is the largest $i$ with $\\lambda_i \\geq i$ — the side length of the largest square in the Ferrers diagram. Partitioning by rank gives Durfee square decompositions."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.8.6",
+      "label": "Proposition 1.8.6 — Durfee square identities",
+      "preview": "(a) $\\prod(1-xq^i)^{-1} = \\sum x^k q^k/((1-q)\\cdots(1-q^k))$ (partition by length $k$). (b) Same but partitioned by rank (with $q^{k^2}$ Durfee square factor). (c) Product for distinct parts."
+    },
+    {
+      "type": "heading",
+      "text": "Pentagonal Number Theorem"
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.8.7",
+      "label": "Proposition 1.8.7 — Pentagonal Number Theorem",
+      "preview": "$\\prod_{k\\geq 1}(1-x^k) = \\sum_{n\\in\\mathbb{Z}}(-1)^n x^{n(3n-1)/2} = 1-x-x^2+x^5+x^7-x^{12}-\\cdots$. Proved via sign-reversing involution. Gives recurrence (1.91) for $p(n)$."
+    }
+  ],
+
+  "connections": {
+    "requires": ["1.1","1.7"],
+    "used_by": ["1.10"],
+    "related": ["1.7","1.10"]
+  }
 }

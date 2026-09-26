@@ -3,21 +3,222 @@
   "title": "Cycles and inversions",
   "chapter": 1,
   "pdf_pages": {"start": 29, "end": 37},
-  "technique_tags": ["bijection", "generating-functions"],
-  "status": "stub",
+  "technique_tags": ["bijection", "generating-functions", "cycle-lemma"],
+  "status": "done",
 
-  "key_idea": "Every permutation decomposes uniquely into **cycles**. The **signless Stirling number** $c(n,k) = \\left[\\begin{smallmatrix}n\\\\k\\end{smallmatrix}\\right]$ counts permutations of $[n]$ with exactly $k$ cycles. Their OGF is $\\sum_k c(n,k) x^k = x(x+1)(x+2)\\cdots(x+n-1)$ (rising factorial). **Inversions**: $(i,j)$ with $i<j$ but $w(i)>w(j)$; tracked by $\\text{inv}(w)$, the $q$-weight $\\sum_w q^{\\text{inv}(w)} = [n]_q!$.",
+  "key_idea": "Every permutation $w \\in \\mathfrak{S}_n$ has a unique cycle decomposition. The Stirling numbers $c(n,k)$ count permutations by number of cycles, and $\\sum_k c(n,k)t^k = t(t+1)\\cdots(t+n-1)$. Inversions $(i>j$ but $w_i < w_j)$ are encoded by the inversion table, giving a bijection $\\mathfrak{S}_n \\leftrightarrow \\mathcal{T}_n$, and $\\sum_{w\\in\\mathfrak{S}_n} q^{\\text{inv}(w)} = [n]!_q$.",
 
-  "summary": "**To be filled in when you reach this section.** Topics: cycle notation, the cycle lemma, signless Stirling numbers $c(n,k)$ and their recurrence $c(n,k) = c(n-1,k-1) + (n-1)c(n-1,k)$, inversion tables, the bijection between inversion tables and permutations, and the $q$-analogue $[n]_q! = \\sum_w q^{\\text{inv}(w)}$.",
+  "summary": "Stanley develops the cycle decomposition of permutations and its standardization (the hat map $w \\mapsto \\hat{w}$ converting cycles to words). The main result is Proposition 1.3.7: $\\sum_k c(n,k)t^k = t(t+1)\\cdots(t+n-1)$, proved four ways. Inversions give a bijection between $\\mathfrak{S}_n$ and the product set $[0,n-1]\\times\\cdots\\times[0,0]$, yielding the $q$-analogue $\\sum q^{\\text{inv}(w)} = [n]!_q$.",
 
   "notation": [
-    {"symbol": "c(n,k)", "latex": "c(n,k)", "description": "Signless Stirling number of the first kind: number of $w \\in S_n$ with exactly $k$ cycles"},
-    {"symbol": "\\text{inv}(w)", "latex": "\\text{inv}(w)", "description": "Number of inversions of $w$: $|\\{(i,j): i<j, w(i)>w(j)\\}|$"},
-    {"symbol": "[n]_q!", "latex": "[n]_q!", "description": "$q$-factorial: $\\sum_{w \\in S_n} q^{\\text{inv}(w)} = 1(1+q)(1+q+q^2)\\cdots(1+\\cdots+q^{n-1})$"},
-    {"symbol": "x^{(n)}", "latex": "x^{(n)}", "description": "Rising factorial: $x(x+1)\\cdots(x+n-1)$"}
+    {"symbol": "c(n,k)",    "latex": "c(n,k)",        "description": "Signless Stirling number of first kind: # permutations of $[n]$ with $k$ cycles"},
+    {"symbol": "s(n,k)",    "latex": "s(n,k)",        "description": "Stirling number of first kind (signed): $s(n,k) = (-1)^{n-k}c(n,k)$"},
+    {"symbol": "inv(w)",    "latex": "\\text{inv}(w)", "description": "Number of inversions of $w$: $\\#\\{(i,j): i<j, w_i>w_j\\}$"},
+    {"symbol": "[n]!_q",   "latex": "[n]!_q",         "description": "$q$-factorial: $(1)(1+q)(1+q+q^2)\\cdots(1+\\cdots+q^{n-1})$"},
+    {"symbol": "hat-w",     "latex": "\\hat{w}",       "description": "Word obtained by erasing parentheses from standard cycle form of $w$"}
   ],
 
-  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+  "definitions": [
+    {
+      "id": "def-cycle-decomp",
+      "term": "Cycle decomposition (standard form)",
+      "number": "1.3.1",
+      "order": 1,
+      "statement": "Every permutation $w \\in \\mathfrak{S}_n$ decomposes uniquely into disjoint cycles. The **standard form** writes cycles so that each cycle begins with its largest element, and cycles are ordered with their largest elements increasing left to right. Example: $w = (3\\,1)(5\\,4\\,2)$ is standard since $3 < 5$.\n\nThe map $w \\mapsto \\hat{w}$ erases parentheses from the standard form to give a word in $\\mathfrak{S}_n$."
+    },
+    {
+      "id": "def-inversion-table",
+      "term": "Inversion table",
+      "number": "1.3.11",
+      "order": 10,
+      "statement": "The **inversion table** of $w = w_1\\cdots w_n \\in \\mathfrak{S}_n$ is $I(w) = (a_1, \\ldots, a_n)$ where $a_i = \\#\\{j < i : w_j > w_i\\}$ (equivalently, $a_i$ is the number of elements larger than $i$ that appear to the left of $i$ in $w$). Then $0 \\leq a_i \\leq n-i$, so $I(w) \\in \\mathcal{T}_n = [0,n-1]\\times[0,n-2]\\times\\cdots\\times[0,0]$."
+    }
+  ],
 
-  "connections": {"requires": ["1.1","1.2"], "used_by": ["1.4","1.10","2.2"], "related": []}
+  "propositions": [
+    {
+      "id": "prop-1-3-1",
+      "number": "1.3.1",
+      "title": "Hat map bijection",
+      "order": 5,
+      "statement": "(a) The map $w \\mapsto \\hat{w}$ is a bijection $\\mathfrak{S}_n \\to \\mathfrak{S}_n$. (b) Under this bijection, $w$ has $k$ cycles if and only if $\\hat{w}$ has exactly $k$ left-to-right maxima (positions $i$ where $w_i > w_j$ for all $j < i$).",
+      "proof_sketch": "The standard form is a deterministic procedure on cycles, so $\\hat{w}$ determines $w$ (the left-to-right maxima mark cycle starts). Reversing: given a word, find its left-to-right maxima, insert parentheses before each to recover the cycle form.",
+      "techniques": ["bijection"]
+    },
+    {
+      "id": "prop-1-3-2",
+      "number": "1.3.2",
+      "title": "Count by cycle type",
+      "order": 6,
+      "statement": "The number of permutations $w \\in \\mathfrak{S}_n$ of cycle type $(c_1, c_2, \\ldots, c_n)$ (where $c_i = $ number of cycles of length $i$) is $$\\frac{n!}{1^{c_1}c_1!\\cdot 2^{c_2}c_2! \\cdots n^{c_n}c_n!}.$$",
+      "proof_sketch": "Write all $n!$ permutations as cycle products. A cycle of length $i$ can be written $i$ ways (cyclic rotations), and there are $c_i!$ ways to order the cycles of length $i$. Dividing by these symmetries gives the formula."
+    },
+    {
+      "id": "prop-1-3-7",
+      "number": "1.3.7",
+      "title": "Rising factorial formula for Stirling numbers",
+      "order": 15,
+      "statement": "$$\\sum_{k=0}^n c(n,k)\\,t^k = t(t+1)(t+2)\\cdots(t+n-1)$$",
+      "proof_sketch": "**Proof 1 (semi-combinatorial):** Induction using Lemma 1.3.6 (recurrence for $c(n,k)$). The RHS satisfies the same recurrence as $c(n,k)$ and the same initial conditions.\n\n**Proof 2 (cycle indicator):** Substitute $t_i = t$ for all $i$ in Theorem 1.3.3 to get $\\sum_{n\\geq 0} Z_n x^n = e^{t(x+x^2/2+\\cdots)} = (1-x)^{-t}$. Expand to recover the rising factorial.\n\n**Proof 3 (bijection):** The LHS counts pairs $(w, f)$ with $w \\in \\mathfrak{S}_n$ and $f: C(w) \\to [t]$ (a coloring of cycles). There are $t^k$ colorings of a permutation with $k$ cycles. For $t \\in \\mathbb{P}$, the RHS also counts such pairs: choosing an element of $[t]$ for each of $n$ successive insertions.\n\n**Proof 4 (bijection with pairs):** Stanley's bijection with pairs $(S, f)$ where $S \\subseteq [n-1]$ and $f: S \\to [n-1]$ with $f(i) \\leq i$.",
+      "techniques": ["bijection", "generating-functions"]
+    },
+    {
+      "id": "prop-1-3-10",
+      "number": "1.3.10",
+      "title": "Inversion table and cycles",
+      "order": 18,
+      "statement": "The number of integer sequences $(a_1, a_2, \\ldots, a_n)$ with $0 \\leq a_i \\leq n-i$ and exactly $k$ of the $a_i$ equal to $0$ is $c(n,k)$.",
+      "techniques": ["bijection"]
+    },
+    {
+      "id": "prop-1-3-12",
+      "number": "1.3.12",
+      "title": "Inversion table bijection",
+      "order": 20,
+      "statement": "The map $I: \\mathfrak{S}_n \\to \\mathcal{T}_n = \\{0,\\ldots,n-1\\}\\times\\{0,\\ldots,n-2\\}\\times\\cdots\\times\\{0\\}$ sending $w$ to its inversion table is a bijection.",
+      "proof_sketch": "The inversion table $(a_1,\\ldots,a_n)$ satisfies $0\\leq a_i \\leq n-i$, so $|\\mathcal{T}_n| = n!$ and injectivity follows from reconstructability: insert elements $n, n-1, \\ldots, 1$ in order, with $a_i$ elements to the left of $i$ at the time $i$ is inserted.",
+      "techniques": ["bijection"]
+    },
+    {
+      "id": "prop-1-3-14",
+      "number": "1.3.14",
+      "title": "Inversions are preserved by inversion",
+      "order": 22,
+      "statement": "$\\text{inv}(w) = \\text{inv}(w^{-1})$ for all $w \\in \\mathfrak{S}_n$.",
+      "proof_sketch": "$(i,j)$ is an inversion of $w$ (i.e., $i<j$ and $w_i > w_j$) iff $(w_j, w_i)$ is an inversion of $w^{-1}$. This is a bijection between inversions of $w$ and inversions of $w^{-1}$."
+    }
+  ],
+
+  "theorems": [
+    {
+      "id": "thm-1-3-3",
+      "number": "1.3.3",
+      "title": "Cycle indicator generating function",
+      "order": 8,
+      "statement": "Let $Z_n = Z_n(t_1,\\ldots,t_n) = \\frac{1}{n!}\\sum_{w\\in\\mathfrak{S}_n} t^{\\text{type}(w)}$ be the cycle indicator (where $t^{\\text{type}(w)} = t_1^{c_1}\\cdots t_n^{c_n}$). Then $$\\sum_{n\\geq 0} Z_n x^n = \\exp\\!\\left(t_1 x + \\frac{t_2 x^2}{2} + \\frac{t_3 x^3}{3} + \\cdots\\right).$$",
+      "proof_sketch": "Take the log of both sides. The count of permutations of type $(c_1,\\ldots,c_n)$ from Proposition 1.3.2 factors into contributions from each cycle length, giving the exponential of a sum over cycle lengths.",
+      "techniques": ["generating-functions"]
+    }
+  ],
+
+  "corollaries": [
+    {
+      "id": "cor-1-3-11",
+      "number": "1.3.11",
+      "title": "Left-to-right maxima and Stirling numbers",
+      "order": 19,
+      "statement": "The number of $w \\in \\mathfrak{S}_n$ with exactly $k$ left-to-right maxima is $c(n,k)$.",
+      "proof_sketch": "Follows from Proposition 1.3.1(b) and the definition of $c(n,k)$: $\\hat{w}$ has $k$ left-to-right maxima iff $w$ has $k$ cycles."
+    },
+    {
+      "id": "cor-1-3-13",
+      "number": "1.3.13",
+      "title": "$q$-analogue of $n!$",
+      "order": 21,
+      "statement": "$$\\sum_{w \\in \\mathfrak{S}_n} q^{\\text{inv}(w)} = (1+q)(1+q+q^2)\\cdots(1+q+\\cdots+q^{n-1}) =: [n]!_q.$$",
+      "proof_sketch": "Via the bijection $I: \\mathfrak{S}_n \\to \\mathcal{T}_n$, $\\text{inv}(w) = \\sum_i a_i$ (since $a_i$ counts inversions involving position $i$). Since the $a_i$ are independent with $0 \\leq a_i \\leq n-i$, the generating function factors as claimed."
+    }
+  ],
+
+  "examples": [
+    {
+      "id": "1.3.8",
+      "title": "Building a permutation from $(S, f)$ data",
+      "content": "Let $n=9, k=4$ and $S=\\{1,3,4,6,8\\}$, $f(1)=1, f(4)=1, f(6)=3, f(8)=6$. Recover $w \\in \\mathfrak{S}_9$ with 4 cycles from the bijection in Proof 3 of Proposition 1.3.7.",
+      "solution": "The bijection maps $(S, f)$ to a permutation by placing $i$ into a new cycle whenever $i-1 \\notin S$ and extending the cycle through $f$. Following the procedure for $n=9, k=4$ yields $w = (2)(4)(7\\,5\\,3)(9\\,1\\,6\\,8)$."
+    },
+    {
+      "id": "1.3.9",
+      "title": "Inversion table example",
+      "content": "The sequence $(4,8,5,0,7,5,2,4,1)$ encodes which of $1,\\ldots,9$ appears where. Recover the permutation.",
+      "solution": "Reading off: $a_1=4, a_2=8, \\ldots$ — these are the positions of inversions. Insert elements $9,8,\\ldots,1$ using the inversion table to recover the word $w$."
+    }
+  ],
+
+  "exercises": [
+    {
+      "number": 37,
+      "statement": "Show that $\\sum_{w\\in\\mathfrak{S}_n}\\text{inv}(w) = \\binom{n+1}{3}$.",
+      "hints": ["Use the bijection with $\\mathcal{T}_n$ and compute $\\sum \\sum_i a_i$."],
+      "techniques": ["double-counting"]
+    }
+  ],
+
+  "text_passages": [
+    {
+      "type": "heading",
+      "text": "Cycle decomposition"
+    },
+    {
+      "type": "prose",
+      "text": "Every permutation $w \\in \\mathfrak{S}_n$ decomposes uniquely into disjoint cycles. Stanley's **standard form** imposes a canonical ordering: write each cycle starting with its largest element, order cycles by increasing largest element."
+    },
+    {
+      "type": "concept",
+      "kind": "definition",
+      "number": "1.3.1",
+      "label": "Definition — Cycle decomposition and $\\hat{w}$",
+      "preview": "Standard form puts largest element first in each cycle, cycles in increasing order of maxima. $\\hat{w}$ erases parentheses, giving a bijection $\\mathfrak{S}_n \\to \\mathfrak{S}_n$."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.3.1",
+      "label": "Proposition 1.3.1 — Hat map bijection",
+      "preview": "The map $w \\mapsto \\hat{w}$ is a bijection on $\\mathfrak{S}_n$, with $w$ having $k$ cycles iff $\\hat{w}$ has $k$ left-to-right maxima."
+    },
+    {
+      "type": "heading",
+      "text": "Stirling numbers and the rising factorial"
+    },
+    {
+      "type": "prose",
+      "text": "Let $c(n,k) = \\#\\{w \\in \\mathfrak{S}_n : w \\text{ has } k \\text{ cycles}\\}$ (signless Stirling numbers of the first kind). The main theorem is that $\\sum_k c(n,k)t^k$ equals the rising factorial $t(t+1)\\cdots(t+n-1)$."
+    },
+    {
+      "type": "concept",
+      "kind": "theorem",
+      "number": "1.3.3",
+      "label": "Theorem 1.3.3 — Cycle indicator GF",
+      "preview": "$\\sum_{n\\geq 0} Z_n x^n = \\exp(t_1x + t_2x^2/2 + \\cdots)$. Specializing $t_i = t$ gives $(1-x)^{-t}$ and the rising factorial."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.3.7",
+      "label": "Proposition 1.3.7 — Rising factorial",
+      "preview": "$\\sum_{k=0}^n c(n,k)t^k = t(t+1)\\cdots(t+n-1)$. Stanley gives four proofs: recurrence, GF, bijection with colored cycles, bijection with pairs $(S,f)$."
+    },
+    {
+      "type": "heading",
+      "text": "Inversions and the $q$-factorial"
+    },
+    {
+      "type": "concept",
+      "kind": "definition",
+      "number": "1.3.11",
+      "label": "Definition — Inversion table",
+      "preview": "$I(w) = (a_1,\\ldots,a_n)$ where $a_i = \\#\\{j<i : w_j > w_i\\}$. Always $0 \\leq a_i \\leq n-i$."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.3.12",
+      "label": "Proposition 1.3.12 — Inversion table bijection",
+      "preview": "$I: \\mathfrak{S}_n \\to \\mathcal{T}_n = [0,n-1]\\times\\cdots\\times[0,0]$ is a bijection. Since $|\\mathcal{T}_n|=n!$, this accounts for all permutations."
+    },
+    {
+      "type": "concept",
+      "kind": "corollary",
+      "number": "1.3.13",
+      "label": "Corollary 1.3.13 — $q$-factorial",
+      "preview": "$\\sum_{w\\in\\mathfrak{S}_n} q^{\\text{inv}(w)} = (1+q)(1+q+q^2)\\cdots(1+\\cdots+q^{n-1}) = [n]!_q$. The $q$-factorial counts permutations by inversions."
+    }
+  ],
+
+  "connections": {
+    "requires": ["1.1","1.2"],
+    "used_by": ["1.4","1.5","1.6","1.7","1.9"],
+    "related": ["1.4"]
+  }
 }

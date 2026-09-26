@@ -3,19 +3,147 @@
   "title": "Geometric representations of permutations",
   "chapter": 1,
   "pdf_pages": {"start": 48, "end": 53},
-  "technique_tags": ["bijection"],
-  "status": "stub",
+  "technique_tags": ["bijection", "pattern-avoidance"],
+  "status": "done",
 
-  "key_idea": "Permutations of $[n]$ correspond bijectively to regions of the **braid arrangement** (the hyperplane arrangement $\\{x_i = x_j : i<j\\}$ in $\\mathbb{R}^n$). This geometric viewpoint connects the combinatorial statistics (inversions, descents) to the geometry of the arrangement — chambers, walls, and the Coxeter group $S_n$.",
+  "key_idea": "Permutations have beautiful geometric representations: permutation matrices, diagrams, and increasing binary trees. Pattern-avoiding permutations (132-avoiding, 321-avoiding) are counted by the Catalan numbers $C_n = \\frac{1}{n+1}\\binom{2n}{n}$. Increasing binary trees encode Eulerian statistics.",
 
-  "summary": "**To be filled in when you reach this section.** Topics: the braid arrangement $\\mathcal{A}_n$, permutohedron, the bijection between permutations and regions, how descents correspond to walls, weak order on $S_n$. Motivates the broader theory of hyperplane arrangements in §3.11.",
+  "summary": "The diagram $D_w$ of a permutation captures its inversions geometrically. 321-avoiding permutations (no decreasing subsequence of length 3) biject with certain lattice paths, and 132-avoiding permutations biject with Young diagrams fitting in a staircase — both sets have Catalan number size. Increasing binary trees encode permutations bijectively, with the number of left children giving the Eulerian number count.",
 
   "notation": [
-    {"symbol": "\\mathcal{A}_n", "latex": "\\mathcal{A}_n", "description": "Braid arrangement: the set of hyperplanes $\\{x_i = x_j\\}$ for $1 \\leq i < j \\leq n$ in $\\mathbb{R}^n$"},
-    {"symbol": "\\Pi_n", "latex": "\\Pi_n", "description": "Permutohedron: convex hull of all $n!$ permutations of $(1,2,\\ldots,n)$"}
+    {"symbol": "P_w",     "latex": "P_w",         "description": "Permutation matrix: $(P_w)_{ij} = 1$ iff $w(i)=j$"},
+    {"symbol": "D_w",     "latex": "D_w",         "description": "Diagram of $w$: cells $(i,j)$ with $i < w^{-1}(j)$ and $j < w(i)$"},
+    {"symbol": "S_n(132)","latex": "\\mathcal{S}_n(132)", "description": "132-avoiding permutations in $\\mathfrak{S}_n$"},
+    {"symbol": "C_n",     "latex": "C_n",         "description": "Catalan number: $\\frac{1}{n+1}\\binom{2n}{n}$"}
   ],
 
-  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+  "definitions": [
+    {
+      "id": "def-diagram",
+      "term": "Permutation diagram",
+      "number": "1.5.1",
+      "order": 2,
+      "statement": "The **diagram** of $w \\in \\mathfrak{S}_n$ is $$D_w = \\{(i,j) \\in [n]\\times[n] : w(i) \\neq j,\\, w^{-1}(j) \\neq i,\\, i < w^{-1}(j),\\, j < w(i)\\}.$$ Equivalently, $(i,j) \\in D_w$ iff column $j$ is to the left of the $1$ in row $i$ of $P_w$, and row $i$ is above the $1$ in column $j$."
+    },
+    {
+      "id": "def-inc-binary-tree",
+      "term": "Increasing binary tree",
+      "number": "1.5.2",
+      "order": 6,
+      "statement": "For $w = w_1 \\cdots w_n \\in \\mathfrak{S}_n$, the **increasing binary tree** $T(w)$ is defined recursively: find the position $i$ where $w_i = $ minimum of $w$; then $i$ is the root, $T(u)$ (left subtree) is built from $w_1\\cdots w_{i-1}$, and $T(v)$ (right subtree) from $w_{i+1}\\cdots w_n$. The tree is **increasing** because each parent label is less than its children's labels.\n\nThe **unordered increasing tree** $T'(w)$: vertex $i$ is a child of the rightmost $j < i$ that appears to the left of $i$ in $w$ (if no such $j$, $i$ is a child of the root $0$)."
+    }
+  ],
 
-  "connections": {"requires": ["1.3","1.4"], "used_by": ["1.6"], "related": ["3.11"]}
+  "propositions": [
+    {
+      "id": "prop-1-5-1",
+      "number": "1.5.1",
+      "title": "132-avoiding permutations and partitions",
+      "order": 10,
+      "statement": "There is a bijection between 132-avoiding permutations in $\\mathfrak{S}_n$ and partitions $\\lambda = (\\lambda_1 \\geq \\cdots \\geq \\lambda_n \\geq 0)$ with $\\lambda_i \\leq n-i$ (partitions fitting in the staircase $(n-1, n-2, \\ldots, 0)$). Moreover, under this bijection, $\\text{inv}(w) = |\\lambda|$, so $$\\sum_{w \\in \\mathcal{S}_{132}(n)} q^{\\text{inv}(w)} = \\sum_{\\lambda} q^{|\\lambda|}$$\nwhere $\\lambda$ ranges over partitions fitting in the staircase.",
+      "techniques": ["bijection"]
+    },
+    {
+      "id": "prop-1-5-3",
+      "number": "1.5.3",
+      "title": "Increasing binary trees and Eulerian numbers",
+      "order": 15,
+      "statement": "(a) The number of increasing binary trees on vertex set $[n]$ is $n!$.\n(b) The number of such trees with exactly $k$ left successors (vertices with a left child) is the Eulerian number $A(n, k+1)$.\n(c) The number of **complete** increasing binary trees on $2n+1$ vertices is the Euler number $E_{2n+1}$.",
+      "proof_sketch": "The bijection $w \\mapsto T(w)$ is a bijection $\\mathfrak{S}_n \\to$ (increasing binary trees on $[n]$). A left successor in $T(w)$ corresponds to a descent in $w$, establishing (b). For complete trees (every vertex has 0 or 2 children), alternating permutations are in bijection with such trees.",
+      "techniques": ["bijection"]
+    },
+    {
+      "id": "prop-1-5-5",
+      "number": "1.5.5",
+      "title": "Unordered increasing trees and Stirling/Euler numbers",
+      "order": 20,
+      "statement": "For unordered increasing trees $T'(w)$ on vertex set $\\{0,1,\\ldots,n\\}$ (root labeled $0$):\n(a) The number of such trees is $n!$.\n(b) The number with exactly $k$ children of the root equals $c(n,k)$ (signless Stirling number of the first kind).\n(c) The number with exactly $k$ leaves (vertices with no children) equals the Eulerian number $A(n,k)$.",
+      "techniques": ["bijection"]
+    }
+  ],
+
+  "theorems": [],
+  "corollaries": [],
+
+  "examples": [
+    {
+      "id": "1.5.1",
+      "title": "Catalan numbers from 321-avoiding permutations",
+      "content": "Show $|\\mathcal{S}_{321}(n)| = C_n = \\frac{1}{n+1}\\binom{2n}{n}$.",
+      "solution": "321-avoiding permutations biject with ballot sequences (lattice paths from $(0,0)$ to $(n,n)$ not going below the diagonal): map $w$ to the path that goes right when reading $w$ from right to left (if current value is larger than any future value, go up; else right). The count of such paths is $C_n$."
+    }
+  ],
+
+  "exercises": [
+    {
+      "number": 65,
+      "statement": "Show that the number of 132-avoiding permutations in $\\mathfrak{S}_n$ is the Catalan number $C_n = \\frac{1}{n+1}\\binom{2n}{n}$.",
+      "hints": ["Use the bijection with staircase partitions: $|\\mathcal{S}_{132}(n)|$ = # partitions inside the staircase $(n-1,n-2,\\ldots,1,0)$. This is a well-known Catalan number identity."],
+      "techniques": ["bijection"]
+    }
+  ],
+
+  "text_passages": [
+    {
+      "type": "heading",
+      "text": "Permutation matrix and diagram"
+    },
+    {
+      "type": "prose",
+      "text": "The permutation matrix $P_w$ has a $1$ in position $(i, w(i))$ for each $i$. The **diagram** $D_w$ captures inversions geometrically: $(i,j) \\in D_w$ if cell $(i,j)$ is strictly to the right of the $1$ in column $j$ and strictly above the $1$ in row $i$."
+    },
+    {
+      "type": "concept",
+      "kind": "definition",
+      "number": "1.5.1",
+      "label": "Definition — Permutation diagram",
+      "preview": "$D_w = \\{(i,j): i < w^{-1}(j)$ and $j < w(i)\\}$. This cell set encodes inversions and pattern structure."
+    },
+    {
+      "type": "heading",
+      "text": "Pattern-avoiding permutations and Catalan numbers"
+    },
+    {
+      "type": "prose",
+      "text": "A permutation $w$ is **321-avoiding** if it has no decreasing subsequence of length 3. Similarly, $w$ is **132-avoiding** if there are no $i < j < k$ with $w_k < w_i < w_j$. Both sets have Catalan number size $C_n = \\frac{1}{n+1}\\binom{2n}{n}$."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.5.1",
+      "label": "Proposition 1.5.1 — 132-avoiding and partitions",
+      "preview": "$\\sum_{w \\in \\mathcal{S}_{132}(n)} q^{\\text{inv}(w)} = \\sum_{\\lambda} q^{|\\lambda|}$ where $\\lambda$ ranges over partitions in the staircase $(n-1,\\ldots,0)$. Setting $q=1$ gives $|\\mathcal{S}_{132}(n)| = C_n$."
+    },
+    {
+      "type": "heading",
+      "text": "Increasing binary trees"
+    },
+    {
+      "type": "concept",
+      "kind": "definition",
+      "number": "1.5.2",
+      "label": "Definition — Increasing binary tree",
+      "preview": "$T(w)$ is built recursively: the position of the minimum is the root, left subtree from elements before it, right subtree from elements after. The bijection $w \\leftrightarrow T(w)$ links tree structure to permutation statistics."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.5.3",
+      "label": "Proposition 1.5.3 — Trees and Eulerian numbers",
+      "preview": "(a) Increasing binary trees on $[n]$: $n!$ total. (b) Trees with $k$ left successors: $A(n,k+1)$ (Eulerian number). (c) Complete trees on $2n+1$ vertices: $E_{2n+1}$ (Euler number)."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.5.5",
+      "label": "Proposition 1.5.5 — Unordered increasing trees",
+      "preview": "Unordered increasing trees on $\\{0,\\ldots,n\\}$: (a) $n!$ total; (b) $k$ children of root $\\leftrightarrow c(n,k)$ (Stirling 1st kind); (c) $k$ leaves $\\leftrightarrow A(n,k)$ (Eulerian)."
+    }
+  ],
+
+  "connections": {
+    "requires": ["1.3","1.4"],
+    "used_by": ["1.6"],
+    "related": ["1.6"]
+  }
 }

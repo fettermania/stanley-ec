@@ -3,20 +3,175 @@
   "title": "Two q-analogues of permutations",
   "chapter": 1,
   "pdf_pages": {"start": 89, "end": 104},
-  "technique_tags": ["q-analogue", "generating-functions", "bijection"],
-  "status": "stub",
+  "technique_tags": ["generating-functions", "finite-fields"],
+  "status": "done",
 
-  "key_idea": "Two natural statistics on $S_n$ — $\\text{inv}(w)$ (inversions, §1.3) and $\\text{maj}(w)$ (major index, §1.7) — are **equidistributed**: $\\sum_w q^{\\text{inv}(w)} = \\sum_w q^{\\text{maj}(w)} = [n]_q!$. This is MacMahon's theorem. Section 1.10 gives two complementary 'proofs via bijection as words' vs. 'as bijections,' constructing explicit bijections $\\phi: S_n \\to S_n$ with $\\text{inv}(\\phi(w)) = \\text{maj}(w)$.",
+  "key_idea": "There are two natural $q$-analogues of the symmetric group $\\mathfrak{S}_n$: (1) invertible linear transformations $\\text{GL}(n,q)$ on $\\mathbb{F}_q^n$ (permutations as bijections), and (2) maximal chains (flags) in $\\mathbb{F}_q^n$ ($q$-analogues of permutations as words/chains). The cycle indicator of $\\text{Mat}(n,q)$ and the formula for $c_f(\\lambda)$ are the $q$-analogues of Theorem 1.3.3 and Proposition 1.3.2.",
 
-  "summary": "**To be filled in when you reach this section.** Two subsections: (1.10.1) the $q$-analogue as bijections ($\\text{inv}$ viewpoint, $q$-factorial via inversion tables, Foata's map); (1.10.2) the $q$-analogue as words ($\\text{maj}$ viewpoint, MacMahon's theorem, the bijection $\\phi$ of Foata and Schützenberger). These connect directly to Example 2.2.5 in §2.2 ($q$-multinomials).",
+  "summary": "Section 1.10 develops two $q$-analogues of $\\mathfrak{S}_n$. In §1.10.1, $\\text{GL}(n,q)$ plays the role of $\\mathfrak{S}_n$: the order of $\\text{GL}(n,q)$ is a $q$-analogue of $n!$ (Prop 1.10.1). The adjoint action on $\\text{Mat}(n,q)$ gives an orbit structure counted by $\\omega(n,q) = \\sum_j p_j(n)q^j$ (Prop 1.10.2). Theorem 1.10.4 is the $q$-analogue of the cycle indicator generating function. In §1.10.2, flags in $\\mathbb{F}_q^n$ are the $q$-analogue of words/permutations, giving the $q$-analogue of descent statistics.",
 
   "notation": [
-    {"symbol": "\\text{maj}(w)", "latex": "\\text{maj}(w)", "description": "Major index: $\\sum_{i \\in \\text{Des}(w)} i$"},
-    {"symbol": "\\text{inv}(w)", "latex": "\\text{inv}(w)", "description": "Inversion number: $|\\{(i,j): i<j, w(i)>w(j)\\}|$"},
-    {"symbol": "\\phi", "latex": "\\phi", "description": "Foata's bijection $S_n \\to S_n$ with $\\text{maj}(w) = \\text{inv}(\\phi(w))$"}
+    {"symbol": "GL(n,q)",   "latex": "\\text{GL}(n,q)", "description": "General linear group: invertible $n\\times n$ matrices over $\\mathbb{F}_q$"},
+    {"symbol": "Mat(n,q)",  "latex": "\\text{Mat}(n,q)","description": "All $n\\times n$ matrices over $\\mathbb{F}_q$"},
+    {"symbol": "gamma(n,q)","latex": "\\gamma(n,q)",    "description": "$\\#\\text{GL}(n,q) = (q^n-1)(q^n-q)\\cdots(q^n-q^{n-1})$"},
+    {"symbol": "Z_n(t;q)",  "latex": "Z_n(t;q)",       "description": "Cycle indicator of $\\text{Mat}(n,q)$ — $q$-analogue of the cycle indicator $Z_n(t_i)$"},
+    {"symbol": "c_f(lam)",  "latex": "c_f(\\lambda)",   "description": "# matrices in $\\text{GL}$ commuting with a fixed matrix of orbit type $\\lambda$ for irreducible $f$"}
   ],
 
-  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+  "definitions": [
+    {
+      "id": "def-gl-group",
+      "term": "General linear group GL(n,q)",
+      "number": "1.10.0",
+      "order": 1,
+      "statement": "The **general linear group** $\\text{GL}(n,q)$ is the group of all invertible $n\\times n$ matrices over $\\mathbb{F}_q$. It is the $q$-analogue of the symmetric group $\\mathfrak{S}_n$ (permutations as bijections).\n\nThe **orbit type** $\\Phi_M: \\mathcal{I}(K) \\to \\text{Par}$ of a matrix $M \\in \\text{Mat}(n,K)$ assigns to each monic irreducible polynomial $f$ the partition $\\lambda(f)$ such that the $f$-primary component of $K[M]$ as a $K[u]$-module has type $\\lambda(f)$. This is the $q$-analogue of the cycle type."
+    }
+  ],
 
-  "connections": {"requires": ["1.3","1.4","1.7"], "used_by": ["2.2"], "related": []}
+  "propositions": [
+    {
+      "id": "prop-1-10-1",
+      "number": "1.10.1",
+      "title": "Order of GL(n,q)",
+      "order": 5,
+      "statement": "$$\\#\\text{GL}(n,q) = (q^n-1)(q^n-q)\\cdots(q^n-q^{n-1}) = q^{\\binom{n}{2}}(q-1)^n[n]!_q.$$",
+      "proof_sketch": "An invertible $n\\times n$ matrix has rows that are linearly independent. The first row can be any nonzero vector ($q^n-1$ choices), the second can be any vector not in the span of the first ($q^n - q$ choices), etc."
+    },
+    {
+      "id": "prop-1-10-2",
+      "number": "1.10.2",
+      "title": "Conjugacy classes and partitions",
+      "order": 10,
+      "statement": "The number of orbits $\\omega(n,q)$ of $\\text{GL}(n,q)$ acting adjointly on $\\text{Mat}(n,q)$ (equivalently, the number of conjugacy classes of $\\text{Mat}(n,q)$) satisfies $$\\omega(n,q) = \\sum_j p_j(n)q^j,$$ where $p_j(n)$ is the number of partitions of $n$ into exactly $j$ parts. Equivalently, $\\sum_{n\\geq 0}\\omega(n,q)x^n = \\prod_{j\\geq 1}(1-qx^j)^{-1}.$",
+      "proof_sketch": "Apply Theorem 1.10.4 with the cycle indicator. The number of irreducible polynomials of degree $d$ over $\\mathbb{F}_q$ is $\\beta(d,q) = \\frac{1}{d}\\sum_{e|d}\\mu(d/e)q^e$. Computing the resulting product expansion yields the partition GF.",
+      "techniques": ["generating-functions"]
+    }
+  ],
+
+  "theorems": [
+    {
+      "id": "thm-1-10-4",
+      "number": "1.10.4",
+      "title": "q-analogue of cycle indicator GF",
+      "order": 20,
+      "statement": "Let $Z_n(t;q)$ be the cycle indicator of $\\text{Mat}(n,q)$ (defined by analogy with $Z_n(t_i)$). Then $$\\sum_{n\\geq 0} Z_n(t;q)x^n = \\prod_{f\\in\\mathcal{I}}\\sum_{\\lambda\\in\\text{Par}} \\frac{t_{f,\\lambda}\\,x^{|\\lambda|\\cdot\\text{deg}(f)}}{c_f(\\lambda)},$$ where $c_f(\\lambda)$ is the number of matrices in $\\text{GL}$ commuting with a fixed matrix of orbit type $\\{f\\mapsto\\lambda\\}$.",
+      "proof_sketch": "By Burnside's lemma (equation 1.106), the number of orbits of $\\text{GL}(n,q)$ on $\\text{Mat}(n,q)$ factors. The orbit type decomposes into a product over irreducible polynomials $f$, each factor independent. The formula follows by combining the GF for each factor."
+    },
+    {
+      "id": "thm-1-10-7",
+      "number": "1.10.7",
+      "title": "Formula for $c_f(\\lambda)$",
+      "order": 25,
+      "statement": "Let $f \\in \\mathcal{I}(K)$ have degree $d$, and let $\\lambda \\vdash n$ with conjugate $\\lambda'$ and $m_i = m_i(\\lambda) = \\lambda'_i - \\lambda'_{i+1}$. Set $h_i = \\lambda'_1+\\cdots+\\lambda'_i$. Then $$c_f(\\lambda) = \\prod_{i\\geq 1}\\prod_{j=1}^{m_i}(q^{h_i d} - q^{(h_i-j)d}).$$",
+      "proof_sketch": "Count the indexed bases for $\\mathbb{F}_q^{nd}$ that define a matrix $M$ with $\\Phi_M(f)=\\lambda$. The counting of valid choices for each basis vector $v_{ij}$ in the flag decomposition gives the product formula."
+    }
+  ],
+
+  "corollaries": [
+    {
+      "id": "cor-1-10-6",
+      "number": "1.10.6",
+      "title": "Diagonalizable matrices GF",
+      "order": 28,
+      "statement": "Let $d_n$ = number of diagonalizable (over $\\mathbb{F}_q$) matrices $M \\in \\text{Mat}(n,q)$. Then $$\\sum_{n\\geq 0} d_n \\frac{x^n}{\\gamma(n)} = \\left(\\sum_{k\\geq 0}\\frac{x^k}{\\gamma(k)}\\right)^q.$$",
+      "proof_sketch": "Specialize Theorem 1.10.4 using that $M$ is diagonalizable iff $\\Phi_M(f) = \\langle 1^k\\rangle$ for each linear $f=z-a$ (with $k$ = multiplicity of eigenvalue $a$) and $\\Phi_M(f)=\\emptyset$ for non-linear $f$."
+    },
+    {
+      "id": "cor-1-10-10",
+      "number": "1.10.10",
+      "title": "Specialization of cycle indicator",
+      "order": 30,
+      "statement": "$$\\sum_{n\\geq 0}\\hat{Z}_n x^n = \\prod_{f\\in\\mathcal{I}}\\prod_{r\\geq 1}\\left(1 - \\frac{t_f x^{\\text{deg}(f)}}{q^{r\\cdot\\text{deg}(f)}}\\right)^{-1},$$ where $\\hat{Z}_n = Z_n(t;q)|_{t_{f,\\lambda}=t_f^{|\\lambda|}}$."
+    },
+    {
+      "id": "cor-1-10-11",
+      "number": "1.10.11",
+      "title": "Nilpotent matrices",
+      "order": 35,
+      "statement": "(a) $\\frac{1}{1-x} = \\prod_{n\\geq 1}\\prod_{r\\geq 1}(1-q^{rn}x^n)^{-\\beta^*(n,q)}$.\n(b) The number of nilpotent matrices $M \\in \\text{Mat}(n,q)$ is $g(n) = q^{n(n-1)}$.",
+      "proof_sketch": "(b) follows by specializing Corollary 1.10.10 to $t_z=0$ (no copies of $f=z$) and $t_f=1$ for $f\\neq z$, reducing to a partition identity from Proposition 1.8.6(a)."
+    }
+  ],
+
+  "examples": [
+    {
+      "id": "1.10.3",
+      "title": "Cycle indicator for $n=2, q=2$",
+      "content": "Compute the cycle indicator $Z_2(t;2)$.",
+      "solution": "$Z_2(t;2) = \\frac{1}{6}(t_{z,(1,1)}+ 3t_{z,(1)}t_{z+1,(1)} + 6t_{z,(1)}t_{z+1,(1)} + t_{z+1,(2)} + 3t_{z+1,(1)}t_{z,(2)} + 2t_{z^2+z+1,(1)})$.\n\nFrom the text: $Z_2(t;2) = \\frac{1}{6}(t_{z,(1,1)} + 3t_{z,(1)}t_{z+1,(1)} + \\cdots + 2t_{z^2+z+1,(1)})$."
+    }
+  ],
+
+  "exercises": [
+    {
+      "number": 190,
+      "statement": "Prove directly that the number of nilpotent matrices in $\\text{Mat}(n,q)$ is $q^{n(n-1)}$.",
+      "hints": ["A matrix is nilpotent iff it has all eigenvalues equal to 0 iff its characteristic polynomial is $z^n$. Use the orbit-type formula."],
+      "techniques": ["finite-fields"]
+    }
+  ],
+
+  "text_passages": [
+    {
+      "type": "heading",
+      "text": "GL(n,q) as a q-analogue of $\\mathfrak{S}_n$"
+    },
+    {
+      "type": "prose",
+      "text": "The $n$-element set $[n]$ is replaced by $\\mathbb{F}_q^n$ (an $n$-dimensional vector space). A bijection $[n]\\to[n]$ corresponds to an invertible linear map $\\mathbb{F}_q^n \\to \\mathbb{F}_q^n$. The 'group of bijections' $\\mathfrak{S}_n$ corresponds to $\\text{GL}(n,q)$."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.10.1",
+      "label": "Proposition 1.10.1 — Order of GL(n,q)",
+      "preview": "$\\#\\text{GL}(n,q) = (q^n-1)(q^n-q)\\cdots(q^n-q^{n-1}) = q^{\\binom{n}{2}}(q-1)^n[n]!_q$. This is the $q$-analogue of $n!$."
+    },
+    {
+      "type": "heading",
+      "text": "Conjugacy classes and orbit types"
+    },
+    {
+      "type": "prose",
+      "text": "The **orbit type** of $M \\in \\text{Mat}(n,K)$ generalizes cycle type: it assigns to each monic irreducible polynomial $f$ a partition $\\lambda(f)$ (from the $K[u]$-module structure). This is the $q$-analogue of the cycle type of a permutation."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.10.2",
+      "label": "Proposition 1.10.2 — Conjugacy classes",
+      "preview": "The number of $\\text{GL}(n,q)$ orbits on $\\text{Mat}(n,q)$ is $\\omega(n,q) = \\sum_j p_j(n)q^j$, a satisfactory $q$-analogue of $p(n)$ (the number of conjugacy classes of $\\mathfrak{S}_n$)."
+    },
+    {
+      "type": "concept",
+      "kind": "theorem",
+      "number": "1.10.4",
+      "label": "Theorem 1.10.4 — q-analogue cycle indicator",
+      "preview": "$\\sum Z_n(t;q)x^n = \\prod_{f\\in\\mathcal{I}}\\sum_{\\lambda} t_{f,\\lambda}x^{|\\lambda|\\deg(f)}/c_f(\\lambda)$. The $q$-analogue of Theorem 1.3.3."
+    },
+    {
+      "type": "concept",
+      "kind": "theorem",
+      "number": "1.10.7",
+      "label": "Theorem 1.10.7 — Formula for $c_f(\\lambda)$",
+      "preview": "$c_f(\\lambda) = \\prod_{i\\geq 1}\\prod_{j=1}^{m_i}(q^{h_id}-q^{(h_i-j)d})$. This is the $q$-analogue of Proposition 1.3.2 (cycle type count formula)."
+    },
+    {
+      "type": "heading",
+      "text": "Applications: nilpotent matrices"
+    },
+    {
+      "type": "concept",
+      "kind": "corollary",
+      "number": "1.10.11",
+      "label": "Corollary 1.10.11 — Nilpotent matrices",
+      "preview": "The number of nilpotent $n\\times n$ matrices over $\\mathbb{F}_q$ is $g(n)=q^{n(n-1)}$. Follows from the cycle indicator specialization and Prop 1.8.6(a)."
+    }
+  ],
+
+  "connections": {
+    "requires": ["1.3","1.7","1.8"],
+    "used_by": [],
+    "related": ["1.3","1.8"]
+  }
 }

@@ -3,20 +3,166 @@
   "title": "Sets and multisets",
   "chapter": 1,
   "pdf_pages": {"start": 23, "end": 28},
-  "technique_tags": ["bijection", "generating-functions"],
-  "status": "stub",
+  "technique_tags": ["bijection", "double-counting", "generating-functions"],
+  "status": "done",
 
-  "key_idea": "A **multiset** is a set where elements may repeat; a $k$-element multiset from an $n$-element set is counted by the multiset coefficient $\\binom{n+k-1}{k}$ (stars and bars). The binomial coefficient $\\binom{n}{k}$ counts $k$-element subsets; both have generating function identities that are the main workhorses of elementary enumeration.",
+  "key_idea": "The binomial coefficient $\\binom{n}{k}$ counts $k$-element subsets of $[n]$. Its extension to multisets gives $\\binom{\\binom{n}{k}} = \\binom{n+k-1}{k}$, which equals $(-1)^k \\binom{-n}{k}$ — an elegant sign-flip identity. The multinomial coefficient counts arrangements of multisets and lattice paths.",
 
-  "summary": "**To be filled in when you reach this section.** Key formulas: $\\binom{n}{k} = n!/(k!(n-k)!)$, the multinomial theorem, stars-and-bars $\\binom{n+k-1}{k}$, the Vandermonde identity, and generating functions $(1+x)^n = \\sum_k \\binom{n}{k} x^k$ and $1/(1-x)^n = \\sum_k \\binom{n+k-1}{k} x^k$.",
+  "summary": "This section develops the combinatorics of sets and multisets systematically. Starting from $2^S$ (the power set), Stanley derives the binomial coefficient formula via both counting arguments and generating functions. Compositions and weak compositions of integers arise naturally, as does the multiset coefficient. The lattice path interpretation of multinomial coefficients is established via Proposition 1.2.1.",
 
   "notation": [
-    {"symbol": "\\binom{n}{k}", "latex": "\\binom{n}{k}", "description": "Binomial coefficient: $n!/(k!(n-k)!)$, counts $k$-element subsets of $[n]$"},
-    {"symbol": "\\left(\\!\\binom{n}{k}\\!\\right)", "latex": "\\left(\\!\\binom{n}{k}\\!\\right)", "description": "Multiset coefficient: $\\binom{n+k-1}{k}$, counts $k$-element multisets from $[n]$"},
-    {"symbol": "\\binom{n}{k_1,\\ldots,k_r}", "latex": "\\binom{n}{k_1,\\ldots,k_r}", "description": "Multinomial coefficient $n!/(k_1!\\cdots k_r!)$ where $\\sum k_i = n$"}
+    {"symbol": "2^S",         "latex": "2^S",             "description": "Power set of $S$: the set of all subsets"},
+    {"symbol": "binom(S,k)",  "latex": "\\binom{S}{k}",   "description": "Set of all $k$-element subsets of $S$"},
+    {"symbol": "binom(n,k)",  "latex": "\\binom{n}{k}",   "description": "Binomial coefficient: $\\#\\binom{[n]}{k} = n!/(k!(n-k)!)$"},
+    {"symbol": "(n)_k",       "latex": "(n)_k",           "description": "Falling factorial: $n(n-1)\\cdots(n-k+1)$"},
+    {"symbol": "multiset coeff","latex": "\\binom{\\binom{n}{k}}", "description": "Multiset coefficient: $\\#$ of $k$-multisets from $[n]$"},
+    {"symbol": "multinom",    "latex": "\\binom{n}{a_1,\\ldots,a_m}", "description": "Multinomial coefficient $n!/(a_1!\\cdots a_m!)$"}
   ],
 
-  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+  "definitions": [
+    {
+      "id": "def-binomial",
+      "term": "Binomial coefficient",
+      "number": "1.2.1",
+      "order": 1,
+      "statement": "For a set $S$ and $k \\in \\mathbb{N}$, let $\\binom{S}{k}$ denote the set of all $k$-element subsets of $S$. For $n,k \\in \\mathbb{N}$: $$\\binom{n}{k} = \\#\\binom{[n]}{k} = \\frac{n(n-1)\\cdots(n-k+1)}{k!} = \\frac{(n)_k}{k!}.$$ More generally, for any $\\alpha \\in \\mathbb{C}$ and $k \\in \\mathbb{N}$: $\\binom{\\alpha}{k} = \\frac{\\alpha(\\alpha-1)\\cdots(\\alpha-k+1)}{k!}$.",
+      "proof_sketch": "There are $(n)_k = n(n-1)\\cdots(n-k+1)$ ordered $k$-tuples of distinct elements from $[n]$. Each $k$-subset is ordered in $k!$ ways, so $\\#\\binom{[n]}{k} = (n)_k/k!$."
+    },
+    {
+      "id": "def-multiset-coeff",
+      "term": "Multiset coefficient",
+      "number": "1.2.4",
+      "order": 5,
+      "statement": "A **multiset** on $[n]$ is a function $f:[n]\\to\\mathbb{N}$; it has **size** $\\sum f(i)$. A $k$-multiset on $[n]$ has size $k$. The **multiset coefficient** is $$\\binom{\\binom{n}{k}} = \\#\\{k\\text{-multisets on }[n]\\} = \\binom{n+k-1}{k}.$$",
+      "proof_sketch": "**Stars and bars:** A $k$-multiset on $[n]$ corresponds to a weak composition $m_1+\\cdots+m_n=k$ (where $m_i$ = multiplicity of $i$), which bijects with $(k+n-1)$-bit strings with $k$ ones: place $k$ ones (stars) and $n-1$ bars. The formula $\\binom{n+k-1}{k}$ follows.",
+      "techniques": ["bijection"]
+    },
+    {
+      "id": "def-composition",
+      "term": "Composition and weak composition",
+      "number": "1.2.3",
+      "order": 4,
+      "statement": "A **composition** of $n$ is an ordered tuple $(a_1,\\ldots,a_k)$ of positive integers summing to $n$. A **$k$-composition** of $n$ corresponds bijectively to a $(k-1)$-element subset of $[n-1]$ (the partial sums), so there are $\\binom{n-1}{k-1}$ such $k$-compositions and $2^{n-1}$ total compositions of $n>0$.\n\nA **weak composition** allows $a_i \\geq 0$. The number of weak $k$-compositions of $n$ is $\\binom{n+k-1}{k-1}$."
+    }
+  ],
 
-  "connections": {"requires": ["1.1"], "used_by": ["1.3","1.7","1.9","2.1","2.2"], "related": []}
+  "propositions": [
+    {
+      "id": "prop-1-2-1",
+      "number": "1.2.1",
+      "title": "Lattice paths and multinomial coefficients",
+      "order": 20,
+      "statement": "Let $v = (a_1, a_2, \\ldots, a_d) \\in \\mathbb{N}^d$ and $n = a_1 + \\cdots + a_d$. The number of lattice paths in $\\mathbb{Z}^d$ from the origin $\\mathbf{0}$ to $v$ using steps $e_1, \\ldots, e_d$ (each step $e_i$ increases coordinate $i$ by 1) equals the multinomial coefficient $$\\binom{n}{a_1, a_2, \\ldots, a_d} = \\frac{n!}{a_1! a_2! \\cdots a_d!}.$$",
+      "proof_sketch": "Each path is a sequence of $n$ steps, with exactly $a_i$ steps in direction $e_i$. This is a permutation of the multiset $\\{e_1^{a_1}, \\ldots, e_d^{a_d}\\}$, and $\\#\\mathfrak{S}_M = \\binom{n}{a_1,\\ldots,a_d}$.",
+      "techniques": ["bijection"]
+    }
+  ],
+
+  "theorems": [],
+  "corollaries": [
+    {
+      "id": "cor-multiset-sign",
+      "number": "1.2.5",
+      "title": "Sign-flip formula for multiset coefficient",
+      "order": 6,
+      "statement": "$$\\binom{\\binom{n}{k}} = (-1)^k \\binom{-n}{k}.$$",
+      "proof_sketch": "$\\binom{-n}{k} = \\frac{(-n)(-n-1)\\cdots(-n-k+1)}{k!} = (-1)^k \\frac{n(n+1)\\cdots(n+k-1)}{k!} = (-1)^k \\binom{n+k-1}{k}.$"
+    }
+  ],
+
+  "examples": [
+    {
+      "id": "1.2.1",
+      "title": "Compositions via subset bijection",
+      "content": "Show there are $2^{n-1}$ compositions of $n > 0$.",
+      "solution": "Map a composition $(a_1,\\ldots,a_k)$ of $n$ to the subset $S = \\{a_1, a_1+a_2, \\ldots, a_1+\\cdots+a_{k-1}\\} \\subseteq [n-1]$ of partial sums (excluding $n$). This is a bijection between compositions of $n$ and all subsets of $[n-1]$, so the count is $2^{n-1}$."
+    },
+    {
+      "id": "1.2.2",
+      "title": "Non-negative solutions to a linear equation",
+      "content": "Show that the number of solutions $(x_1,\\ldots,x_k) \\in \\mathbb{N}^k$ to $x_1 + \\cdots + x_k = n$ is $\\binom{n+k-1}{k-1}$.",
+      "solution": "This is the number of weak $k$-compositions of $n$, which equals the number of $n$-multisets on $[k]$ (by sending $x_i \\mapsto$ multiplicity of $i$). By the multiset coefficient formula: $\\binom{\\binom{k}{n}} = \\binom{n+k-1}{n} = \\binom{n+k-1}{k-1}$."
+    }
+  ],
+
+  "exercises": [
+    {
+      "number": 14,
+      "statement": "Find the number of ways to write $n$ as an ordered sum of positive integers, where each summand is at most 2.",
+      "hints": ["Relate to Fibonacci numbers."],
+      "techniques": ["bijection", "generating-functions"]
+    }
+  ],
+
+  "text_passages": [
+    {
+      "type": "heading",
+      "text": "The power set and binomial coefficient"
+    },
+    {
+      "type": "prose",
+      "text": "Given a set $S$, its **power set** $2^S$ consists of all subsets of $S$. For $S = [n]$, we write $\\binom{[n]}{k}$ for the collection of all $k$-element subsets. The binomial coefficient $\\binom{n}{k}$ is defined as $\\#\\binom{[n]}{k}$."
+    },
+    {
+      "type": "concept",
+      "kind": "definition",
+      "number": "1.2.1",
+      "label": "Definition — Binomial coefficient",
+      "preview": "$\\binom{n}{k} = n(n-1)\\cdots(n-k+1)/k! = (n)_k/k!$. Proof: $(n)_k$ ordered selections, each $k$-subset counted $k!$ times."
+    },
+    {
+      "type": "prose",
+      "text": "The **generating function** approach: $(1+x_1)\\cdots(1+x_n) = \\sum_{T \\subseteq [n]}\\prod_{i \\in T}x_i$. Setting $x_i = x$ for all $i$ gives $(1+x)^n = \\sum_{k=0}^n \\binom{n}{k}x^k$."
+    },
+    {
+      "type": "heading",
+      "text": "Compositions"
+    },
+    {
+      "type": "concept",
+      "kind": "definition",
+      "number": "1.2.3",
+      "label": "Compositions and weak compositions",
+      "preview": "A composition of $n$ is an ordered tuple of positive integers summing to $n$. There are $\\binom{n-1}{k-1}$ compositions with $k$ parts, and $2^{n-1}$ total. Weak compositions allow zeros: $\\binom{n+k-1}{k-1}$ weak $k$-compositions of $n$."
+    },
+    {
+      "type": "heading",
+      "text": "Multisets"
+    },
+    {
+      "type": "concept",
+      "kind": "definition",
+      "number": "1.2.4",
+      "label": "Multiset coefficient",
+      "preview": "The multiset coefficient $\\binom{\\binom{n}{k}}$ counts $k$-multisets on $[n]$. By stars-and-bars, this equals $\\binom{n+k-1}{k}$."
+    },
+    {
+      "type": "concept",
+      "kind": "corollary",
+      "number": "1.2.5",
+      "label": "Corollary — Sign-flip formula",
+      "preview": "$\\binom{\\binom{n}{k}} = (-1)^k \\binom{-n}{k}$. Elegant connection between multiset coefficient and binomial with negative upper index."
+    },
+    {
+      "type": "heading",
+      "text": "Multinomial coefficients and lattice paths"
+    },
+    {
+      "type": "prose",
+      "text": "The multinomial coefficient $\\binom{n}{a_1,\\ldots,a_m} = n!/(a_1!\\cdots a_m!)$ counts arrangements of the multiset $\\{1^{a_1}, 2^{a_2}, \\ldots, m^{a_m}\\}$. Equivalently, it counts permutations of the multiset $M$."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.2.1",
+      "label": "Proposition 1.2.1 — Lattice paths",
+      "preview": "Lattice paths from $\\mathbf{0}$ to $(a_1,\\ldots,a_d)$ using unit steps in coordinate directions are counted by $\\binom{a_1+\\cdots+a_d}{a_1,\\ldots,a_d}$."
+    }
+  ],
+
+  "connections": {
+    "requires": ["1.1"],
+    "used_by": ["1.3","1.7","1.8","1.9"],
+    "related": ["1.7"]
+  }
 }

@@ -204,6 +204,7 @@ async function renderSection(id) {
       <div class="section-meta">${pdfLink} ${tags}</div>
     </div>
     <div class="section-tabs">
+      <button class="tab-btn" data-tab="read">Read</button>
       <button class="tab-btn active" data-tab="overview">Overview</button>
       <button class="tab-btn" data-tab="content">Theorems &amp; Defs</button>
       <button class="tab-btn" data-tab="examples">Examples</button>
@@ -211,6 +212,7 @@ async function renderSection(id) {
       <button class="tab-btn" data-tab="notes">My Notes</button>
       <button class="tab-btn" data-tab="connections">Connections</button>
     </div>
+    <div id="tab-read"        class="tab-panel">${renderTextView(sec)}</div>
     <div id="tab-overview"    class="tab-panel active">${renderOverview(sec)}</div>
     <div id="tab-content"     class="tab-panel">${renderContent(sec)}</div>
     <div id="tab-examples"    class="tab-panel">${renderExamples(sec)}</div>
@@ -228,6 +230,30 @@ async function renderSection(id) {
       btn.classList.add('active');
       document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
       if (btn.dataset.tab === 'notes') focusNotes();
+      if (btn.dataset.tab === 'read') typeset();
+    });
+  });
+
+  // Wire concept passage clicks in Read tab
+  document.querySelectorAll('.clickable-passage').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.clickable-passage').forEach(p => p.classList.remove('selected'));
+      el.classList.add('selected');
+      const kind = el.dataset.kind;
+      const number = el.dataset.number;
+      const detail = document.getElementById('detail-panel');
+      if (!detail) return;
+      const items = [
+        ...(sec.definitions   || []).map(x => ({...x, kind: 'definition'})),
+        ...(sec.theorems      || []).map(x => ({...x, kind: 'theorem'})),
+        ...(sec.propositions  || []).map(x => ({...x, kind: 'proposition'})),
+        ...(sec.corollaries   || []).map(x => ({...x, kind: 'corollary'})),
+      ];
+      const item = items.find(x => x.kind === kind && String(x.number) === String(number));
+      if (item) {
+        detail.innerHTML = renderItem(item);
+        if (window.MathJax) MathJax.typesetPromise([detail]).catch(()=>{});
+      }
     });
   });
 
@@ -497,6 +523,48 @@ function renderConnections(sec) {
         ${techniques.join('') || '<em style="font-family:sans-serif;font-size:.85rem">None tagged</em>'}
       </div>
     </div>`;
+}
+
+// ── Tab: Read (Split View) ─────────────────────────────
+function renderTextView(sec) {
+  if (!sec.text_passages || !sec.text_passages.length) {
+    return `<div class="split-placeholder">
+      <p>No text passages available for this section yet.</p>
+      <p style="font-size:.85rem;color:var(--text-light)">Add a <code>text_passages</code> array to this section's JSON file.</p>
+    </div>`;
+  }
+
+  const passagesHtml = sec.text_passages.map((p, i) => {
+    if (p.type === 'heading') {
+      return `<h3 class="text-section-heading">${p.text}</h3>`;
+    }
+    if (p.type === 'prose') {
+      return `<div class="text-passage prose-passage">${markdownToHtml(p.text)}</div>`;
+    }
+    if (p.type === 'concept') {
+      const kindClass = p.kind || 'theorem';
+      return `<div class="text-passage clickable-passage concept-passage-${kindClass}"
+                   data-kind="${p.kind}" data-number="${esc(String(p.number))}"
+                   title="Click to see full details">
+        <div class="passage-concept-label ${kindClass}">${esc(p.label)}</div>
+        <div class="passage-preview">${markdownToHtml(p.preview)}</div>
+        <div class="passage-click-hint">Click for details →</div>
+      </div>`;
+    }
+    return '';
+  }).join('');
+
+  return `<div class="split-view">
+    <div class="text-panel" id="text-panel">
+      ${passagesHtml}
+    </div>
+    <div class="detail-panel" id="detail-panel">
+      <div class="detail-placeholder">
+        <div class="detail-placeholder-icon">◈</div>
+        <p>Click any highlighted concept on the left to see the full theorem, definition, or proposition here.</p>
+      </div>
+    </div>
+  </div>`;
 }
 
 // ── Technique Library ──────────────────────────────────

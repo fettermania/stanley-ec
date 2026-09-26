@@ -3,20 +3,137 @@
   "title": "The Twelvefold Way",
   "chapter": 1,
   "pdf_pages": {"start": 79, "end": 88},
-  "technique_tags": ["bijection", "inclusion-exclusion"],
-  "status": "stub",
+  "technique_tags": ["bijection", "generating-functions", "inclusion-exclusion"],
+  "status": "done",
 
-  "key_idea": "The **Twelvefold Way** (Rota's term) systematically classifies the 12 cases of distributing $n$ **balls** into $k$ **boxes** according to three binary choices: balls labeled or unlabeled, boxes labeled or unlabeled, and occupancy restricted (injective/surjective/unrestricted). Each case gives a standard combinatorial sequence: $k^n$, $k!S(n,k)$, $\\binom{n}{k}$, $p_k(n)$ (partitions into $k$ parts), etc.",
+  "key_idea": "The Twelvefold Way unifies twelve counting problems for functions $f: N \\to X$ ($|N|=n$, $|X|=x$) by varying: (1) whether $f$ is arbitrary/injective/surjective, and (2) whether $N$ and $X$ are distinguishable. The answers involve $x^n$, falling factorials, Stirling numbers, and partition numbers.",
 
-  "summary": "**To be filled in when you reach this section.** The 12 cases are: $f: N \\to K$ with $N,K$ labeled/unlabeled and $f$ unrestricted/injective/surjective. Organized in a 3×4 table. Key counts: $k^n$, $k!S(n,k)$, $S(n,k)$, $\\binom{n+k-1}{k}$, $\\binom{n-1}{k-1}$, $p(n,k)$, $p_k(n)$, $\\binom{n}{k}$, $n!/k!$... and Stirling numbers of both kinds.",
+  "summary": "This section presents the celebrated 'Twelvefold Way' — a unified framework for placing $n$ balls into $x$ boxes under 12 combinations of constraints. The Stirling numbers of the second kind $S(n,k)$ appear in entries 3, 7, 9, 12. The section also proves key formulas for $S(n,k)$ and Bell numbers $B(n)$, connects them to finite differences, and proves Proposition 1.9.1 (Stirling number matrix inversion).",
 
   "notation": [
-    {"symbol": "S(n,k)", "latex": "S(n,k)", "description": "Stirling number of the second kind: number of partitions of $[n]$ into $k$ non-empty subsets"},
-    {"symbol": "p_k(n)", "latex": "p_k(n)", "description": "Number of partitions of $n$ into exactly $k$ parts"},
-    {"symbol": "c(n,k)", "latex": "c(n,k)", "description": "Signless Stirling number of the first kind (from §1.3): number of $w \\in S_n$ with $k$ cycles"}
+    {"symbol": "S(n,k)",   "latex": "S(n,k)",         "description": "Stirling number of second kind: # partitions of $[n]$ into $k$ blocks"},
+    {"symbol": "B(n)",     "latex": "B(n)",            "description": "Bell number: total # partitions of $[n]$, $B(n)=\\sum_k S(n,k)$"},
+    {"symbol": "Delta",    "latex": "\\Delta",         "description": "Finite difference operator: $\\Delta f(n) = f(n+1)-f(n)$"},
+    {"symbol": "p_x(n)",   "latex": "p_x(n)",         "description": "# partitions of $n$ into exactly $x$ parts"},
+    {"symbol": "S(n,x)",   "latex": "S(n,x)",         "description": "Surjections: $\\#\\{$surjective $f:[n]\\to[x]\\} = x!S(n,x)$"}
   ],
 
-  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+  "definitions": [
+    {
+      "id": "def-set-partition",
+      "term": "Set partition and Stirling numbers",
+      "number": "1.9.0",
+      "order": 1,
+      "statement": "A **partition** of a set $N$ is a collection $\\pi = \\{B_1,\\ldots,B_k\\}$ of nonempty pairwise disjoint subsets (blocks) covering $N$. The number of partitions of $[n]$ into exactly $k$ blocks is the **Stirling number of the second kind** $S(n,k)$.\n\nBasic values: $S(n,0)=0$ for $n\\geq 1$, $S(0,0)=1$, $S(n,1)=1$, $S(n,n)=1$, $S(n,2)=2^{n-1}-1$, $S(n,n-1)=\\binom{n}{2}$.\n\nThe **Bell number** $B(n) = \\sum_{k=1}^n S(n,k)$ counts all partitions of $[n]$."
+    }
+  ],
 
-  "connections": {"requires": ["1.2","1.3","1.8"], "used_by": ["2.1"], "related": []}
+  "propositions": [
+    {
+      "id": "prop-1-9-1",
+      "number": "1.9.1",
+      "title": "Stirling number matrix inversion",
+      "order": 25,
+      "statement": "(a) For all $m,n \\in \\mathbb{N}$: $\\sum_{k\\geq 0} S(m,k)s(k,n) = \\delta_{mn}$.\n(b) Sequences $(a_n)$ and $(b_n)$ satisfy $b_n = \\sum_{k=0}^n S(n,k)a_k$ for all $n$ if and only if $a_n = \\sum_{k=0}^n s(n,k)b_k$ for all $n$, where $s(n,k) = (-1)^{n-k}c(n,k)$ (signed Stirling numbers of the first kind).",
+      "proof_sketch": "The infinite matrices $\\mathbf{S} = [S(n,k)]$ and $\\mathbf{s} = [s(n,k)]$ are inverses. This follows from the equations $x^n = \\sum_k S(n,k)(x)_k$ and $\\sum_k s(n,k)x^k = (x)_n$."
+    },
+    {
+      "id": "prop-1-9-2",
+      "number": "1.9.2",
+      "title": "Polynomial characterization via finite differences",
+      "order": 30,
+      "statement": "(a) $f: \\mathbb{Z} \\to K$ is a polynomial of degree $\\leq d$ iff $\\Delta^{d+1}f(n)=0$ for all $n$.\n(b) $f(n) = \\sum_{i=0}^d \\Delta^i f(0)\\binom{n}{i}$ (Newton forward difference formula).\n(c) $\\Delta^k 0^d = k! S(d,k)$.",
+      "proof_sketch": "Part (b) follows from $(1+\\Delta)^n = E^n$ (shift operator). Part (c) follows from (b) and the identity $n^d = \\sum_k k!S(d,k)\\binom{n}{k}$ (which comes from expressing monomials in the falling factorial basis)."
+    },
+    {
+      "id": "prop-1-9-3",
+      "number": "1.9.3",
+      "title": "Corollary: integer-valued polynomials",
+      "order": 31,
+      "statement": "A polynomial $f:\\mathbb{Z}\\to K$ of degree $d$ (char $K = 0$) has $f(n) \\in \\mathbb{Z}$ for all $n$ iff $\\Delta^k f(0) \\in \\mathbb{Z}$ for $0\\leq k\\leq d$. The abelian group of integer-valued polynomials of degree $\\leq d$ is free with basis $\\{\\binom{n}{0}, \\binom{n}{1}, \\ldots, \\binom{n}{d}\\}$."
+    }
+  ],
+
+  "theorems": [],
+  "corollaries": [],
+
+  "examples": [
+    {
+      "id": "1.9.1",
+      "title": "The Twelvefold Way table",
+      "content": "Describe all 12 entries of the Twelvefold Way for placing $n$ balls into $x$ boxes.",
+      "solution": "Let $N$ = set of $n$ balls, $X$ = set of $x$ boxes.\n\n**Both distinguishable ($N$ and $X$):**\n1. Arbitrary $f$: $x^n$\n2. Injective $f$: $(x)_n = x(x-1)\\cdots(x-n+1)$\n3. Surjective $f$: $x!\\,S(n,x)$\n\n**$N$ indistinguishable, $X$ distinguishable:**\n4. Arbitrary: $\\binom{\\binom{x}{n}} = \\binom{n+x-1}{x-1}$ (multiset)\n5. Injective: $\\binom{x}{n}$\n6. Surjective: $\\binom{\\binom{x}{n-x}} = \\binom{n-1}{x-1}$\n\n**$N$ distinguishable, $X$ indistinguishable:**\n7. Arbitrary: $\\sum_{k=1}^{x} S(n,k)$\n8. Injective: 1 if $n\\leq x$, else 0\n9. Surjective: $S(n,x)$\n\n**Both indistinguishable:**\n10. Arbitrary: $p_0(n)+p_1(n)+\\cdots+p_x(n)$\n11. Injective: 1 if $n\\leq x$, else 0\n12. Surjective: $p_x(n)$ (partitions into exactly $x$ parts)"
+    },
+    {
+      "id": "1.9.2",
+      "title": "Bell numbers",
+      "content": "The Bell numbers $B(n) = \\sum_k S(n,k)$ count all partitions of $[n]$. Compute $B(1)$ through $B(10)$ and verify the EGF $\\sum B(n)x^n/n! = e^{e^x-1}$.",
+      "solution": "$B(1)=1, B(2)=2, B(3)=5, B(4)=15, B(5)=52, B(6)=203, B(7)=877, B(8)=4140, B(9)=21147, B(10)=115975$.\n\nEGF: $\\sum_{n\\geq 0}B(n)\\frac{x^n}{n!} = \\sum_{k\\geq 0}\\frac{1}{k!}(e^x-1)^k = e^{e^x-1}$."
+    }
+  ],
+
+  "exercises": [
+    {
+      "number": 120,
+      "statement": "Prove the Stirling number recurrence $S(n,k) = kS(n-1,k) + S(n-1,k-1)$.",
+      "hints": ["Either $n$ is in a singleton block (the $S(n-1,k-1)$ term) or it joins one of the $k$ existing blocks of a partition of $[n-1]$ into $k$ blocks (the $kS(n-1,k)$ term)."],
+      "techniques": ["bijection"]
+    },
+    {
+      "number": 121,
+      "statement": "Prove $S(n,k) = \\frac{1}{k!}\\sum_{i=0}^k (-1)^{k-i}\\binom{k}{i}i^n$ using inclusion-exclusion.",
+      "hints": ["Count surjections $[n]\\to[k]$ (= $k!S(n,k)$) by inclusion-exclusion over which boxes are empty."],
+      "techniques": ["inclusion-exclusion"]
+    }
+  ],
+
+  "text_passages": [
+    {
+      "type": "heading",
+      "text": "Setup: functions $f: N \\to X$"
+    },
+    {
+      "type": "prose",
+      "text": "Let $|N|=n$ balls and $|X|=x$ boxes. Three function types: arbitrary, injective, surjective. Four equivalence notions: both distinguishable, $N$ indistinguishable, $X$ indistinguishable, both indistinguishable. This gives $3 \\times 4 = 12$ problems — the Twelvefold Way."
+    },
+    {
+      "type": "concept",
+      "kind": "definition",
+      "number": "1.9.0",
+      "label": "Definition — Set partition and Stirling numbers",
+      "preview": "$S(n,k)$ = # partitions of $[n]$ into $k$ blocks. Bell number $B(n)=\\sum_k S(n,k)$. Recurrence: $S(n,k)=kS(n-1,k)+S(n-1,k-1)$."
+    },
+    {
+      "type": "heading",
+      "text": "The 12 entries"
+    },
+    {
+      "type": "prose",
+      "text": "**Both distinguishable:** $x^n$ (any), $(x)_n$ (injective), $x!S(n,x)$ (surjective).\n**$N$ indistinguishable:** $\\binom{n+x-1}{x-1}$ (any), $\\binom{x}{n}$ (inj), $\\binom{n-1}{x-1}$ (surj).\n**$X$ indistinguishable:** $\\sum_{k\\leq x}S(n,k)$ (any), 1 or 0 (inj), $S(n,x)$ (surj).\n**Both indistinguishable:** $\\sum_{k\\leq x}p_k(n)$ (any), 1 or 0 (inj), $p_x(n)$ (surj)."
+    },
+    {
+      "type": "heading",
+      "text": "Stirling number formulas and finite differences"
+    },
+    {
+      "type": "proposition",
+      "kind": "proposition",
+      "number": "1.9.1",
+      "label": "Proposition 1.9.1 — Stirling matrix inversion",
+      "preview": "The matrices $\\mathbf{S}=[S(m,k)]$ and $\\mathbf{s}=[s(m,k)]$ are inverses. Equivalent: $b_n=\\sum S(n,k)a_k$ iff $a_n=\\sum s(n,k)b_k$."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.9.2",
+      "label": "Proposition 1.9.2 — Finite differences",
+      "preview": "$f$ is degree $\\leq d$ iff $\\Delta^{d+1}f=0$. Newton formula: $f(n)=\\sum_i \\Delta^i f(0)\\binom{n}{i}$. Key: $\\Delta^k 0^d = k!S(d,k)$ — links differences to Stirling numbers."
+    }
+  ],
+
+  "connections": {
+    "requires": ["1.2","1.3","1.8"],
+    "used_by": [],
+    "related": ["1.8"]
+  }
 }

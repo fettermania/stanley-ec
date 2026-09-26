@@ -8,16 +8,16 @@
       "num": 1,
       "title": "What is Enumerative Combinatorics?",
       "sections": [
-        {"id": "1.1",   "title": "How to count",                                                     "status": "stub",    "pdf_pages": {"start": 9,   "end": 22}},
-        {"id": "1.2",   "title": "Sets and multisets",                                               "status": "stub",    "pdf_pages": {"start": 23,  "end": 28}},
-        {"id": "1.3",   "title": "Cycles and inversions",                                            "status": "stub",    "pdf_pages": {"start": 29,  "end": 37}},
-        {"id": "1.4",   "title": "Descents",                                                         "status": "stub",    "pdf_pages": {"start": 38,  "end": 47}},
-        {"id": "1.5",   "title": "Geometric representations of permutations",                        "status": "stub",    "pdf_pages": {"start": 48,  "end": 53}},
-        {"id": "1.6",   "title": "Alternating permutations, Euler numbers, and the cd-index of S_n","status": "stub",    "pdf_pages": {"start": 54,  "end": 61}},
-        {"id": "1.7",   "title": "Permutations of multisets",                                        "status": "stub",    "pdf_pages": {"start": 62,  "end": 67}},
-        {"id": "1.8",   "title": "Partition identities",                                             "status": "stub",    "pdf_pages": {"start": 68,  "end": 78}},
-        {"id": "1.9",   "title": "The Twelvefold Way",                                               "status": "stub",    "pdf_pages": {"start": 79,  "end": 88}},
-        {"id": "1.10",  "title": "Two q-analogues of permutations",                                  "status": "stub",    "pdf_pages": {"start": 89,  "end": 104}}
+        {"id": "1.1",   "title": "How to count",                                                     "status": "done",    "pdf_pages": {"start": 9,   "end": 22}},
+        {"id": "1.2",   "title": "Sets and multisets",                                               "status": "done",    "pdf_pages": {"start": 23,  "end": 28}},
+        {"id": "1.3",   "title": "Cycles and inversions",                                            "status": "done",    "pdf_pages": {"start": 29,  "end": 37}},
+        {"id": "1.4",   "title": "Descents",                                                         "status": "done",    "pdf_pages": {"start": 38,  "end": 47}},
+        {"id": "1.5",   "title": "Geometric representations of permutations",                        "status": "done",    "pdf_pages": {"start": 48,  "end": 53}},
+        {"id": "1.6",   "title": "Alternating permutations, Euler numbers, and the cd-index of S_n","status": "done",    "pdf_pages": {"start": 54,  "end": 61}},
+        {"id": "1.7",   "title": "Permutations of multisets",                                        "status": "done",    "pdf_pages": {"start": 62,  "end": 67}},
+        {"id": "1.8",   "title": "Partition identities",                                             "status": "done",    "pdf_pages": {"start": 68,  "end": 78}},
+        {"id": "1.9",   "title": "The Twelvefold Way",                                               "status": "done",    "pdf_pages": {"start": 79,  "end": 88}},
+        {"id": "1.10",  "title": "Two q-analogues of permutations",                                  "status": "done",    "pdf_pages": {"start": 89,  "end": 104}}
       ]
     },
     {

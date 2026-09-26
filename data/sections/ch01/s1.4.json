@@ -3,20 +3,195 @@
   "title": "Descents",
   "chapter": 1,
   "pdf_pages": {"start": 38, "end": 47},
-  "technique_tags": ["generating-functions", "inclusion-exclusion", "bijection"],
-  "status": "stub",
+  "technique_tags": ["bijection", "generating-functions", "inclusion-exclusion"],
+  "status": "done",
 
-  "key_idea": "The **Eulerian number** $A(n,k)$ (also written $\\langle\\begin{smallmatrix}n\\\\k\\end{smallmatrix}\\rangle$) counts permutations of $[n]$ with exactly $k$ descents. Their generating function is the **Eulerian polynomial** $A_n(t) = \\sum_k A(n,k) t^k$. These satisfy the recurrence $A(n,k) = (k+1)A(n-1,k) + (n-k)A(n-1,k-1)$ and the 'worpitzky identity' connecting Eulerian numbers to power sums.",
+  "key_idea": "The descent set $D(w) \\subseteq [n-1]$ and major index $\\text{maj}(w) = \\sum_{i\\in D(w)} i$ are key statistics on $\\mathfrak{S}_n$. The major index and the inversion number have the same distribution on $\\mathfrak{S}_n$: $\\sum q^{\\text{maj}} = \\sum q^{\\text{inv}} = [n]!_q$. The Eulerian numbers $A(d,k)$ count permutations by descents.",
 
-  "summary": "**To be filled in when you reach this section.** Key results: Eulerian recurrence, symmetry $A(n,k) = A(n, n-1-k)$, the EGF $\\sum_n A_n(t) x^n/n! = (t-1)/(t-e^{(t-1)x})$, the Worpitzky identity $n^k = \\sum_j A(k,j)\\binom{n+k-j-1}{k}$, and the connection to descent sets in §2.2.",
+  "summary": "Stanley defines $\\alpha(S)$ and $\\beta(S)$ (counts of permutations with descent set $\\subseteq S$ and $= S$), and proves Proposition 1.4.1 ($\\alpha(S)$ is a multinomial coefficient). The Eulerian polynomial $A_d(x) = \\sum A(d,k)x^k$ satisfies a GF formula (Prop 1.4.4-5). The major index $\\text{maj}(w)$ is equidistributed with $\\text{inv}(w)$ (Prop 1.4.6), proved via an elegant bijection $\\varphi$ using cyclic shifts.",
 
   "notation": [
-    {"symbol": "A(n,k)", "latex": "A(n,k)", "description": "Eulerian number: number of $w \\in S_n$ with exactly $k$ descents"},
-    {"symbol": "\\text{des}(w)", "latex": "\\text{des}(w)", "description": "Number of descents of $w$: $|\\{i \\in [n-1]: w(i) > w(i+1)\\}|$"},
-    {"symbol": "A_n(t)", "latex": "A_n(t)", "description": "Eulerian polynomial $\\sum_{k=0}^{n-1} A(n,k) t^k$; also written $\\sum_w t^{\\text{des}(w)}$"}
+    {"symbol": "D(w)",       "latex": "D(w)",          "description": "Descent set: $\\{i\\in[n-1]: w_i > w_{i+1}\\}$"},
+    {"symbol": "des(w)",     "latex": "\\text{des}(w)", "description": "Number of descents: $\\#D(w)$"},
+    {"symbol": "maj(w)",     "latex": "\\text{maj}(w)", "description": "Major index: $\\sum_{i\\in D(w)} i$"},
+    {"symbol": "A(d,k)",     "latex": "A(d,k)",         "description": "Eulerian number: # permutations in $\\mathfrak{S}_d$ with $k-1$ descents"},
+    {"symbol": "A_d(x)",     "latex": "A_d(x)",         "description": "Eulerian polynomial: $\\sum_{w\\in\\mathfrak{S}_d} x^{1+\\text{des}(w)}$"},
+    {"symbol": "E_n",        "latex": "E_n",            "description": "Euler number: # alternating permutations in $\\mathfrak{S}_n$"},
+    {"symbol": "alpha(S)",   "latex": "\\alpha(S)",     "description": "# $w\\in\\mathfrak{S}_n$ with $D(w)\\subseteq S$"},
+    {"symbol": "beta(S)",    "latex": "\\beta(S)",      "description": "# $w\\in\\mathfrak{S}_n$ with $D(w)=S$"}
   ],
 
-  "definitions": [], "theorems": [], "propositions": [], "corollaries": [], "examples": [], "exercises": [],
+  "definitions": [
+    {
+      "id": "def-descent",
+      "term": "Descent, major index",
+      "number": "1.4.0",
+      "order": 1,
+      "statement": "For $w = w_1\\cdots w_n \\in \\mathfrak{S}_n$, position $i$ is a **descent** if $w_i > w_{i+1}$, and an **ascent** if $w_i < w_{i+1}$. The **descent set** is $D(w) = \\{i \\in [n-1] : w_i > w_{i+1}\\}$ and $\\text{des}(w) = \\#D(w)$.\n\nThe **major index** is $\\text{maj}(w) = \\sum_{i \\in D(w)} i$ (originally called the 'greater index' by MacMahon)."
+    },
+    {
+      "id": "def-eulerian",
+      "term": "Eulerian polynomial and numbers",
+      "number": "1.4.2",
+      "order": 5,
+      "statement": "The **Eulerian polynomial** in degree $d$ is $$A_d(x) = \\sum_{w \\in \\mathfrak{S}_d} x^{1+\\text{des}(w)} = \\sum_{k=1}^d A(d,k)x^k$$ where $A(d,k)$ is the **Eulerian number** = $\\#\\{w \\in \\mathfrak{S}_d : \\text{des}(w) = k-1\\}$.\n\nFirst few: $A_1=x$, $A_2=x+x^2$, $A_3=x+4x^2+x^3$, $A_4=x+11x^2+11x^3+x^4$."
+    }
+  ],
 
-  "connections": {"requires": ["1.1","1.2","1.3"], "used_by": ["1.6","2.2"], "related": []}
+  "propositions": [
+    {
+      "id": "prop-1-4-1",
+      "number": "1.4.1",
+      "title": "Descent-constrained count",
+      "order": 10,
+      "statement": "For $S = \\{s_1 < s_2 < \\cdots < s_k\\} \\subseteq [n-1]$, let $c_i = s_i - s_{i-1}$ (with $s_0=0, s_{k+1}=n$). Then $$\\alpha(S) = \\#\\{w \\in \\mathfrak{S}_n : D(w) \\subseteq S\\} = \\binom{n}{c_1, c_2, \\ldots, c_{k+1}}$$",
+      "proof_sketch": "A permutation $w$ with $D(w) \\subseteq S$ must be increasing on each block $[s_i+1, s_{i+1}]$. Choosing which elements go in each block (then ordering them increasingly) gives the multinomial coefficient.",
+      "techniques": ["bijection"]
+    },
+    {
+      "id": "prop-1-4-3",
+      "number": "1.4.3",
+      "title": "Exceedances and Eulerian numbers",
+      "order": 12,
+      "statement": "An **exceedance** of $w$ is a position $i$ with $w(i) > i$. The number of $w \\in \\mathfrak{S}_d$ with exactly $k$ exceedances equals $A(d, k+1)$ (the Eulerian number).",
+      "proof_sketch": "There is a bijection between permutations with $k$ exceedances and permutations with $k$ descents, given by the Foata correspondence (the fundamental transformation of Stanley).",
+      "techniques": ["bijection"]
+    },
+    {
+      "id": "prop-1-4-4",
+      "number": "1.4.4",
+      "title": "Eulerian polynomial and $m^d$",
+      "order": 13,
+      "statement": "$$\\sum_{m \\geq 0} m^d x^m = \\frac{A_d(x)}{(1-x)^{d+1}}.$$",
+      "proof_sketch": "Express $m^d = \\sum_k k! S(d,k)\\binom{m}{k}$ (via Stirling numbers of the 2nd kind) and use $\\sum_m\\binom{m}{k}x^m = x^k/(1-x)^{k+1}$. The resulting sum simplifies to $A_d(x)/(1-x)^{d+1}$.",
+      "techniques": ["generating-functions"]
+    },
+    {
+      "id": "prop-1-4-5",
+      "number": "1.4.5",
+      "title": "EGF of Eulerian polynomials",
+      "order": 14,
+      "statement": "$$\\sum_{d \\geq 0} A_d(x) \\frac{t^d}{d!} = \\frac{1-x}{1 - x\\,e^{(1-x)t}}.$$",
+      "proof_sketch": "Differentiate the identity $\\sum_m m^d x^m = A_d(x)/(1-x)^{d+1}$ with respect to $t$ after multiplying by $t^d/d!$, and use the EGF for the Bernoulli-like series."
+    },
+    {
+      "id": "prop-1-4-6",
+      "number": "1.4.6",
+      "title": "Equidistribution of inv and maj",
+      "order": 20,
+      "statement": "$$\\sum_{w \\in \\mathfrak{S}_n} q^{\\text{maj}(w)} = \\sum_{w \\in \\mathfrak{S}_n} q^{\\text{inv}(w)} = [n]!_q.$$",
+      "proof_sketch": "Define $\\varphi: \\mathfrak{S}_n \\to \\mathfrak{S}_n$ using **cyclic shifts on compartments**: given $w$ with descent set $D(w) = \\{d_1 < \\cdots < d_k\\}$, partition $w$ into blocks at descents and cyclically shift each block to turn descents into ascents while preserving $\\text{maj}(w) = \\text{inv}(\\varphi(w))$. This bijection $\\varphi$ satisfies $\\text{inv}(\\varphi(w)) = \\text{maj}(w)$.",
+      "techniques": ["bijection"]
+    }
+  ],
+
+  "theorems": [
+    {
+      "id": "thm-1-4-8",
+      "number": "1.4.8",
+      "title": "Bijection $\\varphi$ preserves inverse descent set",
+      "order": 22,
+      "statement": "The bijection $\\varphi$ of Proposition 1.4.6 satisfies $\\text{ID}(\\varphi(w)) = \\text{ID}(w)$, where $\\text{ID}(w) = D(w^{-1})$ is the **inverse descent set** (also called the reading set).",
+      "techniques": ["bijection"]
+    }
+  ],
+
+  "corollaries": [
+    {
+      "id": "cor-1-4-9",
+      "number": "1.4.9",
+      "title": "Symmetric joint distributions",
+      "order": 23,
+      "statement": "On $\\mathfrak{S}_n$, the pairs $\\text{(inv, maj)}$, $\\text{(inv, imaj)}$, and $\\text{(maj, imaj)}$ are all symmetrically jointly distributed, where $\\text{imaj}(w) = \\text{maj}(w^{-1})$.",
+      "proof_sketch": "Follows from Theorem 1.4.8 and the equidistribution $\\text{maj} \\sim \\text{inv}$ applied to $w$ and $w^{-1}$."
+    }
+  ],
+
+  "examples": [
+    {
+      "id": "1.4.7",
+      "title": "Example of the $\\varphi$ bijection",
+      "content": "Let $w = 683941725 \\in \\mathfrak{S}_9$. Compute $\\text{maj}(w)$, apply $\\varphi$, and verify $\\text{inv}(\\varphi(w)) = \\text{maj}(w)$.",
+      "solution": "$D(w) = \\{1,3,4,6,8\\}$ (positions where $w_i > w_{i+1}$: $6>8$? no; $8>3$? yes at pos 2; let's reread: $w=6,8,3,9,4,1,7,2,5$).\n\n$D(w) = \\{2,4,5,7\\}$ (positions 2,4,5,7 where there are descents). $\\text{maj}(w) = 2+4+5+7 = 18$.\n\nApplying $\\varphi$ (cyclic shifts at compartment breaks): $\\varphi(w) = 364891725$.\n\n$\\text{inv}(\\varphi(w)) = 18 = \\text{maj}(w)$. ✓"
+    }
+  ],
+
+  "exercises": [
+    {
+      "number": 56,
+      "statement": "Show that the number of permutations in $\\mathfrak{S}_n$ with descent set $S$ equals $\\beta(S)$, computed via inclusion-exclusion: $\\beta(S) = \\sum_{T \\subseteq S}(-1)^{\\#(S\\setminus T)} \\alpha(T)$.",
+      "hints": ["This is inclusion-exclusion on the constraint $D(w) = S$ from $D(w) \\subseteq T$ for $T \\subseteq S$."],
+      "techniques": ["inclusion-exclusion"]
+    }
+  ],
+
+  "text_passages": [
+    {
+      "type": "heading",
+      "text": "Descents and their statistics"
+    },
+    {
+      "type": "concept",
+      "kind": "definition",
+      "number": "1.4.0",
+      "label": "Definition — Descent set and major index",
+      "preview": "Position $i$ is a descent of $w$ if $w_i > w_{i+1}$. $D(w)$ = descent set. $\\text{maj}(w) = \\sum_{i\\in D(w)} i$ is the major index (MacMahon's 'greater index')."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.4.1",
+      "label": "Proposition 1.4.1 — Descent-constrained count",
+      "preview": "$\\alpha(S) = \\#\\{w: D(w) \\subseteq S\\} = \\binom{n}{c_1,c_2,\\ldots}$ where $c_i$ are consecutive differences of $S$. Proof: choose elements for each increasing block."
+    },
+    {
+      "type": "heading",
+      "text": "Eulerian polynomials and numbers"
+    },
+    {
+      "type": "concept",
+      "kind": "definition",
+      "number": "1.4.2",
+      "label": "Definition — Eulerian polynomial",
+      "preview": "$A_d(x) = \\sum_{w\\in\\mathfrak{S}_d} x^{1+\\text{des}(w)} = \\sum_k A(d,k)x^k$. The Eulerian number $A(d,k)$ counts permutations with $k-1$ descents. First few: $A_3 = x+4x^2+x^3$."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.4.4",
+      "label": "Proposition 1.4.4 — Power sum GF",
+      "preview": "$\\sum_{m\\geq 0} m^d x^m = A_d(x)/(1-x)^{d+1}$. Key identity linking Eulerian polynomials to power sums."
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.4.5",
+      "label": "Proposition 1.4.5 — EGF of Eulerian polynomials",
+      "preview": "$\\sum_{d\\geq 0}A_d(x)t^d/d! = (1-x)/(1-xe^{(1-x)t})$."
+    },
+    {
+      "type": "heading",
+      "text": "Equidistribution: inv and maj"
+    },
+    {
+      "type": "concept",
+      "kind": "proposition",
+      "number": "1.4.6",
+      "label": "Proposition 1.4.6 — Equidistribution of inv and maj",
+      "preview": "$\\sum_{w\\in\\mathfrak{S}_n}q^{\\text{maj}(w)} = [n]!_q$. The major index and inversion number are equidistributed on $\\mathfrak{S}_n$, proved via the cyclic shift bijection $\\varphi$."
+    },
+    {
+      "type": "concept",
+      "kind": "theorem",
+      "number": "1.4.8",
+      "label": "Theorem 1.4.8 — $\\varphi$ preserves $\\text{ID}$",
+      "preview": "The bijection $\\varphi$ (cyclic shifts) satisfies $\\text{ID}(\\varphi(w)) = \\text{ID}(w)$ where $\\text{ID}(w) = D(w^{-1})$ is the inverse descent set."
+    }
+  ],
+
+  "connections": {
+    "requires": ["1.2","1.3"],
+    "used_by": ["1.5","1.6"],
+    "related": ["1.3","1.6"]
+  }
 }
