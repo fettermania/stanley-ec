@@ -204,16 +204,16 @@ async function renderSection(id) {
       <div class="section-meta">${pdfLink} ${tags}</div>
     </div>
     <div class="section-tabs">
-      <button class="tab-btn" data-tab="read">Read</button>
-      <button class="tab-btn active" data-tab="overview">Overview</button>
-      <button class="tab-btn" data-tab="content">Theorems &amp; Defs</button>
+      <button class="tab-btn active" data-tab="read">Read</button>
+      <button class="tab-btn" data-tab="overview">Overview</button>
+      <button class="tab-btn" data-tab="content">Summary</button>
       <button class="tab-btn" data-tab="examples">Examples</button>
       <button class="tab-btn" data-tab="exercises">Exercises</button>
       <button class="tab-btn" data-tab="notes">My Notes</button>
       <button class="tab-btn" data-tab="connections">Connections</button>
     </div>
-    <div id="tab-read"        class="tab-panel">${renderTextView(sec)}</div>
-    <div id="tab-overview"    class="tab-panel active">${renderOverview(sec)}</div>
+    <div id="tab-read"        class="tab-panel active">${renderTextView(sec)}</div>
+    <div id="tab-overview"    class="tab-panel">${renderOverview(sec)}</div>
     <div id="tab-content"     class="tab-panel">${renderContent(sec)}</div>
     <div id="tab-examples"    class="tab-panel">${renderExamples(sec)}</div>
     <div id="tab-exercises"   class="tab-panel">${renderExercises(sec, id)}</div>
@@ -234,24 +234,22 @@ async function renderSection(id) {
     });
   });
 
-  // Wire concept passage clicks in Read tab
-  document.querySelectorAll('.clickable-passage').forEach(el => {
+  // Wire concept-link clicks in Read tab (inline annotated terms)
+  document.querySelectorAll('.concept-link').forEach(el => {
     el.addEventListener('click', () => {
-      document.querySelectorAll('.clickable-passage').forEach(p => p.classList.remove('selected'));
+      document.querySelectorAll('.concept-link').forEach(p => p.classList.remove('selected'));
       el.classList.add('selected');
       const kind = el.dataset.kind;
-      const number = el.dataset.number;
+      const id   = el.dataset.id;
       const detail = document.getElementById('detail-panel');
       if (!detail) return;
-      const items = [
-        ...(sec.definitions   || []).map(x => ({...x, kind: 'definition'})),
-        ...(sec.theorems      || []).map(x => ({...x, kind: 'theorem'})),
-        ...(sec.propositions  || []).map(x => ({...x, kind: 'proposition'})),
-        ...(sec.corollaries   || []).map(x => ({...x, kind: 'corollary'})),
-      ];
-      const item = items.find(x => x.kind === kind && String(x.number) === String(number));
-      if (item) {
-        detail.innerHTML = renderItem(item);
+      const found = lookupConceptItem(kind, id, sec);
+      if (found) {
+        detail.innerHTML = found.kind === 'generating_function'
+          ? renderGFItem(found.item)
+          : found.kind === 'technique'
+          ? renderTechItem(found.item)
+          : renderItem({...found.item, kind: found.kind});
         if (window.MathJax) MathJax.typesetPromise([detail]).catch(()=>{});
       }
     });
@@ -526,6 +524,56 @@ function renderConnections(sec) {
 }
 
 // ── Tab: Read (Split View) ─────────────────────────────
+function annotateText(text) {
+  // [[kind:id:display text]] → clickable span
+  return text.replace(/\[\[(\w+):([^\]:]+):([^\]]+)\]\]/g, (_, kind, id, display) =>
+    `<span class="concept-link" data-kind="${esc(kind)}" data-id="${esc(id)}">${display}</span>`
+  );
+}
+
+function lookupConceptItem(kind, id, sec) {
+  if (kind === 'gf') {
+    const item = (sec.generating_functions || []).find(x => x.id === id);
+    if (item) return { item, kind: 'generating_function' };
+  }
+  if (kind === 'tech') {
+    const item = (state.techniques?.techniques || []).find(x => x.id === id);
+    if (item) return { item, kind: 'technique' };
+  }
+  const kindMap = { def: 'definition', thm: 'theorem', prop: 'proposition', cor: 'corollary' };
+  const normKind = kindMap[kind] || kind;
+  const arr = {
+    definition: sec.definitions || [],
+    theorem:    sec.theorems    || [],
+    proposition:sec.propositions|| [],
+    corollary:  sec.corollaries || [],
+  }[normKind] || [];
+  const item = arr.find(x => String(x.number) === String(id) || x.id === id);
+  if (item) return { item, kind: normKind };
+  return null;
+}
+
+function renderGFItem(gf) {
+  return `<div class="card card-gf">
+    <div class="card-label gf">Generating Function</div>
+    <h3 style="margin:8px 0">${esc(gf.name)}</h3>
+    ${gf.sequence ? `<p><strong>Sequence:</strong> $${gf.sequence}$</p>` : ''}
+    ${gf.formula  ? `<p>$$${gf.formula}$$</p>` : ''}
+    ${gf.ogf      ? `<p><strong>OGF:</strong> $\\displaystyle ${gf.ogf}$</p>` : ''}
+    ${gf.egf      ? `<p><strong>EGF:</strong> $\\displaystyle ${gf.egf}$</p>` : ''}
+    ${gf.description ? `<div style="margin-top:10px">${markdownToHtml(gf.description)}</div>` : ''}
+  </div>`;
+}
+
+function renderTechItem(tech) {
+  return `<div class="card card-technique">
+    <div class="card-label technique">Technique</div>
+    <h3 style="margin:8px 0">${esc(tech.name)}</h3>
+    ${tech.description  ? `<div>${markdownToHtml(tech.description)}</div>` : ''}
+    ${tech.when_to_use  ? `<p><strong>When to use:</strong> ${esc(tech.when_to_use)}</p>` : ''}
+  </div>`;
+}
+
 function renderTextView(sec) {
   if (!sec.text_passages || !sec.text_passages.length) {
     return `<div class="split-placeholder">
@@ -534,21 +582,30 @@ function renderTextView(sec) {
     </div>`;
   }
 
-  const passagesHtml = sec.text_passages.map((p, i) => {
+  const passagesHtml = sec.text_passages.map(p => {
     if (p.type === 'heading') {
       return `<h3 class="text-section-heading">${p.text}</h3>`;
     }
     if (p.type === 'prose') {
-      return `<div class="text-passage prose-passage">${markdownToHtml(p.text)}</div>`;
+      return `<div class="text-passage prose-passage">${annotateText(markdownToHtml(p.text))}</div>`;
     }
-    if (p.type === 'concept') {
-      const kindClass = p.kind || 'theorem';
-      return `<div class="text-passage clickable-passage concept-passage-${kindClass}"
-                   data-kind="${p.kind}" data-number="${esc(String(p.number))}"
-                   title="Click to see full details">
-        <div class="passage-concept-label ${kindClass}">${esc(p.label)}</div>
-        <div class="passage-preview">${markdownToHtml(p.preview)}</div>
-        <div class="passage-click-hint">Click for details →</div>
+    if (p.type === 'example') {
+      return `<div class="text-passage text-example">
+        <span class="text-block-label">Example ${esc(p.label)}.</span>
+        ${annotateText(markdownToHtml(p.text))}
+      </div>`;
+    }
+    if (p.type === 'proposition' || p.type === 'theorem' || p.type === 'corollary' || p.type === 'definition') {
+      const kindLabel = p.type.charAt(0).toUpperCase() + p.type.slice(1);
+      return `<div class="text-passage text-formal text-${p.type}">
+        <span class="text-block-label">${kindLabel} ${esc(p.label||'')}.</span>
+        ${annotateText(markdownToHtml(p.text))}
+      </div>`;
+    }
+    if (p.type === 'note') {
+      return `<div class="text-passage text-note">
+        <span class="text-block-label">Note.</span>
+        ${annotateText(markdownToHtml(p.text))}
       </div>`;
     }
     return '';
@@ -561,7 +618,7 @@ function renderTextView(sec) {
     <div class="detail-panel" id="detail-panel">
       <div class="detail-placeholder">
         <div class="detail-placeholder-icon">◈</div>
-        <p>Click any highlighted concept on the left to see the full theorem, definition, or proposition here.</p>
+        <p>Click any <span style="color:var(--teal-dark);border-bottom:1px solid var(--teal-dark)">highlighted term</span> to see the full definition, theorem, or generating function.</p>
       </div>
     </div>
   </div>`;

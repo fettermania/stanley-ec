@@ -546,6 +546,72 @@ p:last-child { margin-bottom: 0; }
   font-family: sans-serif;
 }
 
+/* Inline concept links within prose */
+.concept-link {
+  color: var(--teal-dark);
+  border-bottom: 1px dotted var(--teal-dark);
+  cursor: pointer;
+  transition: color .12s, border-color .12s, background .12s;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+.concept-link:hover { background: var(--teal-pale); border-bottom-style: solid; }
+.concept-link.selected {
+  background: var(--teal-pale); border-bottom: 2px solid var(--teal);
+  color: var(--navy); font-weight: 600;
+}
+
+/* Example blocks in Read tab */
+.text-example {
+  border-left: 3px solid var(--gold);
+  padding-left: 14px;
+  margin-bottom: 18px;
+}
+.text-block-label {
+  font-weight: 700;
+  font-family: sans-serif;
+  font-size: .88rem;
+  display: inline;
+  margin-right: 4px;
+}
+.text-example .text-block-label { color: var(--gold-dark, #b8860b); }
+
+/* Formal blocks (proposition, theorem, definition, corollary) in Read tab */
+.text-formal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 14px;
+}
+.text-proposition .text-block-label { color: var(--teal-dark); }
+.text-theorem     .text-block-label { color: var(--navy); }
+.text-definition  .text-block-label { color: var(--teal); }
+.text-corollary   .text-block-label { color: #4a7da0; }
+.text-formal { border-left-width: 4px; }
+.text-theorem     { border-left-color: var(--navy); }
+.text-proposition { border-left-color: var(--teal-dark); }
+.text-definition  { border-left-color: var(--teal); }
+.text-corollary   { border-left-color: #6b9ec7; }
+
+/* Note blocks */
+.text-note {
+  background: #fffbea; border-left: 3px solid var(--gold);
+  padding: 10px 14px; border-radius: var(--radius-sm);
+  font-size: .9rem; margin-bottom: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .text-note { background: #2a2510; }
+}
+:root[data-theme="dark"] .text-note { background: #2a2510; }
+
+/* GF and technique cards */
+.card-gf { border-left-color: var(--salmon); }
+.card-technique { border-left-color: var(--salmon); }
+.card-label.gf, .card-label.technique {
+  background: var(--salmon); color: #fff;
+}
+
 @media (max-width: 900px) {
   .split-view { grid-template-columns: 1fr; }
   .detail-panel { position: static; max-height: none; }

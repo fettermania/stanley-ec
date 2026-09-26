@@ -1,47 +1,84 @@
 {
   "id": "1.1",
-  "title": "How to count",
+  "title": "How to Count",
   "chapter": 1,
   "pdf_pages": {"start": 9, "end": 22},
-  "technique_tags": ["bijection", "double-counting", "generating-functions"],
+  "technique_tags": ["generating-functions", "bijection"],
   "status": "done",
 
-  "key_idea": "A sequence $(a_n)$ can be understood via its generating function $F(x) = \\sum_{n \\geq 0} a_n x^n$ (OGF) or $F(x) = \\sum_{n \\geq 0} a_n x^n/n!$ (EGF). Formal power series in $\\mathbb{C}[[x]]$ obey algebraic rules without convergence concerns. A bijective proof of $|A| = |B|$ is often the most elegant approach.",
+  "key_idea": "A counting function $f(i)$ can be determined by: (1) explicit closed formula, (2) recurrence, (3) algorithm, (4) asymptotic formula, or (5) generating function. The generating function approach — encoding $f(n)$ as coefficients of a formal power series — is the most powerful and is the main subject of Chapter 1.",
 
-  "summary": "Stanley opens by asking: what does it mean to 'find' $f(n)$? He identifies five types of answers: a closed formula, a recurrence, an algorithm, an asymptotic estimate, or a generating function. The section introduces ordinary and exponential generating functions as elements of $\\mathbb{C}[[x]]$, proves convergence criteria for infinite sums and products of formal power series, introduces the formal derivative, and works through many examples including subsets, derangements, Fibonacci numbers, and the Vandermonde identity — often giving both GF and bijective proofs.",
+  "summary": "Stanley introduces generating functions as the fifth (and most useful) method of 'determining' a counting function $f(i)$. The [[gf:ogf:ordinary generating function]] $F(x) = \\sum f(n)x^n$ and [[gf:egf:exponential generating function]] $F(x) = \\sum f(n)x^n/n!$ are formal power series in the ring $\\mathbb{C}[[x]]$. The section develops the algebra of formal power series (addition, multiplication, inversion, composition, formal derivative), proves convergence criteria ([[prop:1.1.8:Prop. 1.1.8]] and [[prop:1.1.9:Prop. 1.1.9]]), and works through 17 examples. The final pages discuss the distinction between combinatorial (bijective) and non-combinatorial proofs.",
 
   "notation": [
-    {"symbol": "[n]",      "latex": "[n]",          "description": "The set $\\{1,2,\\ldots,n\\}$"},
-    {"symbol": "C[[x]]",   "latex": "\\mathbb{C}[[x]]", "description": "Ring of formal power series with complex coefficients"},
-    {"symbol": "[x^n]F",   "latex": "[x^n]F(x)",    "description": "Coefficient of $x^n$ in the formal power series $F(x)$"},
-    {"symbol": "OGF",      "latex": "\\sum_n a_n x^n", "description": "Ordinary generating function"},
-    {"symbol": "EGF",      "latex": "\\sum_n a_n x^n/n!", "description": "Exponential generating function"},
-    {"symbol": "F'(x)",    "latex": "F'(x)",         "description": "Formal derivative: if $F=\\sum a_n x^n$ then $F'=\\sum n a_n x^{n-1}$"}
+    {"symbol": "[x^n]F(x)", "latex": "[x^n]F(x)", "description": "Coefficient of $x^n$ in $F(x)$"},
+    {"symbol": "C[[x]]",    "latex": "\\mathbb{C}[[x]]", "description": "Ring of formal power series with complex coefficients"},
+    {"symbol": "deg F",     "latex": "\\deg F(x)",  "description": "Degree of $F$: least $n$ with $[x^n]F(x) \\neq 0$"},
+    {"symbol": "F'(x)",     "latex": "F'(x)",       "description": "Formal derivative: $\\sum_{n \\geq 0} n a_n x^{n-1}$"},
+    {"symbol": "f(n)~g(n)", "latex": "f(n) \\sim g(n)", "description": "$\\lim_{n\\to\\infty} f(n)/g(n) = 1$"}
+  ],
+
+  "generating_functions": [
+    {
+      "id": "ogf",
+      "name": "Ordinary generating function (OGF)",
+      "formula": "F(x) = \\sum_{n \\geq 0} f(n)\\, x^n",
+      "description": "Encodes $f(n)$ as the coefficient of $x^n$. We write $f(n) = [x^n]F(x)$. Suitable when objects of different sizes do not interact in a multiplicative way."
+    },
+    {
+      "id": "egf",
+      "name": "Exponential generating function (EGF)",
+      "formula": "F(x) = \\sum_{n \\geq 0} f(n)\\, \\frac{x^n}{n!}",
+      "description": "Encodes $f(n)$ in the coefficient of $x^n/n!$. We write $f(n) = n![x^n]F(x)$. Suitable for labeled structures: multiplication of EGFs corresponds to choosing a subset and combining two structures."
+    },
+    {
+      "id": "fps",
+      "name": "Formal power series ring $\\mathbb{C}[[x]]$",
+      "formula": "\\mathbb{C}[[x]] = \\left\\{ \\sum_{n \\geq 0} a_n x^n : a_n \\in \\mathbb{C} \\right\\}",
+      "description": "$\\mathbb{C}[[x]]$ is a commutative integral domain (in fact a principal ideal domain). $F(x)^{-1}$ exists iff $F(0) = a_0 \\neq 0$. The operation $[x^n]: \\mathbb{C}[[x]] \\to \\mathbb{C}$ is a linear functional."
+    },
+    {
+      "id": "gf-geometric",
+      "name": "Geometric series",
+      "sequence": "f(n) = \\alpha^n",
+      "ogf": "\\frac{1}{1 - \\alpha x}",
+      "description": "$\\sum_{n \\geq 0} \\alpha^n x^n = (1-\\alpha x)^{-1}$. This is Example 1.1.5. It is the 'formula for summing a geometric series' in a formal setting."
+    },
+    {
+      "id": "gf-fibonacci",
+      "name": "Fibonacci GF",
+      "sequence": "f(n) = F_{n+1}$ (Fibonacci number), $a_n = a_{n-1} + a_{n-2}$, $a_0 = a_1 = 1",
+      "ogf": "\\frac{1}{1 - x - x^2}",
+      "description": "Derived in Example 1.1.12 by writing $F(x) = 1 + x + x(F(x)-1) + x^2 F(x)$ and solving."
+    },
+    {
+      "id": "gf-exp",
+      "name": "Exponential $e^x$ as EGF",
+      "formula": "\\sum_{n \\geq 0} \\frac{x^n}{n!} = e^x",
+      "description": "The EGF for $f(n) = 1$. Used in Example 1.1.6 ($e^x \\cdot e^{-x} = 1 \\Rightarrow \\sum_k (-1)^k \\binom{n}{k} = \\delta_{0n}$) and in Example 1.1.13 ($F'(x) = (1+x)F(x) \\Rightarrow F(x) = e^{x + x^2/2}$)."
+    },
+    {
+      "id": "gf-mobius",
+      "name": "Möbius identity",
+      "formula": "\\prod_{n \\geq 1} (1-x^n)^{-\\mu(n)/n} = e^x",
+      "description": "Derived in Example 1.1.14 using $\\log F(x) = x$ from the Möbius inversion formula $\\frac{1}{m}\\sum_{d|m}\\mu(d) = [m=1]$."
+    }
   ],
 
   "definitions": [
     {
-      "id": "def-ogf",
-      "term": "Ordinary Generating Function",
-      "number": "OGF",
+      "id": "def-ogf-egf",
+      "term": "Ordinary and exponential generating functions",
+      "number": "1.1.0",
       "order": 1,
-      "statement": "Given a sequence $(a_0, a_1, a_2, \\ldots)$ of complex numbers, its **ordinary generating function** (OGF) is the formal power series $F(x) = \\sum_{n \\geq 0} a_n x^n \\in \\mathbb{C}[[x]]$.",
-      "techniques": ["generating-functions"]
+      "statement": "If $I = \\mathbb{N}$, the **ordinary generating function** (OGF) of $f(n)$ is $\\sum_{n \\geq 0} f(n)x^n$, and the **exponential generating function** (EGF) is $\\sum_{n \\geq 0} f(n)x^n/n!$. These are elements of $\\mathbb{C}[[x]]$, the ring of formal power series. The coefficient of $x^n$ in $F(x)$ is written $[x^n]F(x)$; for EGFs we write $n![x^n]F(x) = f(n)$."
     },
     {
-      "id": "def-egf",
-      "term": "Exponential Generating Function",
-      "number": "EGF",
-      "order": 2,
-      "statement": "The **exponential generating function** (EGF) of a sequence $(a_n)$ is $F(x) = \\sum_{n \\geq 0} a_n \\frac{x^n}{n!}$. EGFs are natural when the objects counted are labelled structures.",
-      "techniques": ["generating-functions"]
-    },
-    {
-      "id": "def-formal-deriv",
+      "id": "def-formal-derivative",
       "term": "Formal derivative",
       "number": "1.1.7",
-      "order": 3,
-      "statement": "The **formal derivative** of $F(x) = \\sum_{n \\geq 0} a_n x^n$ is $F'(x) = \\sum_{n \\geq 1} n a_n x^{n-1}$. The usual rules of calculus hold: $(FG)' = F'G + FG'$, $(F \\circ G)' = (F' \\circ G) \\cdot G'$ (when $G(0) = 0$), and the chain rule."
+      "order": 5,
+      "statement": "If $F(x) = \\sum_{n \\geq 0} a_n x^n \\in \\mathbb{C}[[x]]$, the **formal derivative** $F'(x)$ (also written $dF/dx$ or $DF(x)$) is the formal power series $$F'(x) = \\sum_{n \\geq 0} n a_n x^{n-1} = \\sum_{n \\geq 0} (n+1)a_{n+1} x^n.$$ The familiar laws of differentiation hold formally: $(F+G)' = F'+G'$, $(FG)' = F'G + FG'$, $F(G(x))' = G'(x) F'(G(x))$."
     }
   ],
 
@@ -49,20 +86,18 @@
     {
       "id": "prop-1-1-8",
       "number": "1.1.8",
-      "title": "Convergence of infinite sums",
+      "title": "Convergence of infinite series",
       "order": 10,
-      "statement": "Let $F_0(x), F_1(x), \\ldots$ be formal power series. The infinite sum $\\sum_{j \\geq 0} F_j(x)$ converges in $\\mathbb{C}[[x]]$ if and only if $\\lim_{j \\to \\infty} \\deg F_j(x) = \\infty$, where $\\deg F$ denotes the degree of the lowest-degree nonzero term.",
-      "proof_sketch": "The coefficient of $x^n$ in the sum is a finite sum (since all but finitely many $F_j$ have degree $> n$) iff the degrees go to infinity. The condition ensures each coefficient stabilizes.",
-      "techniques": ["generating-functions"]
+      "statement": "The infinite series $\\sum_{j \\geq 0} F_j(x)$ converges if and only if $$\\lim_{j \\to \\infty} \\deg F_j(x) = \\infty.$$",
+      "proof_sketch": "By definition of convergence in $\\mathbb{C}[[x]]$: $F_j(x) \\to F(x)$ iff for every $n$ there is $\\delta(n)$ such that $[x^n]F_i(x) = a_n$ for all $i \\geq \\delta(n)$. Since $[x^n] \\sum_{j=0}^{i} F_j(x)$ stabilizes once $\\deg F_j > n$ for all remaining $j$, the series converges iff $\\deg F_j(x) \\to \\infty$."
     },
     {
       "id": "prop-1-1-9",
       "number": "1.1.9",
       "title": "Convergence of infinite products",
-      "order": 11,
-      "statement": "Let $G_1(x), G_2(x), \\ldots$ be formal power series with $G_j(0) = 0$ for all $j$. The infinite product $\\prod_{j \\geq 1}(1 + G_j(x))$ converges in $\\mathbb{C}[[x]]$ if and only if $\\lim_{j \\to \\infty} \\deg G_j(x) = \\infty$.",
-      "proof_sketch": "Taking logs reduces to the sum case: each coefficient of the product is determined by finitely many factors.",
-      "techniques": ["generating-functions"]
+      "order": 12,
+      "statement": "The infinite product $\\prod_{j \\geq 1}(1 + G_j(x))$, where $G_j(0) = 0$, converges if and only if $\\lim_{j \\to \\infty} \\deg G_j(x) = \\infty$.",
+      "proof_sketch": "Left to the reader. The key point is that $[x^n]$ in a finite sub-product stabilizes once $\\deg G_j > n$."
     }
   ],
 
@@ -72,107 +107,218 @@
   "examples": [
     {
       "id": "1.1.1",
-      "title": "Subsets of an $n$-element set",
-      "content": "Let $f(n) = $ number of subsets of $[n] = \\{1, 2, \\ldots, n\\}$. Show $f(n) = 2^n$.",
-      "solution": "**Bijective proof:** Map each subset $S \\subseteq [n]$ to its characteristic vector $(\\epsilon_1, \\ldots, \\epsilon_n) \\in \\{0,1\\}^n$, where $\\epsilon_i = 1$ iff $i \\in S$. This is a bijection between subsets of $[n]$ and $\\{0,1\\}^n$, and $|\\{0,1\\}^n| = 2^n$.\n\n**GF approach:** $(1+x_1)(1+x_2)\\cdots(1+x_n) = \\sum_{T \\subseteq [n]} \\prod_{i \\in T} x_i$. Setting $x_i = 1$ gives $2^n$."
+      "title": "Subsets of $[n]$",
+      "content": "For each $n \\in \\mathbb{N}$, let $f(n)$ be the number of subsets of $[n] = \\{1,2,\\ldots,n\\}$.",
+      "solution": "$f(n) = 2^n$. OGF: $\\sum 2^n x^n = 1/(1-2x)$."
     },
     {
       "id": "1.1.2",
       "title": "Derangements",
-      "content": "A derangement of $[n]$ is a permutation $w$ with no fixed points ($w(i) \\neq i$ for all $i$). Show $f(n) = n! \\sum_{i=0}^{n} \\frac{(-1)^i}{i!}$.",
-      "solution": "By inclusion-exclusion: $f(n) = \\sum_{k=0}^n (-1)^k \\binom{n}{k}(n-k)! = n!\\sum_{k=0}^n \\frac{(-1)^k}{k!}$.\n\nThe EGF is $e^{-x}/(1-x)$, which gives $f(n)/n! = \\sum_k (-1)^k/k!$, so $f(n) \\approx n!/e$."
+      "content": "Suppose $n$ men give their $n$ hats to a hat-check person. Let $f(n)$ be the number of ways the hats can be given back so that no man receives his own hat.",
+      "solution": "$f(1)=0, f(2)=1, f(3)=2$. By inclusion-exclusion (Chapter 2): $$f(n) = n! \\sum_{i=0}^{n} \\frac{(-1)^i}{i!}.$$ The nearest integer to $n!/e$. EGF: $\\sum f(n) x^n/n! = e^{-x}/(1-x)$."
     },
     {
       "id": "1.1.5",
-      "title": "Geometric series as GF",
-      "content": "Show that $\\sum_{n \\geq 0} \\alpha^n x^n = \\frac{1}{1 - \\alpha x}$ in $\\mathbb{C}[[x]]$.",
-      "solution": "$(1-\\alpha x) \\sum_{n\\geq 0} \\alpha^n x^n = \\sum_{n\\geq 0}\\alpha^n x^n - \\sum_{n\\geq 0}\\alpha^{n+1}x^{n+1} = 1$ (telescoping). This is an algebraic identity in $\\mathbb{C}[[x]]$ requiring no convergence."
+      "title": "Geometric series",
+      "content": "Let $\\left(\\sum_{n \\geq 0} \\alpha^n x^n\\right)(1-\\alpha x) = \\sum c_n x^n$.",
+      "solution": "$c_0 = 1$; for $n \\geq 1$, $c_n = \\alpha^n - \\alpha \\cdot \\alpha^{n-1} = 0$. Hence $\\sum_{n \\geq 0} \\alpha^n x^n = (1-\\alpha x)^{-1}$."
     },
     {
       "id": "1.1.12",
-      "title": "Fibonacci numbers via GF",
-      "content": "The Fibonacci sequence satisfies $F_0=0, F_1=1, F_{n+2}=F_{n+1}+F_n$. Find the OGF and a formula for $F_n$.",
-      "solution": "Let $F(x) = \\sum_{n\\geq 0} F_n x^n$. The recurrence gives $(1-x-x^2)F(x) = x$, so $F(x) = x/(1-x-x^2)$.\n\nSetting $a_n = F_{n+1}$, the OGF $\\sum a_n x^n = 1/(1-x-x^2)$.\n\nPartial fractions: $1/(1-x-x^2) = 1/((1-\\phi x)(1-\\psi x))$ where $\\phi = (1+\\sqrt{5})/2$, $\\psi = (1-\\sqrt{5})/2$ are the golden ratio and its conjugate. This gives $F_{n+1} = (\\phi^{n+1} - \\psi^{n+1})/\\sqrt{5}$ (Binet's formula)."
+      "title": "Fibonacci GF",
+      "content": "Find a simple expression for the OGF $F(x) = \\sum a_n x^n$ where $a_0 = a_1 = 1$, $a_n = a_{n-1}+a_{n-2}$ for $n \\geq 2$.",
+      "solution": "$F(x) = 1 + x + \\sum_{n \\geq 2}(a_{n-1}+a_{n-2})x^n = 1 + x + x(F(x)-1) + x^2 F(x)$. Solving: $F(x) = 1/(1-x-x^2)$. The number $a_n = F_{n+1}$ is the $(n+1)$st Fibonacci number."
+    },
+    {
+      "id": "1.1.13",
+      "title": "EGF via ODE",
+      "content": "Find the EGF $F(x) = \\sum a_n x^n/n!$ where $a_0 = 1$ and $a_{n+1} = a_n + na_{n-1}$ for $n \\geq 0$.",
+      "solution": "Multiply the recurrence by $x^n/n!$ and sum on $n \\geq 0$: the LHS is $F'(x)$, the RHS is $F(x) + xF(x) = (1+x)F(x)$. Solving $F' = (1+x)F$, $F(0) = 1$: $F(x) = \\exp(x + x^2/2)$."
+    },
+    {
+      "id": "1.1.14",
+      "title": "Möbius function identity",
+      "content": "Let $\\mu(n)$ be the Möbius function ($\\mu(1)=1$, $\\mu(n)=(-1)^r$ if $n$ is a product of $r$ distinct primes, $\\mu(n)=0$ otherwise). Find $F(x) = \\prod_{n \\geq 1}(1-x^n)^{-\\mu(n)/n}$.",
+      "solution": "$\\log F(x) = -\\sum_n \\frac{\\mu(n)}{n}\\log(1-x^n) = \\sum_n \\frac{\\mu(n)}{n}\\sum_{i \\geq 1}\\frac{x^{in}}{i}$. The coefficient of $x^m$ is $\\frac{1}{m}\\sum_{d|m}\\mu(d) = [m=1]$ (Möbius inversion). Hence $\\log F(x) = x$, so $F(x) = e^x$."
+    },
+    {
+      "id": "1.1.16",
+      "title": "Intersection of subsets (bijective vs. non-bijective proof)",
+      "content": "Let $n,k$ be fixed positive integers. How many sequences $(X_1,\\ldots,X_k)$ of subsets of $[n]$ satisfy $X_1 \\cap \\cdots \\cap X_k = \\emptyset$?",
+      "solution": "**Non-combinatorial:** Let $f(k,n)$ be the count. Condition on $\\#(X_1 \\cap \\cdots \\cap X_{k-1}) = i$: there are $\\binom{n}{i}$ choices for the intersection, $f(k-1,n-i)$ sequences $(X_1,\\ldots,X_{k-1})$, and $2^{n-i}$ choices for $X_k$ (any subset of $[n]$ not containing $T$). This gives $f(k,n) = \\sum_{i=0}^n \\binom{n}{i}2^{n-i}f(k-1,n-i)$. Setting $F_k(x) = \\sum f(k,n)x^n/n!$: $F_k(x) = e^x F_{k-1}(2x)$. Since $F_1(x)=e^x$, induction gives $F_k(x) = \\exp((2^k-1)x)$, so $f(k,n) = (2^k-1)^n$.\n\n**Combinatorial:** The $n$ elements of $[n]$ behave independently; element $j$ must appear in at least one set among $X_1,\\ldots,X_k$ that excludes it, giving $2^k - 1$ choices for the vector of memberships. Hence $f(k,n) = (2^k-1)^n$."
     },
     {
       "id": "1.1.17",
-      "title": "Vandermonde convolution",
-      "content": "Prove $\\sum_{i=0}^n \\binom{a}{i}\\binom{b}{n-i} = \\binom{a+b}{n}$ (Vandermonde's identity).",
-      "solution": "**GF proof:** $(1+x)^a(1+x)^b = (1+x)^{a+b}$. Extracting $[x^n]$ gives the identity.\n\n**Bijective proof:** Choose $n$ elements from $[a+b]$ (split as $A = [a]$ and $B = [b]$). For each $0 \\leq i \\leq n$, choose $i$ from $A$ and $n-i$ from $B$; summing over $i$ gives all $n$-element subsets of $[a+b]$."
+      "title": "Vandermonde identity",
+      "content": "Prove $\\sum_{i=0}^n \\binom{a}{i}\\binom{b}{n-i} = \\binom{a+b}{n}$.",
+      "solution": "**Generating function proof:** The coefficient of $x^n$ in $(\\sum_{i \\geq 0}\\binom{a}{i}x^i)(\\sum_{j \\geq 0}\\binom{b}{j}x^j) = (1+x)^a(1+x)^b = (1+x)^{a+b} = \\sum \\binom{a+b}{n}x^n$.\n\n**Combinatorial proof:** The RHS counts $n$-element subsets $X$ of $[a+b]$. If $\\#(X \\cap [a]) = i$, there are $\\binom{a}{i}$ choices for $X \\cap [a]$ and $\\binom{b}{n-i}$ choices for $X \\cap \\{a+1,\\ldots,a+b\\}$. Summing over $i$ gives the LHS."
     }
   ],
 
   "exercises": [
     {
       "number": 1,
-      "statement": "Find a closed formula for $\\sum_{n \\geq 0} n^2 x^n$.",
-      "hints": ["Differentiate $1/(1-x) = \\sum x^n$ twice and adjust."],
+      "statement": "Find the generating function $\\sum_{n \\geq 0} f(n) x^n$ where $f(n)$ is the number of $n \\times n$ 0-1 matrices with all row and column sums equal to 2.",
+      "hints": ["Use permanents or inclusion-exclusion; the answer involves a sum analogous to (1.2)."],
       "techniques": ["generating-functions"]
     },
     {
-      "number": 3,
-      "statement": "Show that the number of ways to write $n$ as an ordered sum of positive integers (compositions) is $2^{n-1}$ for $n \\geq 1$.",
-      "hints": ["Bijection: a composition of $n$ corresponds to a subset of $\\{1,2,\\ldots,n-1\\}$ (the partial sums, or equivalently, which gaps between $1,\\ldots,n-1$ to cut)."],
-      "techniques": ["bijection"]
+      "number": 7,
+      "statement": "Show that $\\sum_{i=0}^n (-1)^{n-i}\\binom{n}{i}f(i) = [x^n]F(x) \\cdot n!$ does not hold in general. Find what it does equal for $F(x) = e^x$.",
+      "hints": ["Apply the finite difference operator $\\Delta^n$ to 0 evaluated at the EGF."],
+      "techniques": ["generating-functions"]
     }
   ],
 
   "text_passages": [
     {
-      "type": "heading",
-      "text": "What does it mean to find $f(n)$?"
+      "type": "prose",
+      "text": "The basic problem of enumerative combinatorics is that of counting the number of elements of a finite set. Usually we are given an infinite collection of finite sets $S_i$ where $i$ ranges over some index set $I$ (such as the nonnegative integers $\\mathbb{N}$), and we wish to count the number $f(i)$ of elements in each $S_i$ \"simultaneously.\" Immediate philosophical difficulties arise. What does it mean to \"count\" the number of elements of $S_i$? There is no definitive answer to this question. Only through experience does one develop an idea of what is meant by a \"determination\" of a counting function $f(i)$. The counting function $f(i)$ can be given in several standard ways:"
     },
     {
       "type": "prose",
-      "text": "Stanley opens by asking: what does it mean to **find** $f(n)$, the number of objects of size $n$? He identifies five satisfactory answers:\n\n1. A **closed formula** (expression in terms of standard functions)\n2. A **recurrence** with initial conditions\n3. An **algorithm** to compute $f(n)$\n4. An **asymptotic estimate** as $n \\to \\infty$\n5. A **generating function** $\\sum f(n) x^n$"
+      "text": "**1.** The most satisfactory form of $f(i)$ is a completely explicit closed formula involving only well-known functions, and free from summation symbols. Only in rare cases will such a formula exist. As formulas for $f(i)$ become more complicated, our willingness to accept them as \"determinations\" of $f(i)$ decreases. Consider the following examples."
     },
     {
-      "type": "heading",
-      "text": "Formal power series and generating functions"
+      "type": "example",
+      "label": "1.1.1",
+      "text": "For each $n \\in \\mathbb{N}$, let $f(n)$ be the number of subsets of the set $[n] = \\{1, 2, \\ldots, n\\}$. Then $f(n) = 2^n$, and no one will quarrel about this being a satisfactory formula for $f(n)$."
     },
     {
-      "type": "concept",
-      "kind": "definition",
-      "number": "OGF",
-      "label": "Ordinary Generating Function",
-      "preview": "The OGF of $(a_n)$ is $F(x) = \\sum_{n \\geq 0} a_n x^n \\in \\mathbb{C}[[x]]$. The EGF is $\\sum a_n x^n/n!$. These are elements of $\\mathbb{C}[[x]]$, the ring of formal power series."
+      "type": "example",
+      "label": "1.1.2",
+      "text": "Suppose $n$ men give their $n$ hats to a hat-check person. Let $f(n)$ be the number of ways that the hats can be given back to the men, each man receiving one hat, so that no man receives his own hat. For instance, $f(1) = 0$, $f(2) = 1$, $f(3) = 2$. We will see in Chapter 2 (Example 2.2.1) that $$f(n) = n! \\sum_{i=0}^{n} \\frac{(-1)^i}{i!}.$$ This formula for $f(n)$ is not as elegant as the formula in Example 1.1.1, but for lack of a simpler answer we are willing to accept (1.1) as a satisfactory formula. It certainly has the virtue of making it easy (in a sense that can be made precise) to compute the values $f(n)$. Moreover, once the derivation of (1.1) is understood (using the Principle of Inclusion-Exclusion), every term of (1.1) has an easily understood combinatorial meaning. This enables us to \"understand\" (1.1) intuitively, so our willingness to accept it is enhanced. We also remark that it follows easily from (1.1) that $f(n)$ is the nearest integer to $n!/e$. This is certainly a simple explicit formula, but it has the disadvantage of being \"non-combinatorial\"; that is, dividing by $e$ and rounding off to the nearest integer has no direct combinatorial significance."
     },
     {
-      "type": "prose",
-      "text": "Formal power series $\\mathbb{C}[[x]]$ are formal sums $\\sum_{n\\geq 0} a_n x^n$. They form a ring under the obvious addition and multiplication (Cauchy product). Unlike real analysis, **convergence is not required**: these are purely algebraic objects. The coefficient $[x^n]F(x)$ extracts $a_n$."
+      "type": "example",
+      "label": "1.1.3",
+      "text": "Let $f(n)$ be the number of $n \\times n$ matrices $\\mathbf{M}$ of 0's and 1's such that every row and column of $\\mathbf{M}$ has three 1's. For example, $f(0) = 1$, $f(1) = f(2) = 0$, $f(3) = 1$. The most explicit formula known at present for $f(n)$ is $$f(n) = 6^{-n} n!^2 \\sum \\frac{(-1)^{\\beta}(\\beta + 3\\gamma)!\\, 2^{\\alpha} 3^{\\beta}}{\\alpha!\\, \\beta!\\, \\gamma!^2\\, 6^{\\gamma}},$$ where the sum ranges over all $(n+2)(n+1)/2$ solutions to $\\alpha + \\beta + \\gamma = n$ in nonnegative integers. This formula gives very little insight into the behavior of $f(n)$, but it does allow one to compute $f(n)$ much faster than if only the combinatorial definition of $f(n)$ were used. Hence with some reluctance we accept (1.2) as a \"determination\" of $f(n)$. Of course if someone were later to prove that $f(n) = (n-1)(n-2)/2$ (rather unlikely), then our enthusiasm for (1.2) would be considerably diminished."
     },
     {
-      "type": "concept",
-      "kind": "proposition",
-      "number": "1.1.8",
-      "label": "Proposition 1.1.8 — Convergence of sums",
-      "preview": "$\\sum_{j \\geq 0} F_j(x)$ converges in $\\mathbb{C}[[x]]$ if and only if $\\lim_{j\\to\\infty}\\deg F_j(x) = \\infty$. Each coefficient stabilizes after finitely many terms."
-    },
-    {
-      "type": "concept",
-      "kind": "proposition",
-      "number": "1.1.9",
-      "label": "Proposition 1.1.9 — Convergence of products",
-      "preview": "$\\prod_{j\\geq 1}(1+G_j(x))$ converges in $\\mathbb{C}[[x]]$ (with $G_j(0)=0$) if and only if $\\lim_{j\\to\\infty} \\deg G_j(x) = \\infty$."
-    },
-    {
-      "type": "heading",
-      "text": "The formal derivative"
-    },
-    {
-      "type": "concept",
-      "kind": "definition",
-      "number": "1.1.7",
-      "label": "Formal Derivative",
-      "preview": "If $F(x) = \\sum a_n x^n$, then $F'(x) = \\sum_{n\\geq 1} n a_n x^{n-1}$. The usual product rule and chain rule hold algebraically."
-    },
-    {
-      "type": "heading",
-      "text": "Key examples"
+      "type": "example",
+      "label": "1.1.4",
+      "text": "There are actually formulas in the literature (\"nameless here for evermore\") for certain counting functions $f(n)$ whose evaluation requires listing all (or almost all) of the $f(n)$ objects being counted! Such a \"formula\" is completely worthless."
     },
     {
       "type": "prose",
-      "text": "Several key examples illustrate the GF method:\n- Subsets of $[n]$: $f(n) = 2^n$, proved bijectively via characteristic vectors (Example 1.1.1)\n- Derangements: $f(n) \\approx n!/e$, EGF is $e^{-x}/(1-x)$ (Example 1.1.2)\n- Geometric series: $\\sum \\alpha^n x^n = 1/(1-\\alpha x)$ (Example 1.1.5)\n- Fibonacci: OGF is $1/(1-x-x^2)$ (Example 1.1.12)\n- Vandermonde: $\\sum_i \\binom{a}{i}\\binom{b}{n-i} = \\binom{a+b}{n}$ (Example 1.1.17)"
+      "text": "**2.** A recurrence for $f(i)$ may be given in terms of previously calculated $f(j)$'s, thereby giving a simple procedure for calculating $f(i)$ for any desired $i \\in I$. For instance, let $f(n)$ be the number of subsets of $[n]$ that do not contain two consecutive integers. For example, for $n = 4$ we have the subsets $\\emptyset$, $\\{1\\}$, $\\{2\\}$, $\\{3\\}$, $\\{4\\}$, $\\{1,3\\}$, $\\{1,4\\}$, $\\{2,4\\}$, so $f(4) = 8$. It is easily seen that $f(n) = f(n-1) + f(n-2)$ for $n \\geq 2$. This makes it trivial, for example, to compute $f(20) = 17711$. On the other hand, it can be shown (see Section 4.1 for the underlying theory) that $$f(n) = \\frac{1}{\\sqrt{5}} \\left(\\tau^{n+2} - \\bar{\\tau}^{n+2}\\right),$$ where $\\tau = \\frac{1}{2}(1+\\sqrt{5})$, $\\bar{\\tau} = \\frac{1}{2}(1-\\sqrt{5})$. This is an explicit answer, but because it involves irrational numbers it is a matter of opinion (which may depend on the context) whether it is a better answer than the recurrence $f(n) = f(n-1) + f(n-2)$."
+    },
+    {
+      "type": "prose",
+      "text": "**3.** An algorithm may be given for computing $f(i)$. This method of determining $f$ subsumes the previous two, as well as method **5** below. Any counting function likely to arise in practice can be computed from an algorithm, so the acceptability of this method will depend on the elegance and performance of the algorithm. In general, we would like the time that it takes the algorithm to compute $f(i)$ to be \"substantially less\" than $f(i)$ itself. Otherwise we are accomplishing little more than a brute force listing of the objects counted by $f(i)$. We will be concerned almost exclusively with enumerative problems that admit solutions that are more concrete than an algorithm."
+    },
+    {
+      "type": "prose",
+      "text": "**4.** An estimate may be given for $f(i)$. If $I = \\mathbb{N}$, this estimate frequently takes the form of an *asymptotic formula* $f(n) \\sim g(n)$, where $g(n)$ is a \"familiar function.\" The notation $f(n) \\sim g(n)$ means that $\\lim_{n \\to \\infty} f(n)/g(n) = 1$. For instance, let $f(n)$ be the function of Example 1.1.3. It can be shown that $$f(n) \\sim e^{-2} 36^{-n} (3n)!.$$ For many purposes this estimate is superior to the \"explicit\" formula (1.2)."
+    },
+    {
+      "type": "prose",
+      "text": "**5.** The most useful but most difficult to understand method for evaluating $f(i)$ is to give its *[[gf:fps:generating function]]*. We will not develop in this chapter a rigorous abstract theory of generating functions, but will instead content ourselves with an informal discussion and some examples. Informally, a generating function is an \"object\" that represents a counting function $f(i)$. Usually this object is a *formal power series*. The two most common types of generating functions are *[[gf:ogf:ordinary]]* generating functions and *[[gf:egf:exponential]]* generating functions. If $I = \\mathbb{N}$, then the [[gf:ogf:ordinary generating function]] of $f(n)$ is the formal power series $$\\sum_{n \\geq 0} f(n)\\, x^n,$$ while the [[gf:egf:exponential generating function]] of $f(n)$ is the formal power series $$\\sum_{n \\geq 0} f(n)\\, \\frac{x^n}{n!}.$$ (If $I = \\mathbb{P}$, the positive integers, then these sums begin at $n = 1$.) These power series are called \"formal\" because we are not concerned with letting $x$ take on particular values, and we ignore questions of convergence and divergence. The term $x^n$ or $x^n/n!$ merely marks the place where $f(n)$ is written."
+    },
+    {
+      "type": "prose",
+      "text": "If $F(x) = \\sum_{n \\geq 0} a_n x^n$, then we call $a_n$ the *coefficient* of $x^n$ in $F(x)$ and write $a_n = [x^n]F(x)$. Similarly, if $F(x) = \\sum_{n \\geq 0} a_n x^n/n!$, then we write $a_n = n![x^n]F(x)$.\n\nIn the same way we can deal with generating functions of several variables, such as $\\sum_{l \\geq 0}\\sum_{m \\geq 0}\\sum_{n \\geq 0} f(l,m,n) x^l y^m z^n/n!$ (which may be considered as \"ordinary\" in the indices $l$, $m$ and \"exponential\" in $n$), or even of infinitely many variables. A simple generating function in infinitely many variables is $x_1 + x_2 + x_3 + \\cdots$."
+    },
+    {
+      "type": "prose",
+      "text": "Why bother with generating functions if they are merely another way of writing a counting function? The answer is that we can perform various natural operations on generating functions that have a combinatorial significance. For instance, we can add two generating functions, say in one variable with $I = \\mathbb{N}$, by the rule $$\\left(\\sum_{n \\geq 0} a_n x^n\\right) + \\left(\\sum_{n \\geq 0} b_n x^n\\right) = \\sum_{n \\geq 0} (a_n + b_n) x^n,$$ or $$\\left(\\sum_{n \\geq 0} a_n \\frac{x^n}{n!}\\right) + \\left(\\sum_{n \\geq 0} b_n \\frac{x^n}{n!}\\right) = \\sum_{n \\geq 0} (a_n + b_n) \\frac{x^n}{n!}.$$ Similarly, we can multiply generating functions according to the rule $$\\left(\\sum_{n \\geq 0} a_n x^n\\right)\\left(\\sum_{n \\geq 0} b_n x^n\\right) = \\sum_{n \\geq 0} c_n x^n,$$ where $c_n = \\sum_{i=0}^n a_i b_{n-i}$, or $$\\left(\\sum_{n \\geq 0} a_n \\frac{x^n}{n!}\\right)\\left(\\sum_{n \\geq 0} b_n \\frac{x^n}{n!}\\right) = \\sum_{n \\geq 0} d_n \\frac{x^n}{n!},$$ where $d_n = \\sum_{i=0}^n \\binom{n}{i} a_i b_{n-i}$, with $\\binom{n}{i} = n!/i!(n-i)!$. Note that these operations are just what we would obtain by treating generating functions as if they obeyed the ordinary laws of algebra, such as $x^i x^j = x^{i+j}$."
+    },
+    {
+      "type": "prose",
+      "text": "These operations coincide with the addition and multiplication of functions when the power series converge for appropriate values of $x$, and they obey such familiar laws of algebra as associativity and commutativity of addition and multiplication, distributivity of multiplication over addition, and cancellation of multiplication (i.e., if $F(x)G(x) = F(x)H(x)$ and $F(x) \\neq 0$, then $G(x) = H(x)$). In fact, the set of all formal power series $\\sum_{n \\geq 0} a_n x^n$ with complex coefficients $a_n$ forms a (commutative) integral domain under the operations just defined. This integral domain is denoted $\\mathbb{C}[[x]]$ (or more generally, $R[[x]]$). Actually, $\\mathbb{C}[[x]]$, or more generally $K[[x]]$ when $K$ is a field, is a very special type of integral domain. For readers with some familiarity with algebra, we remark that $\\mathbb{C}[[x]]$ is a principal ideal domain and therefore a unique factorization domain. In fact, every ideal of $\\mathbb{C}[[x]]$ has the form $(x^n)$ for some $n \\geq 0$."
+    },
+    {
+      "type": "prose",
+      "text": "If $F(x)$ and $G(x)$ are elements of $\\mathbb{C}[[x]]$ satisfying $F(x)G(x) = 1$, then we (naturally) write $G(x) = F(x)^{-1}$. (Here 1 is short for $1 + 0x + 0x^2 + \\cdots$.) It is easy to see that $F(x)^{-1}$ exists (in which case it is unique) if and only if $a_0 \\neq 0$, where $F(x) = \\sum_{n \\geq 0} a_n x^n$. One commonly writes \"symbolically\" $a_0 = F(0)$. If $F(0) \\neq 0$ and $F(x)G(x) = H(x)$, then $G(x) = F(x)^{-1}H(x)$, which we also write as $G(x) = H(x)/F(x)$. More generally, the operation $^{-1}$ satisfies all the familiar laws of algebra, provided it is only applied to power series $F(x)$ satisfying $F(0) \\neq 0$."
+    },
+    {
+      "type": "example",
+      "label": "1.1.5",
+      "text": "Let $\\left(\\sum_{n \\geq 0} \\alpha^n x^n\\right)(1-\\alpha x) = \\sum_{n \\geq 0} c_n x^n$, where $\\alpha$ is a nonzero complex number. Then by definition of power series multiplication, $$c_n = \\begin{cases} 1, & n = 0 \\\\ \\alpha^n - \\alpha(\\alpha^{n-1}) = 0, & n \\geq 1. \\end{cases}$$ Hence $\\sum_{n \\geq 0} \\alpha^n x^n = (1-\\alpha x)^{-1}$, which can also be written $$\\sum_{n \\geq 0} \\alpha^n x^n = \\frac{1}{1-\\alpha x}.$$ This formula comes as no surprise; it is simply the formula (in a formal setting) for summing a [[gf:gf-geometric:geometric series]]."
+    },
+    {
+      "type": "example",
+      "label": "1.1.6",
+      "text": "The identity $$\\left(\\sum_{n \\geq 0} \\frac{x^n}{n!}\\right)\\left(\\sum_{n \\geq 0} (-1)^n \\frac{x^n}{n!}\\right) = 1$$ is valid at the function-theoretic level (it states that $e^x e^{-x} = 1$) and is well-defined as a statement involving formal power series. Hence (1.3) is a valid formal power series identity. In other words (equating coefficients of $x^n/n!$ on both sides of (1.3)), we have $$\\sum_{k=0}^n (-1)^k \\binom{n}{k} = \\delta_{0n}.$$"
+    },
+    {
+      "type": "example",
+      "label": "1.1.7",
+      "text": "The identity $\\sum_{n \\geq 0} (x+1)^n/n! = e\\sum_{n \\geq 0} x^n/n!$ is valid at the function-theoretic level (it states that $e^{x+1} = e \\cdot e^x$), but does not make sense as a statement involving formal power series. There is no *formal* procedure for writing $\\sum_{n \\geq 0}(x+1)^n/n!$ as a member of $\\mathbb{C}[[x]]$."
+    },
+    {
+      "type": "prose",
+      "text": "Although the expression $\\sum_{n \\geq 0}(x+1)^n/n!$ does not make sense *formally*, there are nevertheless certain infinite processes that can be carried out formally in $\\mathbb{C}[[x]]$. To define these processes, we need to put some additional structure on $\\mathbb{C}[[x]]$ — namely, the notion of *convergence*. From an algebraic standpoint, the definition of convergence is inherent in the statement that $\\mathbb{C}[[x]]$ is *complete* in a certain standard topology that can be put on $\\mathbb{C}[[x]]$. However, we will assume no knowledge of topology on the part of the reader and will instead give a self-contained, elementary treatment of convergence.\n\nIf $F_1(x), F_2(x), \\ldots$ is a sequence of formal power series, and if $F(x) = \\sum_{n \\geq 0} a_n x^n$ is another formal power series, we say by definition that $F_i(x)$ *converges* to $F(x)$ as $i \\to \\infty$, written $F_i(x) \\to F(x)$ or $\\lim_{i \\to \\infty} F_i(x) = F(x)$, provided that for all $n \\geq 0$ there is a number $\\delta(n)$ such that the coefficient of $x^n$ in $F_i(x)$ is $a_n$ whenever $i \\geq \\delta(n)$. In other words, for every $n$ the sequence $[x^n]F_1(x), [x^n]F_2(x), \\ldots$ of complex numbers eventually becomes constant (or *stabilizes*) with value $a_n$. An equivalent definition of convergence is the following. Define the *degree* of a nonzero formal power series $F(x) = \\sum_{n \\geq 0} a_n x^n$, denoted $\\deg F(x)$, to be the least integer $n$ such that $a_n \\neq 0$. Note that $\\deg F(x)G(x) = \\deg F(x) + \\deg G(x)$. Then $F_i(x)$ converges to $F(x)$ if and only if $\\lim_{i \\to \\infty} \\deg(F(x) - F_i(x)) = \\infty$."
+    },
+    {
+      "type": "proposition",
+      "label": "1.1.8",
+      "text": "The infinite series $\\sum_{j \\geq 0} F_j(x)$ converges if and only if $$\\lim_{j \\to \\infty} \\deg F_j(x) = \\infty.$$"
+    },
+    {
+      "type": "proposition",
+      "label": "1.1.9",
+      "text": "The infinite product $\\prod_{j \\geq 1}(1 + G_j(x))$, where $G_j(0) = 0$, converges if and only if $\\lim_{j \\to \\infty} \\deg G_j(x) = \\infty$."
+    },
+    {
+      "type": "prose",
+      "text": "It is essential to realize that in evaluating a convergent series $\\sum_{j \\geq 0} F_j(x)$ (or similarly a product $\\prod_{j \\geq 1} F_j(x)$), the coefficient of $x^n$ for any given $n$ can be computed using only *finite* processes. For if $j$ is sufficiently large, say $j > \\delta(n)$, then $\\deg F_j(x) > n$, so that $$[x^n] \\sum_{j \\geq 0} F_j(x) = [x^n] \\sum_{j=0}^{\\delta(n)} F_j(x).$$ The latter expression involves only a *finite* sum.\n\nThe most important combinatorial application of the notion of convergence is to the idea of power series composition. If $F(x) = \\sum_{n \\geq 0} a_n x^n$ and $G(x)$ are formal power series with $G(0) = 0$, define the *composition* $F(G(x))$ to be the infinite sum $\\sum_{n \\geq 0} a_n G(x)^n$. Since $\\deg G(x)^n = n \\cdot \\deg G(x) \\geq n$, we see by [[prop:1.1.8:Proposition 1.1.8]] that $F(G(x))$ is well-defined as a formal power series. We also see why an expression such as $e^{1+x}$ does not make sense formally; namely, the infinite series $\\sum_{n \\geq 0}(1+x)^n/n!$ does not converge in accordance with the above definition."
+    },
+    {
+      "type": "example",
+      "label": "1.1.10",
+      "text": "If $F(x) \\in \\mathbb{C}[[x]]$ satisfies $F(0) = 0$, then we can *define* for any $\\lambda \\in \\mathbb{C}$ the formal power series $$(1 + F(x))^\\lambda = \\sum_{n \\geq 0} \\binom{\\lambda}{n} F(x)^n,$$ where $\\binom{\\lambda}{n} = \\lambda(\\lambda-1)\\cdots(\\lambda-n+1)/n!$. In fact, we may regard $\\lambda$ as an indeterminate and take (1.5) as the definition of $(1+F(x))^\\lambda$ as an element of $\\mathbb{C}[[x,\\lambda]]$ (or of $\\mathbb{C}[\\lambda][[x]]$); that is, the coefficient of $x^n$ in $(1+F(x))^\\lambda$ is a certain *polynomial* in $\\lambda$. All the expected properties of exponentiation are indeed valid, such as $(1+F(x))^{\\lambda+\\mu} = (1+F(x))^\\lambda(1+F(x))^\\mu$.\n\nIf $F(x) = \\sum_{n \\geq 0} a_n x^n$, define the [[def:1.1.7:formal derivative]] $F'(x)$ (also denoted $dF/dx$ or $DF(x)$) to be the formal power series $$F'(x) = \\sum_{n \\geq 0} n a_n x^{n-1} = \\sum_{n \\geq 0}(n+1)a_{n+1}x^n.$$ It is easy to check that all the familiar laws of differentiation that are well-defined formally continue to be valid for formal power series. In particular, $(F+G)' = F' + G'$, $(FG)' = F'G + FG'$, $F(G(x))' = G'(x)F'(G(x))$. We thus have a theory of *formal calculus* for formal power series."
+    },
+    {
+      "type": "example",
+      "label": "1.1.11",
+      "text": "Suppose $F(0) = 1$, and let $G(x)$ be the power series (easily seen to be unique) satisfying $$G'(x) = F'(x)/F(x), \\quad G(0) = 0.$$ From the function-theoretic viewpoint we can \"solve\" (1.6) to obtain $F(x) = \\exp G(x)$, where by definition $$\\exp G(x) = \\sum_{n \\geq 0} \\frac{G(x)^n}{n!}.$$ Since $G(0) = 0$ everything is well-defined formally, so (1.6) should remain equivalent to $F(x) = \\exp G(x)$ even if the power series for $F(x)$ converges only at $x = 0$. [Stanley continues with a formal justification using polynomials in the $a_i$'s.]"
+    },
+    {
+      "type": "prose",
+      "text": "We now present various illustrations in the manipulation of generating functions. Throughout we will be making heavy use of the principle that formal power series can be treated as if they were functions."
+    },
+    {
+      "type": "example",
+      "label": "1.1.12",
+      "text": "Find a simple expression for the [[gf:gf-fibonacci:generating function]] $F(x) = \\sum_{n \\geq 0} a_n x^n$, where $a_0 = a_1 = 1$, $a_n = a_{n-1} + a_{n-2}$ if $n \\geq 2$. We have $$F(x) = 1 + x + \\sum_{n \\geq 2} a_n x^n = 1 + x + x(F(x)-1) + x^2 F(x).$$ Solving for $F(x)$ yields $F(x) = 1/(1-x-x^2)$. The number $a_n$ is just the *Fibonacci number* $F_{n+1}$."
+    },
+    {
+      "type": "example",
+      "label": "1.1.13",
+      "text": "Find a simple expression for the [[gf:egf:generating function]] $F(x) = \\sum_{n \\geq 0} a_n x^n/n!$, where $a_0 = 1$, $$a_{n+1} = a_n + n a_{n-1}, \\quad n \\geq 0.$$ Multiply the recurrence $(1.7)$ by $x^n/n!$ and sum on $n \\geq 0$. The left-hand side is just $F'(x)$, while the right-hand side is $F(x) + xF(x) = (1+x)F(x)$. Hence $F'(x) = (1+x)F(x)$. The unique solution to this [[gf:fps:differential equation]] satisfying $F(0) = 1$ is $F(x) = \\exp\\left(x + \\frac{1}{2}x^2\\right)$."
+    },
+    {
+      "type": "note",
+      "text": "With the benefit of hindsight we wrote the recurrence $a_{n+1} = a_n + na_{n-1}$ with indexing that makes the computation simplest. If for instance we had written $a_n = a_{n-1} + (n-1)a_{n-2}$, then the computation would be more complicated (though still quite tractable). In converting recurrences to generating function identities, it can be worthwhile to consider how best to index the recurrence."
+    },
+    {
+      "type": "example",
+      "label": "1.1.14",
+      "text": "Let $\\mu(n)$ be the Möbius function of number theory; that is, $\\mu(1) = 1$, $\\mu(n) = 0$ if $n$ is divisible by the square of an integer greater than one, and $\\mu(n) = (-1)^r$ if $n$ is the product of $r$ distinct primes. Find a simple expression for the power series $$F(x) = \\prod_{n \\geq 1}(1-x^n)^{-\\mu(n)/n}.$$ First let us make sure that $F(x)$ is well-defined as a formal power series. We have by Example 1.1.10 that $(1-x^n)^{-\\mu(n)/n} = \\sum_{i \\geq 0} \\binom{-\\mu(n)/n}{i}(-1)^i x^{in}$. Note that $(1-x^n)^{-\\mu(n)/n} = 1 + H(x)$, where $\\deg H(x) = n$. Hence by [[prop:1.1.9:Proposition 1.1.9]] the infinite product (1.8) converges, so $F(x)$ is well-defined. Now apply log to (1.8): $$\\log F(x) = -\\sum_{n \\geq 1} \\frac{\\mu(n)}{n} \\log(1-x^n) = \\sum_{n \\geq 1}\\frac{\\mu(n)}{n}\\sum_{i \\geq 1}\\frac{x^{in}}{i}.$$ The coefficient of $x^m$ in the above power series is $\\frac{1}{m}\\sum_{d|m}\\mu(d)$, where the sum is over all positive integers $d$ dividing $m$. It is well-known that $$\\frac{1}{m}\\sum_{d|m}\\mu(d) = \\begin{cases} 1, & m = 1 \\\\ 0, & \\text{otherwise.} \\end{cases}$$ Hence $\\log F(x) = x$, so $F(x) = e^x$. Note that the derivation of this miraculous formula involved only *formal* manipulations."
+    },
+    {
+      "type": "example",
+      "label": "1.1.15",
+      "text": "Find the unique sequence $a_0 = 1, a_1, a_2, \\ldots$ of real numbers satisfying $$\\sum_{k=0}^n a_k a_{n-k} = 1$$ for all $n \\in \\mathbb{N}$. The trick is to recognize the left-hand side of (1.9) as the coefficient of $x^n$ in $\\left(\\sum_{n \\geq 0} a_n x^n\\right)^2$. Letting $F(x) = \\sum_{n \\geq 0} a_n x^n$, we then have $F(x)^2 = \\sum_{n \\geq 0} x^n = \\frac{1}{1-x}$. Hence $F(x) = (1-x)^{-1/2} = \\sum_{n \\geq 0}\\binom{-1/2}{n}(-1)^n x^n$, so $$a_n = (-1)^n \\binom{-1/2}{n} = \\frac{1 \\cdot 3 \\cdot 5 \\cdots (2n-1)}{2^n n!} = 4^{-n}\\binom{2n}{n}.$$ Note that $a_n$ can also be rewritten as $4^{-n}\\binom{2n}{n}$."
+    },
+    {
+      "type": "prose",
+      "text": "Now that we have discussed the manipulation of formal power series, the question arises as to the advantages of using generating functions to represent a counting function $f(n)$. Why, for instance, should a formula such as $\\sum_{n \\geq 0} f(n) x^n/n! = \\exp(x + x^2/2)$ be regarded as a \"determination\" of $f(n)$? Basically, the answer is that there are many standard, routine techniques for extracting information from generating functions. Generating functions are frequently the most concise and efficient way of presenting information about their coefficients. For instance, from (1.11) an experienced enumerative combinatorialist can tell at a glance: (1) a simple recurrence for $f(n)$, obtained by differentiation; (2) an explicit formula for $f(n)$ from $e^x \\cdot e^{x^2/2}$; (3) an asymptotic formula via complex analysis; (4) various other information. Therefore we are ready to accept the [[gf:gf-exp:generating function]] $\\exp(x + x^2/2)$ as a satisfactory determination of $f(n)$."
+    },
+    {
+      "type": "prose",
+      "text": "This completes our discussion of generating functions and more generally the problem of giving a satisfactory description of a counting function $f(n)$. We now turn to the question of what is the best way to *prove* that a counting function has some given description. In accordance with the principle from other branches of mathematics that it is better to exhibit an explicit isomorphism between two objects than merely to prove that they are isomorphic, we adopt the general principle that it is better to exhibit an explicit one-to-one correspondence ([[tech:bijection:bijection]]) between two finite sets than merely to prove that they have the same number of elements. A proof that shows that a certain set $S$ has a certain number $m$ of elements by constructing an explicit [[tech:bijection:bijection]] between $S$ and some other set that is known to have $m$ elements is called a *combinatorial proof* or *[[tech:bijection:bijective proof]]*."
+    },
+    {
+      "type": "example",
+      "label": "1.1.16",
+      "text": "Let $n$ and $k$ be fixed positive integers. How many sequences $(X_1, X_2, \\ldots, X_k)$ are there of subsets of the set $[n] = \\{1, 2, \\ldots, n\\}$ such that $X_1 \\cap X_2 \\cap \\cdots \\cap X_k = \\emptyset$? Let $f(k,n)$ be this number. If we were not particularly inspired we could perhaps argue as follows. Suppose $X_1 \\cap X_2 \\cap \\cdots \\cap X_{k-1} = T$, where $\\#T = i$. If $Y_j = X_j - T$, then $Y_1 \\cap \\cdots \\cap Y_{k-1} = \\emptyset$ and $Y_j \\subseteq [n] - T$. Hence there are $f(k-1, n-i)$ sequences $(X_1, \\ldots, X_{k-1})$ such that $X_1 \\cap X_2 \\cap \\cdots \\cap X_{k-1} = T$. For each such sequence, $X_k$ can be any of the $2^{n-i}$ subsets of $[n] - T$. As is probably familiar to most readers and will be discussed later, there are $\\binom{n}{i} = n!/i!(n-i)!$ $i$-element subsets $T$ of $[n]$. Hence $$f(k,n) = \\sum_{i=0}^{n} \\binom{n}{i} 2^{n-i} f(k-1, n-i).$$ Let $F_k(x) = \\sum_{n \\geq 0} f(k,n) x^n/n!$. Then (1.14) is equivalent to $F_k(x) = e^x F_{k-1}(2x)$. Clearly $F_1(x) = e^x$. It follows easily that $F_k(x) = \\exp((2^k-1)x)$, so that $f(k,n) = (2^k-1)^n$.\n\nThis argument is a flagrant example of a non-combinatorial proof. The resulting answer is extremely simple despite the contortions involved to obtain it, and it cries out for a better understanding. In fact, $(2^k-1)^n$ is clearly the number of $n$-tuples $(Z_1, Z_2, \\ldots, Z_n)$, where each $Z_i$ is a subset of $[k]$ not equal to $[k]$. [Stanley then gives the explicit [[tech:bijection:bijection]] $\\theta$ proving this directly.]"
+    },
+    {
+      "type": "example",
+      "label": "1.1.17",
+      "text": "Verify the identity $$\\sum_{i=0}^{n} \\binom{a}{i}\\binom{b}{n-i} = \\binom{a+b}{n},$$ where $a$, $b$, and $n$ are nonnegative integers. A non-combinatorial proof would run as follows. The left-hand side of (1.15) is the coefficient of $x^n$ in the power series (polynomial) $\\left(\\sum_{i \\geq 0}\\binom{a}{i}x^i\\right)\\left(\\sum_{j \\geq 0}\\binom{b}{j}x^j\\right)$. But by the binomial theorem, $$\\left(\\sum_{i \\geq 0}\\binom{a}{i}x^i\\right)\\left(\\sum_{j \\geq 0}\\binom{b}{j}x^j\\right) = (1+x)^a(1+x)^b = (1+x)^{a+b} = \\sum_{n \\geq 0}\\binom{a+b}{n}x^n,$$ so the proof follows. A [[tech:bijection:combinatorial proof]] runs as follows. The right-hand side of (1.15) is the number of $n$-element subsets $X$ of $[a+b]$. Suppose $X$ intersects $[a]$ in $i$ elements. There are $\\binom{a}{i}$ choices for $X \\cap [a]$, and $\\binom{b}{n-i}$ choices for the remaining $n-i$ elements $X \\cap \\{a+1, a+2, \\ldots, a+b\\}$. Thus there are $\\binom{a}{i}\\binom{b}{n-i}$ ways that $X \\cap [a]$ can have $i$ elements, and summing over $i$ gives the total number $\\binom{a+b}{n}$ of $n$-element subsets of $[a+b]$.\n\nThere are many examples in the literature of finite sets that are known to have the same number of elements but for which no combinatorial proof of this fact is known. Some of these will appear as exercises throughout this book."
     }
   ],
 
