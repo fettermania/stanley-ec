@@ -1,0 +1,532 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[margin=1.2in]{geometry}
+
+% Fonts (uncomment if installed):
+% \usepackage{fouriernc}
+% \usepackage[T1]{fontenc}
+
+% Theorem-like environments
+\theoremstyle{definition}
+\newtheorem*{solution}{Solution}
+\newtheorem*{claim}{Claim}
+
+% Common abbreviations
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+
+% Formal power series rings
+\newcommand{\Cfps}{\mathbb{C}[[x]]}
+\newcommand{\Rfps}{R[[x]]}
+
+% Generating function coefficient extraction: \coeff{x^n}{F(x)}
+\newcommand{\coeff}[2]{[{#1}]\,{#2}}
+
+% Combinatorics
+\newcommand{\falling}[2]{{#1}^{\underline{#2}}}
+\newcommand{\rising}[2]{{#1}^{\overline{#2}}}
+\newcommand{\stirlingI}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\newcommand{\stirlingII}[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
+
+% Multiset coefficient ((n choose m))
+\newcommand{\multiset}[2]{\left(\!\binom{#1}{#2}\!\right)}
+
+% Convenience
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ds}{\displaystyle}
+
+% Problem wrapper: \problem{N} produces "Problem 1.N."
+\newcounter{probnum}
+\newcommand{\problem}[1]{%
+  \setcounter{probnum}{#1}%
+  \medskip
+  \noindent\textbf{Problem 1.#1.}\quad
+}
+
+\title{Stanley --- Enumerative Combinatorics, Vol.\ 1\\
+       \large Chapter 1 Solutions}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\problem{1} \textit{[1--]}
+Let $S$ and $T$ be disjoint one-element sets.
+Find the number of elements of their union $S \cup T$.
+
+\begin{solution}
+
+This is clear.  2.
+
+\end{solution}
+
+\problem{2} \textit{[1+]}
+Find as simple a solution as possible.
+
+\begin{enumerate}[label=(\alph*)]
+  \item How many subsets of the set $[10] = \{1,2,\ldots,10\}$ contain at least one odd integer?
+    \begin{solution}
+    This is total sets minus total with only even $= 2^{10} - 2^5 = 1024 - 32 = 992.$
+    \end{solution}
+
+  \item In how many ways can seven people be seated in a circle if two arrangements are
+    considered the same whenever each person has the same neighbors (not necessarily
+    on the same side)?
+    \begin{solution}
+    Assuming there are named seats, this means a chain of seven in either one order or the other (if A is to the left of B to the left of C to the left of D, then reversing so C is to the left of B is to the left of A means that D is must be to the left of C).  One person is in seat 1, so this is $7*2 = 14$.  If the seats are unnamed, this 2.
+    \end{solution}
+
+  \item How many permutations $w:[6]\to[6]$ satisfy $w(1)\neq 2$?
+    \begin{solution}
+    Permutations with $w(1) = 2$ are $5!$.  Total perms is $6!$.  Difference is $6! - 5! = 600$.
+    \end{solution}
+
+  \item How many permutations of $[6]$ have exactly two cycles (i.e., find $c(6,2)$)?
+    \begin{solution}
+    $c(n,1) = (n-1)!$ in standard form, since it starts with the highest element.
+    Using the recurrence $c(n,k) = (n-1)c(n-1,k) + c(n-1,k-1)$:
+    \begin{align*}
+      c(2,2) &= 1 \\
+      c(3,2) &= 2c(2,2) + c(2,1) = 2 + 1 = 3 \\
+      c(4,2) &= 3c(3,2) + c(3,1) = 9 + 2 = 11 \\
+      c(5,2) &= 4c(4,2) + c(4,1) = 44 + 6 = 50 \\
+      c(6,2) &= 5c(5,2) + c(5,1) = 250 + 24 = 274
+    \end{align*}
+    Confirmed by finding the coefficient of $t^2$ in $t(t+1)\cdots(t+5)$.
+    \end{solution}
+
+  \item How many partitions of $[6]$ have exactly three blocks (i.e., find $S(6,3)$)?
+    \begin{solution}
+    Using the recurrence $S(n,k) = kS(n-1,k) + S(n-1,k-1)$ (Prop.\ 1.9.3) or the
+    inclusion-exclusion formula (1.94a):
+    \begin{align*}
+      S(6,3) &= \frac{1}{3!}\sum_{j=0}^{3}(-1)^{3-j}\binom{3}{j}j^6 \\
+             &= \frac{1}{6}\left[-\binom{3}{0}0^6 + \binom{3}{1}1^6
+                - \binom{3}{2}2^6 + \binom{3}{3}3^6\right] \\
+             &= \frac{0 + 3 - 192 + 729}{6} = \frac{540}{6} = 90.
+    \end{align*}
+    Cross-check via the EGF (1.94b): $[x^6/6!](e^x-1)^3/3! = 6/48 \cdot 1/720$,
+    giving $S(6,3) = 6!/48 \cdot (1/6) \cdot 6 = 90$. \checkmark
+    \end{solution}
+
+
+  \item There are four men and six women. Each man marries one of the women. In how
+    many ways can this be done?
+    \begin{solution}
+    $6*5*4*3 =360$
+    \end{solution}
+
+  \item Ten people split up into five groups of two each. In how many ways can this be done?
+    \begin{solution}
+    Assuming groups are indistinct this is $\frac{10!}{ (2!)^5} =113,400 $
+    \end{solution}
+
+  \item How many compositions of 19 use only the parts 2 and 3?
+    \begin{solution}
+    % TODO: is there a cleaner approach?
+    If we use $a$ threes and $b$ twos, then $3a+2b=19$, so $a$ must be odd.
+    The number of compositions with $a$ threes and $b$ twos is $\binom{a+b}{a}$.
+    \begin{center}
+    \begin{tabular}{ccc}
+      $a$ & $b$ & compositions \\ \hline
+      1 & 8 & $\binom{9}{1} = 9$ \\
+      3 & 5 & $\binom{8}{3} = 56$ \\
+      5 & 2 & $\binom{7}{5} = 21$
+    \end{tabular}
+    \end{center}
+    Total: $9 + 56 + 21 = 86$.
+    \end{solution}
+
+  \item In how many different ways can the letters of the word MISSISSIPPI be arranged
+    if the four S's cannot appear consecutively?
+    \begin{solution}
+    MISSISSIPPI has 4 S's, 4 I's, 2 P's, 1 M\@. Strategy: subtract arrangements
+    where all four S's appear consecutively.
+    \begin{align*}
+      \text{Total unrestricted:} &\quad \frac{11!}{4!\,4!\,2!} = 34650 \\
+      \text{Violations (treat SSSS as one block):} &\quad \frac{8!}{4!\,2!} = 840 \\
+      \text{Valid arrangements:} &\quad 34650 - 840 = 33810
+    \end{align*}
+    \end{solution}
+
+  \item How many sequences $(a_1, a_2, \ldots, a_{12})$ are there consisting of four 0's and
+    eight 1's, if no two consecutive terms are both 0's?
+    \begin{solution}
+    Place the eight 1's first; they create nine gaps (including the ends).
+    Choose four of those gaps for the 0's:
+    \[ \binom{9}{4} = 126. \]
+    Equivalently, this is $[x^4](1+x)^9 = \binom{9}{4} = 126$.
+    \end{solution}
+
+  \item A box is filled with three blue socks, three red socks, and four chartreuse socks.
+    Eight socks are pulled out, one at a time. In how many ways can this be done?
+    (Socks of the same color are indistinguishable.)
+    \begin{solution}
+    Label the ten socks $1,\ldots,10$. The number of distinct ordered draws of all
+    ten, treating same-color socks as identical, is
+    \[ \frac{10!}{3!\,3!\,4!} = 4200. \]
+    \end{solution}
+
+  \item How many functions $f:[5]\to[5]$ are at most two-to-one, i.e., $\#f^{-1}(n)\leq 2$
+    for all $n\in[5]$?
+    \begin{solution}
+    Model as labeled balls (domain) into labeled boxes (codomain), each box holding
+    at most 2. The EGF for each box is $1 + x + \tfrac{x^2}{2!}$, so the count is
+    \[ 5!\,[x^5]\!\left(1 + x + \tfrac{x^2}{2!}\right)^{\!5} = 2220. \]
+    \end{solution}
+\end{enumerate}
+
+\problem{3}
+Give combinatorial proofs of the following identities, where $x,y,n,a,b$ are
+nonnegative integers.
+
+\begin{enumerate}[label=(\alph*)]
+  \item \textit{[2--]} $\displaystyle\sum_{k=0}^{n}\binom{x+k}{k} = \binom{x+n+1}{n}$
+    \begin{solution}
+    The right hand side indicates all paths of 0 (left) or 1 (right) of $x+n+1$
+    with $n$ right choices.
+
+    The left hand side, at index $k$, counts $n-k$ rights (1) before the first
+    left, then $k$ rights after that.
+    \end{solution}
+
+  \item \textit{[1+]} $\displaystyle\sum_{k=0}^{n}k\binom{n}{k} = n\cdot 2^{n-1}$
+    \begin{solution}
+    Rewrite as $\sum_{k=0}^{n} \frac{k}{n}\binom{n}{k} = 2^{n-1}$. Further rewrite
+    as $\sum_{k=0}^{n} \frac{k}{n}\binom{n}{k} = 2^{n-1}$ (note: $k=-1$ but that's
+    0, so reindex).
+
+    The left can be interpreted as the number of 0/1 combos of $n$ without selecting
+    the first element; of all $\binom{n}{k}$ choices, $k/n$ of them will select the
+    first element. With those eliminated, the total number of selections of $n$ 0/1s
+    is $2^{n-1}$.
+    \end{solution}
+
+  \item \textit{[3]} $\displaystyle\sum_{k=0}^{n}\binom{2k}{k}\binom{2(n-k)}{n-k} = 4^n$
+    \begin{solution}
+    % TODO: apparently very hard; can be approached as NE/NW/SE/SW walks on a grid.
+    TODO\@.
+    \end{solution}
+
+  \item \textit{[3--]}
+    $\displaystyle\sum_{k=0}^{m}\binom{x}{b-k}\binom{y}{a-k}\binom{x+y+k}{k}
+     = \binom{x+a}{a}\binom{y+b}{b}$,
+    where $m = \min(a,b)$
+    \begin{solution}
+    TODO\@.
+    \end{solution}
+
+  \item \textit{[1]} $\displaystyle 2\binom{2n-1}{n} = \binom{2n}{n}$
+    \begin{solution}
+    Rewrite as $\binom{2n-1}{n} + \binom{2n-1}{n-1}$. Then $\binom{2n}{n}$ is the
+    count of the $2n$-th element not in the choice (first term) plus in the choice
+    (second term).
+    \end{solution}
+
+  \item \textit{[2--]} $\displaystyle\sum_{k=0}^{n}(-1)^{k}\binom{n}{k} = 0$, \quad $n\geq 1$
+    \begin{solution}
+    Sending the negative terms to the RHS, this is ``$n$ choose an even number''
+    $=$ ``$n$ choose an odd number.'' This is clear if $n$ is odd (invert the
+    choices, a bijection). If $n$ is even, you can assume by induction this is true
+    at e.g.\ $n=2$, and then expanding $n$ by 2, you have the same number if you
+    select 00 or 11 as selecting 01 or 10 with the two new elements.
+    \end{solution}
+
+  \item \textit{[2+]}
+    $\displaystyle\sum_{k=0}^{n}x^k\binom{n}{k}
+     = \sum_{j=0}^{n}\binom{n}{j}\binom{2n-j}{n}(x-1)^j$
+    \begin{solution}
+    TODO\@.
+
+    Special case: $x=1$. Then this is choosing $n$ elements among $2n$:
+    \begin{itemize}
+      \item LHS: Split $2n$ into two, and choose $k$ from each half:
+        $\binom{n}{k}\binom{n}{n-k} \cdot 1$.
+      \item RHS: Only $j=0$ gets $(x-1)^j = 1$. So this is $\binom{n}{0}\binom{2n}{n}$.
+    \end{itemize}
+    These are equal. TODO: try with $x = 2^k$.
+    \end{solution}
+
+  \item \textit{[3--]}
+    $\displaystyle\sum_{\substack{i,j,k\,\geq\,0\\i+j+k=n}}
+       \binom{i+j}{i}\binom{j+k}{j}\binom{k+i}{k}
+     = \sum_{r=0}^{n}\binom{2r}{r}$,
+    \quad $i,j,k\in\N$
+    \begin{solution}
+    TODO\@.
+    \end{solution}
+\end{enumerate}
+
+\problem{5} \textit{[2]*}
+Show that
+\[
+  \sum_{n_1,\ldots,n_k\,\geq\,0} \min(n_1,\ldots,n_k)\, x_1^{n_1}\cdots x_k^{n_k}
+  = \frac{x_1\cdots x_k}{(1-x_1)\cdots(1-x_k)(1-x_1 x_2\cdots x_k)}.
+\]
+
+\begin{solution}
+Expand the right-hand side as
+\[
+  \frac{x_1 x_2 \cdots x_k}{(1-x_1 x_2 \cdots x_k)(1-x_1)\cdots(1-x_k)}
+  = \bigl(x_1 x_2 \cdots x_k + (x_1 x_2 \cdots x_k)^2 + \cdots\bigr)
+    (1+x_1+x_1^2+\cdots)\cdots(1+x_k+x_k^2+\cdots).
+\]
+
+First, we can consider only $n_1,\ldots,n_k > 0$, since setting any $n_i$ to zero
+renders the left-hand term zero, and no term containing the factor $x_i^0$ exists on
+the right side by virtue of the first factor including each $x_i$.
+
+Both sides consist of exactly one term for each $(n_1,\ldots,n_k) \in \mathbb{N}^k$
+with all entries positive: the left by naming each one in the sum, and the right by
+collecting all terms into $x_1^{n_1} x_2^{n_2} \cdots x_k^{n_k}$. The only question
+to resolve is the coefficient on the left-hand side.
+
+For every $(n_1,\ldots,n_k)$, in the expanded form of the right-hand side (where all
+coefficients are 1), the contribution from
+$(x_1 x_2 \cdots x_k + (x_1 x_2 \cdots x_k)^2 + \cdots)$ will be from the power 1
+to $\min(n_1,\ldots,n_k)$; the difference will be selected from the remaining factors.
+There cannot be another selection from this first factor.
+
+Therefore the coefficient on the left-hand side is $\min(n_1,\ldots,n_k)$, and the
+equivalence is proven.
+\end{solution}
+
+\problem{7} \textit{[2]*}
+Let
+\[
+  e^{x + x^2/2} = \sum_{n\geq 0} f(n)\,\frac{x^n}{n!}.
+\]
+Find a simple expression for $\displaystyle\sum_{i=0}^{n}(-1)^{n-i}\binom{n}{i}f(i)$.
+(See equation (1.13).)
+
+\begin{solution}
+We have $\sum_{n=0}^{\infty} \frac{f(n)}{n!}x^n = e^{x+x^2/2}$.
+
+What we need to do eventually is set $x$ to 1 and get each $x^n$ term of a generating
+function as its own sum over $i$, with $f(i)$ getting an additional factor
+$\binom{n}{i}(-1)^{n-i}$. We can't do this by changing $x$, and we can't square the
+whole thing (that gives $f(i)f(j)$ terms), so we have to multiply it by an outside
+function: $e^{-x}$.
+
+This introduces exactly these terms, since combining two generating functions with
+coefficients $a(i)$ and $b(n-i)$ for term $x^n$ yields $\binom{n}{i}$:
+\[
+  \sum_{n=0}^{\infty} \frac{x^n}{n!} \sum_{i=0}^{n} \binom{n}{i}f(i)(-1)^{n-i}
+  = e^{x+x^2/2} \cdot e^{-x} = e^{x^2/2}.
+\]
+This has only even-degree terms, so the sum is zero for any odd $n$.
+
+For even $n$, each term is $\dfrac{1}{2^n n!}x^{2n}$. Converting to EGF form,
+$\dfrac{(2n)!}{2^n n!} \cdot \dfrac{x^{2n}}{(2n)!}$.
+
+We can see that the coefficient $\dfrac{(2n)!}{2^n n!}$ is $\prod_{j=1}^{n}(2j-1)$.
+\end{solution}
+
+\problem{8} \hfill
+
+\begin{enumerate}[label=(\alph*)]
+  \item \textit{[2--]} Show that
+    $\displaystyle\sum_{n\geq 0}\binom{2n}{n}x^n = \frac{1}{\sqrt{1-4x}}$.
+    \begin{solution}
+    By taking the Taylor series of the LHS, it's clear that $f^{(n)}(x)$ at $x=1$
+    is $2^n \cdot (1 \cdot 3 \cdots (2n-1))$.
+
+    There's an inductive proof that this product is $(n+1)(n+2)\cdots(2n)$: base
+    case at $n=1$ is 2 on both sides. For the inductive case, divide by $2n$ to get
+    the inductive case for the previous number.
+
+    \textit{Lemma.}
+    $\displaystyle 2^k \cdot \prod_{i=1}^{k-1}(2i+1) = \prod_{i=k+1}^{2k} i$.
+
+    \textit{Proof of lemma.}
+    \begin{itemize}
+      \item Base case $k=1$: $2 = 2$. Done.
+      \item We need to show $2^{k} \cdot \prod_{i=1}^{k}(2i+1) = \prod_{i=k+2}^{2k+2} i$
+        using the inductive fact.
+      \item This is the same as showing
+        $2(2k+1)2^{k} \cdot \prod_{i=1}^{k-1}(2i+1) = (2k+2)(2k+1)\prod_{i=k+2}^{2k} i$.
+      \item This is the same as showing
+        $2(2k+1)2^{k} \cdot \prod_{i=1}^{k-1}(2i+1) = 2(2k+1)(2k+1)\prod_{i=k+1}^{2k} i$.
+        Divide out $2(2k+1)$ to get to the inductive case.
+    \end{itemize}
+
+    Therefore $f^{(n)}x = 2^n\cdot \prod_{i=1}^{n-1}(2i+1)$, and
+    \[
+      \frac{f^{(n)}x}{n!}
+        = 2^n\cdot \prod_{i=1}^{n-1}(2i+1) % subscript unclear in original
+        = \frac{(n+1)(n+2)\cdots(2n)}{n!} = \binom{2n}{n}.
+    \]
+    Further, $\left((1-4x)^{-\frac{1}{2}}\right)^2 = \frac{1}{1-4x} = 1+4x+16x^2+\cdots$,
+    so looking at each coefficient,
+    $\sum_{k=0}^{n}\binom{2k}{k}\binom{2(n-k)}{n-k} = 4^n$.
+    \end{solution}
+
+  \item \textit{[2--]} Find
+    $\displaystyle\sum_{n\geq 0}\binom{2n-1}{n}x^n$.
+    \begin{solution}
+    Since $\binom{2n-1}{n} = \frac{1}{2}\binom{2n}{n}$ for $n\geq 1$, subtract out
+    the terms at $n=0$ to obtain the sum as
+    $\dfrac{1}{2} + \dfrac{1}{2}(1-4x)^{-\frac{1}{2}}$.
+    \end{solution}
+\end{enumerate}
+
+\problem{12} \textit{[2+]*}
+Choose $n$ points on the circumference of a circle in ``general position.''
+Draw all $\binom{n}{2}$ chords connecting two of the points.
+(``General position'' means that no three of these chords intersect in a point.)
+Into how many regions will the interior of the circle be divided?
+Try to give an elegant proof avoiding induction, finite differences, generating functions,
+summations, etc.
+
+\begin{solution}
+The solution is $\binom{n}{0} + \binom{n}{2} + \binom{n}{4}$.
+
+Imagine drawing each of these chords and seeing where existing regions are split
+(adding one more region).
+\begin{itemize}
+  \item $\binom{n}{0}$: There is one initial region inside the circle.
+  \item $\binom{n}{2}$: Every time a chord touches the opposite vertex on the
+    circle, a region is created. There are $\binom{n}{2}$ chords.
+  \item $\binom{n}{4}$: Every time a chord crosses another chord the opposite
+    vertex on the circle, a region is created. Every set of four vertices has
+    one crossing point.
+\end{itemize}
+\end{solution}
+
+\problem{13} \textit{[2]}
+Let $p$ be prime and $a\in\P$. Show combinatorially that $a^p - a$ is divisible
+by $p$. (A combinatorial proof would consist of exhibiting a set $S$ with $a^p - a$
+elements and a partition of $S$ into pairwise disjoint subsets, each with $p$
+elements.)
+
+\begin{solution}
+Imagine a loop of $p$ beads with $a$ different colors. You can specify it in $a^p$
+ways starting from some index 1. However, there are only $\frac{a^p - a}{p}$ unique
+loops irrespective of starting index: once you subtract out the uniform color bead
+sequences ($a$), each loop, when rotated, generates a unique sequence; there can be
+no matches on rotation because length $p$ is prime. This $a^p - a$ is divisible
+by $p$.
+\end{solution}
+
+\problem{14}
+Let $p$ be a prime, and let $n = \sum a_i p^i$ and $m = \sum b_i p^i$ be the
+$p$-ary expansions of the positive integers $m$ and $n$.
+
+\begin{enumerate}[label=(\alph*)]
+  \item \textit{[2+]} Show that
+    \[ \binom{n}{m} \equiv \binom{a_0}{b_0}\binom{a_1}{b_1}\cdots \pmod{p}. \]
+    \begin{solution}
+    \end{solution}
+
+  \item \textit{[3--]} Use (a) to determine when $\binom{n}{m}$ is odd. For what $n$
+    is $\binom{n}{m}$ odd for all $0\leq m\leq n$? In general, how many coefficients
+    of the polynomial $(1+x)^n$ are odd?
+    \begin{solution}
+    \end{solution}
+
+  \item \textit{[2+]} It follows from (a), and is easy to show directly, that
+    $\binom{pa}{pb} \equiv \binom{a}{b} \pmod{p}$. Give a combinatorial proof that
+    in fact $\binom{pa}{pb} \equiv \binom{a}{b} \pmod{p^2}$.
+    \begin{solution}
+    \end{solution}
+
+  \item \textit{[3--]} If $p\geq 5$, show in fact
+    $\binom{pa}{pb} \equiv \binom{a}{b} \pmod{p^3}$. Is there a combinatorial proof?
+    \begin{solution}
+    \end{solution}
+
+  \item \textit{[3--]} Give a simple description of the largest power of $p$ dividing
+    $\binom{n}{m}$.
+    \begin{solution}
+    \end{solution}
+\end{enumerate}
+
+\problem{15} \hfill
+
+\begin{enumerate}[label=(\alph*)]
+  \item \textit{[2]} How many coefficients of the polynomial $(1+x+x^2)^n$ are not
+    divisible by~3?
+    \begin{solution}
+    \end{solution}
+
+  \item \textit{[3--]} How many coefficients of the polynomial $(1+x+x^2)^n$ are odd?
+    \begin{solution}
+    \end{solution}
+
+  \item \textit{[2+]} How many coefficients of the polynomial
+    $\prod_{1\leq i<j\leq n}(x_i+x_j)$ are odd?
+    \begin{solution}
+    \end{solution}
+\end{enumerate}
+
+\problem{17}
+Let $m, n \in \N$.
+
+\begin{enumerate}[label=(\alph*)]
+  \item \textit{[1+]*} Prove the identity
+    \[ \multiset{n}{m} = \multiset{m+1}{n-1}. \]
+    \begin{solution}
+    \end{solution}
+
+  \item \textit{[2--]} Give a combinatorial proof.
+    \begin{solution}
+    \end{solution}
+\end{enumerate}
+
+\problem{18} \textit{[2+]*}
+Find a simple description of all $n\in\P$ with the following property: there exists
+$k\in[n]$ such that $\binom{n}{k-1}$, $\binom{n}{k}$, $\binom{n}{k+1}$ are in
+arithmetic progression.
+
+\begin{solution}
+$\binom{n}{k+1} - \binom{n}{k} = \binom{n}{k} - \binom{n}{k-1}$.
+Refactoring: $(k+1)k + (n-k+1)(n-k) = 2(n-k+1)(k+1)$.
+Refactoring: $(n-2k)^2 = n+2$.
+So it happens whenever $n+2$ is a perfect square, i.e.\ $n = a^2 - 2$ for $a \geq 3$.
+\end{solution}
+
+\problem{20} \textit{[2]*}
+How many $m\times n$ matrices of 0's and 1's are there such that every row and column
+contains an even number of 1's? An odd number of 1's?
+
+\begin{solution}
+Proof idea: For an $n\times n$ matrix, choose a submatrix of $(n-1)\times(n-1)$
+and set arbitrarily.
+
+The subarray has an even or an odd total sum.
+
+If odd, there are an odd number of odd total columns and an odd number of odd total
+rows. Add one to the additional row or column wherever so. Add a one in the upper
+right corner to make the whole matrix even.
+
+If even, there are an even number of odd total columns and rows. Add one to the
+additional column wherever so. Leave the corner 0.
+
+In this way we produce an $n\times n$ matrix with even row and column totals.
+
+If we want to produce odd totals, take the even matrix and invert the final row,
+column, and corner.
+
+Since the new row and column are determined by the submatrix, we can arbitrarily
+choose the submatrix and no more, so the total number is at most $2^{(n-1)^2}$. But
+since we can do this for any arbitrary $(n-1)\times(n-1)$, it's at least
+$2^{(n-1)^2}$. So the answer is $2^{(n-1)^2}$.
+\end{solution}
+
+% Add further problems below as needed:
+% \problem{N}
+% \begin{solution}
+% \end{solution}
+
+\end{document}
