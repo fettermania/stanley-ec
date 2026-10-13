@@ -458,6 +458,21 @@ $p$-ary expansions of the positive integers $m$ and $n$.
   \item \textit{[2]} How many coefficients of the polynomial $(1+x+x^2)^n$ are not
     divisible by~3?
     \begin{solution}
+    Let's find the number of coefficients that are divisible by 3, then subtract
+    from $2n+1$ (the total number of coefficients) for the answer.
+
+    Since we're operating mod~3, rewrite $(1+x+x^2)^n$ as $(1-2x+x^2)^n = (1-x)^{2n}$.
+    We're then looking at coefficients $j$ from 0 to $2n$ of the form $\binom{2n}{j}$.
+
+    By Lucas' theorem (Problem~1.14a), a coefficient $\binom{2n}{j}$ will be
+    divisible by 3 if and only if $\binom{(2n)_i}{j_i} = 0$ for some digit index $i$
+    in the base-3 expansions. This occurs when a digit pair $((2n)_i, j_i)$ is
+    $(1,2)$, $(0,1)$, or $(0,2)$.
+
+    Therefore, if $n = (111\cdots1)_3$ (all 1s in base 3), then $2n = (222\cdots2)_3$
+    (all 2s), and no digit pair will be $(0,*)$, so all coefficients of $(1+x+x^2)^n$
+    will not be divisible by 3.  The general case doesn't seem to admit a polynomial
+    function, as $2n+1$ minus this function has infinitely many zeroes.
     \end{solution}
 
   \item \textit{[3--]} How many coefficients of the polynomial $(1+x+x^2)^n$ are odd?
@@ -477,10 +492,14 @@ Let $m, n \in \N$.
   \item \textit{[1+]*} Prove the identity
     \[ \multiset{n}{m} = \multiset{m+1}{n-1}. \]
     \begin{solution}
+    The LHS is the number of multisets of size $n$ among $m$ elements, which is
+    $\binom{n+m-1}{n-1} = \binom{n+m-1}{m}$. The same formula shows the RHS is
+    $\binom{m+n-1}{m}$, an equivalence.
     \end{solution}
 
   \item \textit{[2--]} Give a combinatorial proof.
     \begin{solution}
+    Each side can be interpreted directly as $m$ stars and $n$ bars.
     \end{solution}
 \end{enumerate}
 
@@ -525,8 +544,327 @@ $2^{(n-1)^2}$. So the answer is $2^{(n-1)^2}$.
 \end{solution}
 
 % Add further problems below as needed:
-% \problem{N}
-% \begin{solution}
-% \end{solution}
+
+\problem{22}
+\begin{enumerate}[label=(\alph*)]
+  \item \textit{[2]} Find the number of compositions of $n > 1$ with an even number
+    of even parts. Naturally a combinatorial proof is preferred.
+    \begin{solution}
+    Create a bijection of compositions on $n$ elements with a string of $2^{n-1}$
+    binary digits. Consider a composition to start from a first block. Compositions
+    can be represented as the indices after which a new block is created. If, in
+    reading the composition of length $n$, element $i$ corresponds to such an index,
+    mark it as a 1 in a binary word of length $n-1$; otherwise mark it 0. This is a
+    clear bijection, and the number of compositions of a set of size $n$ is $2^{n-1}$.
+
+    Then, the last digit of the word is a 1 or a 0. To change the even/odd parity of
+    the number of blocks, reverse the last (or any) digit. The number of evens must
+    then equal the number of odds, so half of the total: $2^{n-2}$.
+
+    TODO\@: this should be figured out for an even number of \emph{even} parts.
+    \end{solution}
+
+  \item \textit{[2+]}
+    \begin{solution}
+    \end{solution}
+\end{enumerate}
+
+\problem{30} \textit{[2]}
+Fix $1 \leq k \leq n$. How many integer sequences $1 \leq a_1 < a_2 < \cdots < a_k
+\leq n$ satisfy $a_i \equiv i \pmod{2}$ for all $i$?
+
+\begin{solution}
+Consider if the number of empty spaces, $n-k$, is even. Then this reduces to placing
+$(n-k)/2$ balls in $k+1$ buckets (before or after $a_1, \ldots, a_k$), \textbf{two
+at a time} to ensure the parity works out. Each ball represents two ``spaces'' between
+$a_i$ and $a_{i+1}$, so zero balls in the $i$-th zero-indexed bucket means $a_i + 1 =
+a_{i+1}$, one ball in that bucket means $a_i + 3 = a_{i+1}$, etc.
+
+Then the solution is $\binom{\frac{n-k}{2} + k}{k}$ for $n-k$ even.
+
+If the difference is odd, that means the final space cannot be occupied by $a_k$. If
+$n$ is odd and $k$ is even, then $a_k$ must be an even parity, and if $n$ is even and
+$k$ is odd, then $a_k$ must be an odd parity. In this case, we can simply ignore the
+last space. So the solution is $\binom{\frac{n-k-1}{2} + k}{k}$ for $n-k$ odd.
+
+To combine the two needlessly into a single expression,
+$\displaystyle\binom{\left\lfloor\frac{n-k}{2}\right\rfloor + k}{k}$.
+\end{solution}
+
+\problem{31} \textit{[2+]}
+\begin{enumerate}[label=(\alph*)]
+  \item Let $\#N = n$, $\#X = x$. Find a simple explicit expression for the number of
+    ways of choosing a function $f : N \to X$ and then linearly ordering each block of
+    the coimage of $f$. (The elements of $N$ and $X$ are assumed to be
+    distinguishable.)
+    \begin{solution}
+    Choose an ordering of $n$ in $n!$ ways. Then choose the delimiters of $x$ buckets
+    among $n$ indistinguishable objects: $\binom{n+x-1}{x-1}$. Multiply to get
+    $n!\binom{n+x-1}{x-1}$.
+    \end{solution}
+
+  \item How many ways as in (a) are there if $f$ must be surjective? (Give a simple
+    explicit answer.)
+    \begin{solution}
+    Choose a ``first element'' of each of the $x$ image buckets in $(n)_x$ ways. Then
+    $n-x$ elements remain to distribute among the buckets as in the answer to 31(a):
+    $(n-x)!\binom{n-1}{x-1}$. Multiply together to get $n!\binom{n-1}{x-1}$.
+    \end{solution}
+
+  \item How many ways as in (a) are there if the elements of $X$ are
+    indistinguishable? (Express your answer as a finite sum.)
+    \begin{solution}
+    Call the solution to problem 31(b) $b(n,x)$.
+
+    We use this solution for each fixed EXACT size of the range and then ``unlabel''
+    the $x$ by dividing out by $x!$:
+    \[
+      \sum_{i=1}^{x} \frac{b(n,i)}{i!}
+      = \sum_{i=1}^{x} \frac{(n-i)!\binom{n-1}{i-1}}{i!}.
+    \]
+    \end{solution}
+\end{enumerate}
+
+\problem{32} \textit{[2]}
+Fix positive integers $n$ and $k$. Let $\#S = n$. Find the number of $k$-tuples
+$(T_1, T_2, \ldots, T_k)$ of subsets $T_i$ of $S$ subject to each of the following
+conditions separately (all with the same general method of solution).
+
+\begin{enumerate}[label=(\alph*)]
+  \item $T_1 \subseteq T_2 \subseteq \cdots \subseteq T_k$
+    \begin{solution}
+    For each element in $[n]$, choose either a set in $[k]$ for it to be FIRST
+    included in (e.g.\ if it's in $T_j$, then it's not in $T_{j-1}$ and is in
+    $T_{j+1}, T_{j+2}, \ldots$) or none at all. These completely determine the sets.
+    Total is $(k+1)^n$.
+    \end{solution}
+
+  \item The $T_i$'s are pairwise disjoint.
+    \begin{solution}
+    For each element in $[n]$, choose either a single set in $[k]$ for it to be
+    included in (e.g.\ if it's in $T_j$, then it's not in any $T_i$, $i \neq j$) or
+    none at all. These completely determine the sets. Total is $(k+1)^n$.
+    \end{solution}
+
+  \item $T_1 \cup T_2 \cup \cdots \cup T_k = S$
+    \begin{solution}
+    Consider that by inverting $T_1 \cup T_2 \cup \cdots = S$, you get the same
+    statement $\overline{T_1} \cap \overline{T_2} \cap \cdots = \emptyset$; the
+    number of ways of satisfying one is the same as the number of ways of satisfying
+    the other, because they are equivalent.
+
+    For each element in $[n]$, choose the set $\overline{T_i}$ it will be included
+    in, with the exception of being included in all sets. Then, the total is
+    $(2^k - 1)^n$. Note that this is the same as 32(b) if $k = 2$ since each
+    expression is then $3^n$.
+    \end{solution}
+\end{enumerate}
+
+\problem{33}
+\begin{enumerate}[label=(\alph*)]
+  \item \textit{[2--]*} Let $k, n \geq 1$. Find the number of sequences
+    $\emptyset = S_0, S_1, \ldots, S_k$ of subsets of $[n]$ if for all
+    $1 \leq i \leq k$ we have either (i) $S_{i-1} \subset S_i$ and
+    $|S_i - S_{i-1}| = 1$, or (ii) $S_i \subset S_{i-1}$ and $|S_{i-1} - S_i| = 1$.
+    \begin{solution}
+    This is completely specified by an $a_i$ at each step: if $a_i$ is in the set
+    $S_i$, then remove it in $S_{i+1}$. Otherwise add it. It is easy to see this
+    bijection. Therefore there are $k^n$ possible sequences.
+    \end{solution}
+
+  \item \textit{[2+]*} Suppose that we add the additional condition that $S_k =
+    \emptyset$. Show that now the number $f_k(n)$ of sequences is given by
+    \[
+      f_k(n) = \frac{1}{2^n}\sum_{i=0}^{n}\binom{n}{i}(n-2i)^k.
+    \]
+    Note that $f_k(n) = 0$ if $k$ is odd.
+    \begin{solution}
+    TODO
+    \end{solution}
+\end{enumerate}
+
+\problem{34} \textit{[2]}
+Fix $n, j, k \in \mathbb{P}$. How many integer sequences are there of the form
+$1 \leq a_1 < a_2 < \cdots < a_k \leq n$, where $a_{i+1} - a_i \geq j$ for all
+$1 \leq i \leq k-1$?
+
+\begin{solution}
+Here we need to place $n-k$ spaces (balls) into $k+1$ buckets (before $a_1$, and
+after $a_1, \ldots, a_k$), where each ball indicates an additional `space' between
+$a_i$ and $a_{i+1}$ beyond the first; so $m$ balls in the $i$-th zero-indexed bucket
+means $a_i + m + 1 = a_{i+1}$. The only stipulation is that buckets 1 through $k-1$
+must already contain $j-1$ balls to start to enforce the constraint. Therefore, there
+are $n - (k-1)(j-1)$ balls and $k+1$ buckets, so the answer is
+$\dbinom{n-(k-1)(j-1)+k-1}{k}$.
+\end{solution}
+
+\problem{35}
+The \textit{Fibonacci numbers} are defined by $F_1 = 1$, $F_2 = 1$,
+$F_n = F_{n-1} + F_{n-2}$ if $n \geq 3$.
+Express the following numbers in terms of the Fibonacci numbers.
+
+\begin{enumerate}[label=(\alph*)]
+  \item \textit{[2--]} The number of subsets $S$ of the set $[n] = \{1,2,\ldots,n\}$
+    such that $S$ contains no two consecutive integers.
+    \begin{solution}
+    $f(0) = 1$, $f(1) = 1$, $f(2) = 2$. Inductive case for $f(n)$: if element $n$
+    is in the set, we can include exactly $f(n-2)$ sets from $[n-2]$. If element $n$
+    is not in the set, we can include exactly $f(n-1)$ sets from $[n-1]$. This
+    establishes the recurrence. $f(n) = F_{n+1}$.
+    \end{solution}
+
+  \item \textit{[2]} The number of compositions of $n$ into parts greater than 1.
+    \begin{solution}
+    $f(1) = 0$, $f(2) = 1$. Inductive case for $f(n)$: if the last block of a
+    composition of $n$ is 2, there are $f(n-2)$ compositions of $n-2$ to add 2 to.
+    If the last is 3 or greater, we can remove an element from that block with
+    $f(n-1)$ compositions from there. $f(n) = F_{n-1}$.
+    \end{solution}
+
+  \item \textit{[2--]} The number of compositions of $n$ into parts equal to 1 or 2.
+    \begin{solution}
+    $f(1) = 1$, $f(2) = 2$. Inductive case for $f(n)$: if it ends in a 2, there are
+    $f(n-2)$ compositions before that. If it ends in a 1, there are $f(n-1)$.
+    $f(n) = F_{n+1}$.
+    \end{solution}
+
+  \item \textit{[2]} The number of compositions of $n$ into odd parts.
+    \begin{solution}
+    $f(1) = 1$, $f(2) = 1$. Inductive case for $f(n)$: if the last element is a 1,
+    there are $f(n-1)$ compositions before that. If it ends in an odd number
+    $\geq 3$, form all $f(n-2)$ compositions and add 2 to the last element.
+    $f(n) = F_n$.
+    \end{solution}
+
+  \item \textit{[2]} The number of sequences $(\varepsilon_1, \varepsilon_2, \ldots,
+    \varepsilon_n)$ of 0's and 1's such that $\varepsilon_1 \leq \varepsilon_2 \geq
+    \varepsilon_3 \leq \varepsilon_4 \geq \varepsilon_5 \leq \cdots$.
+    \begin{solution}
+    $f(1) = 2$, $f(2) = 3$. Inductive case:
+
+    If $n$ is even, the viable sequences start with 0 (then $f(n-1)$ subsequences on
+    $n$ odd after that) or 11 (then $f(n-2)$ sequences on $n$ odd after that).
+
+    If $n$ is odd, the viable sequences start with 1 (then $f(n-1)$ subsequences on
+    $n$ odd after that) or 00 (then $f(n-2)$ sequences on $n$ odd after that).
+
+    So $f(n) = f(n-1) + f(n-2)$. $f(n) = F_{n+2}$.
+    \end{solution}
+
+  \item \textit{[2+]} $\sum a_1 a_2 \cdots a_k$, where the sum is over all $2^{n-1}$
+    compositions $a_1 + a_2 + \cdots + a_k = n$.
+    \begin{solution}
+    \textit{Lemma 1.} $F_1 + F_2 + F_4 + \cdots + F_{n-2} = F_{n-1}$, and
+    $F_0 + F_1 + \cdots + F_{n-1} = F_n$.
+
+    This is pretty clear: $F_1 + F_2 = F_3$, $F_3 + F_4 = F_5$, and so on.
+
+    \textit{Lemma 2.} $F_{2(n-1)} \cdot 1 + F_{2(n-2)} \cdot 2 + \cdots + F_0 \cdot
+    \frac{n}{2} = F_{2n}$.
+
+    Lay these out in a grid as a row of $n/2$ copies of $F_0$, $n/2 - 1$ copies of
+    $F_2$, through one $F_{n-2}$, forming a top-right to bottom-left diagonal. Combine
+    the rightmost diagonal using Lemma~1 to get $F_{n-1}$, then the second-rightmost
+    diagonal to get $F_{n-3}$, all the way to the upper-left element, which is
+    $1 = F_2$. Then apply Lemma~2 to get $F_n$.
+
+    \textit{Lemma 3.} The compositions of total size $n+1$ are exactly the
+    compositions $a_1, \ldots, a_k$ with $a_1 + \cdots + a_k = n$ with two
+    modifications: either $a_{k+1} = 1$ (new final part), or $a_k$ is replaced by
+    $a_k + 1$.
+
+    This follows from the bijection of a composition of total size $n$ with a binary
+    string of length $n-1$: the last digit of an expanded string of size $n+1$ is
+    either one (new block) or zero (combine with the last block).
+
+    \textit{Main proof.} Let $M(n) = \sum_{a_1+\cdots+a_k=n} a_1 a_2 \cdots a_k$.
+    By Lemma~3, each composition of $n$ arises by either appending a new last part $k$
+    to a composition of $n-k$, giving recurrence
+    \[
+      M(n) = \sum_{k=1}^{n} k \cdot M(n-k)
+           = \sum_{k=1}^{n} k \cdot F_{2(n-k)}.
+    \]
+    By Lemma~2, this equals $F_{2n}$.
+    \end{solution}
+
+  \item \textit{[2+]} $\sum (2^{a_1-1}-1)\cdots(2^{a_k-1}-1)$, summed over the same
+    set as in (f).
+    \begin{solution}
+    TODO\@.
+    \end{solution}
+
+  \item \textit{[2+]} $\sum 2^{\#\{i\,:\,a_i=1\}}$, summed over the same set as (f).
+    \begin{solution}
+    TODO\@.
+    \end{solution}
+
+  \item \textit{[2+]} $\sum (-1)^{k-1}(5^{a_1-1}+1)\cdots(5^{a_k-1}+1)$, summed
+    over the same set as (f).
+    \begin{solution}
+    TODO\@.
+    \end{solution}
+
+  \item \textit{[2+]*} The number of sequences $(\delta_1, \delta_2, \ldots,
+    \delta_n)$ of 0's, 1's, and 2's such that 0 is never immediately followed by 1.
+    \begin{solution}
+    TODO\@.
+    \end{solution}
+
+  \item \textit{[2+]} The number of distinct terms of the polynomial
+    $P_n = \prod_{j=1}^{n}(1 + x_j + x_{j+1})$.
+    \begin{solution}
+    TODO\@.
+    \end{solution}
+\end{enumerate}
+
+\problem{36} \textit{[2]}
+Fix $k, n \in \mathbb{P}$. Find a simple expression involving Fibonacci numbers for
+the number of sequences $(T_1, T_2, \ldots, T_k)$ of subsets $T_i$ of $[n]$ such
+that $T_1 \subseteq T_2 \supseteq T_3 \subseteq T_4 \supseteq \cdots$.
+
+\begin{solution}
+This is an extension of 35(e) but with $n$ 0/1 digits operating in parallel. A 0 in
+position $i$ of $n$-digit word $t_k$ means element $i$ is not in $T_k$; a 1 means it
+is. Then the inclusion for each element follows the same pattern as 35(e), so
+enumerating all parallel inclusions means multiplying them all together: $(F_{n+2})^k$.
+\end{solution}
+
+\problem{37} \textit{[2]}
+Show that
+\[
+  F_{n+1} = \sum_{k=0}^{n}\binom{n-k}{k}. \tag{1.122}
+\]
+
+\begin{solution}
+Base cases:
+\begin{align*}
+  F_{(0)+1} &= \tbinom{0}{0} = 1 \\
+  F_{(1)+1} &= \tbinom{1}{0} + \tbinom{0}{1} = 1
+\end{align*}
+
+We use the identity $\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}$. Line up the
+sums for $F_{(n-2)+1}$ and $F_{(n-1)+1}$ term by term, and take term $i$ from
+$F_{(n-2)+1}$ and term $i+1$ from $F_{(n-1)+1}$ and pair them up, leaving only the
+first term of $F_{(n-1)+1}$ alone:
+\begin{align*}
+  F_{(n-2)+1} + F_{(n-1)+1}
+  &= \sum_{k=0}^{n-2}\binom{n-2-k}{k} + \sum_{k=0}^{n-1}\binom{n-1-k}{k} \\
+  &= \left[\sum_{k=0}^{n-1}\left(\binom{n-2-k}{k} + \binom{n-1-k}{k+1}\right)\right]
+     + \binom{n-1}{0} \\
+  &= \left[\sum_{k=0}^{n-1}\binom{n-1-k}{k+1}\right] + \binom{n-1}{0} \\
+  &= F_{n+1}.
+\end{align*}
+
+% TODO: this is right but check the indexing.
+
+To illustrate:
+\begin{align*}
+  2 = F_3 &= \tbinom{2}{0} + \tbinom{1}{1} + \tbinom{0}{2} \\
+  3 = F_4 &= \tbinom{3}{0} + \tbinom{2}{1} + \tbinom{1}{2} + \tbinom{0}{3} \\
+  5 = F_5 &= \tbinom{4}{0} + \tbinom{3}{1} + \tbinom{2}{2} + \tbinom{1}{3} + \tbinom{0}{4} \\
+  8 = F_6 &= \tbinom{5}{0} + \tbinom{4}{1} + \tbinom{3}{2} + \tbinom{2}{3}
+             + \tbinom{1}{4} + \tbinom{0}{5}
+\end{align*}
+\end{solution}
 
 \end{document}
